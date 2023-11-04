@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thermworksheet</title>
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <script type="module" src="assets/js/index.js" defer></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js" defer></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" defer></script>
+    <script src="node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+</head>
+<body>
+<main>
+    <section class="login">
+        <form class="form" id="form" autocomplete="off">
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuario</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="user-addon1"><i class="fa-solid fa-user"></i></span>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="password-addon1"><i class="fa-solid fa-key"></i></span>
+                    <input type="password" class="form-control" id="password" autocomplete="current-password" required>
+                </div>
+
+            </div>
+            <div class="justify-content-center">
+                <button type="submit" class="btn btn-success">Aceptar</button>
+            </div>
+        </form>
+    </section>
+    <div id="errorAuthorization" class="modal text-danger" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Ha ocurrido un error</h5>
+                    <button type="button" class="btn-close closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="errorLogin"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary closeModal" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
