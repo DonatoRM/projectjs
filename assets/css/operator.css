@@ -1,0 +1,25 @@
+.selector {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(3,1fr);
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0.25rem;
+    box-shadow: 1px 1px 0.5rem rgb(128, 128, 128);
+    border-radius: 0.25rem;
+}
+.selector label {
+    font-weight: bold;
+}
+.clients {
+    grid-row: 1;
+    grid-column: 1;
+}
+.installations {
+    grid-row: 1;
+    grid-column: 2;
+}
+.locations {
+    grid-row: 1;
+    grid-column: 3;
+}
