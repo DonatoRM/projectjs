@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import '../css/reset.css';
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
@@ -12420,24 +12419,5 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.searchContainer {
-  position: relative;
-}
-.searchContainer .search {
-  padding-left: 2rem;
-}
-.searchContainer .icon {
-  position: absolute;
-  top: 1.35rem;
-  left: 1.5rem;
-}
 
-.btn:focus {
-  box-shadow: 0 0 10px #59A63B;
-}
-
-.form-select:focus, .form-control:focus, .exit:focus {
-  box-shadow: 0 0 10px #A65B38;
-}
-
-/*# sourceMappingURL=operator.css.map */
+/*# sourceMappingURL=colors.css.map */

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thermworksheet</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href=../assets/css/defects.css>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <script type="module" src="../assets/js/defects.js" defer></script>
+    <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js" defer></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js" defer></script>
+    <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+</head>
+<body>
+<header class="header">
+    <div>
+        <span class="fs-6">Id</span>
+        <div id="id" class="fs-5 text-white"></div>
+    </div>
+    <div>
+        <span class="fs-6">Posición</span>
+        <div id="position" class="fs-5 text-white"></div>
+    </div>
+    <div>
+        <span class="fs-6">Elemento</span>
+        <div id="element" class="fs-5 text-white"></div>
+    </div>
+    <div>
+        <span class="fs-6">Punto</span>
+        <div id="point" class="fs-5 text-white"></div>
+    </div>
+    <div>
+        <span class="fs-6">Fase</span>
+        <div id="fase" class="fs-5 text-white"></div>
+    </div>
+</header>
+<main>
+    <section>
+        <table class="table table-striped">
+            <thead>
+            <tr class="text-center">
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Viento</th>
+                <th>Emiss</th>
+                <th>T</th>
+                <th>Tref</th>
+                <th>Tamb</th>
+                <th>Tref</th>
+                <th>Imax</th>
+                <th>Ir</th>
+                <th>Comentarios</th>
+                <th>Termograma</th>
+                <th>Foto</th>
+            </tr>
+            </thead>
+            <tbody id="table"></tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

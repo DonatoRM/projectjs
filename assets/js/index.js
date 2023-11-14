@@ -31,6 +31,11 @@ const getAuthorizationByToken = async (authToken) => {
         modal.style.display = 'none';
         window.localStorage.removeItem('AUTH_CLIENT');
         window.localStorage.removeItem('role');
+        window.localStorage.removeItem('selectedClient');
+        window.localStorage.removeItem('selectedInstallation');
+        window.localStorage.removeItem('selectedLocation');
+        window.localStorage.removeItem('row');
+        window.location='../../index.html';
       }, false);
     }
   } else {

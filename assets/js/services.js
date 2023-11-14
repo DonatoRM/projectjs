@@ -22,7 +22,7 @@ export const fetchData = async (url, authorization, method) => {
   } catch (err) {
     return {
       data: [],
-      error: '<p>Error de Red</p'
+      error: '<p>Autenticación no válida</p'
     }
   }
 };

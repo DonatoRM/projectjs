@@ -1,0 +1,19 @@
+@import '../css/reset.css';
+@import './colors';
+.searchContainer {
+  position: relative;
+  .search {
+    padding-left: 2rem;
+  }
+  .icon {
+    position: absolute;
+    top: 1.35rem;
+    left: 1.5rem;
+  }
+}
+.btn:focus {
+  box-shadow: 0 0 10px #59A63B;
+}
+.form-select:focus,.form-control:focus,.exit:focus {
+  box-shadow: 0 0 10px #A65B38;
+}

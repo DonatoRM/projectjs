@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../css/reset.css';
+@import "assets/css/reset.css";
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
@@ -12420,24 +12420,23 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.searchContainer {
-  position: relative;
-}
-.searchContainer .search {
-  padding-left: 2rem;
-}
-.searchContainer .icon {
-  position: absolute;
-  top: 1.35rem;
-  left: 1.5rem;
+.login {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.btn:focus {
-  box-shadow: 0 0 10px #59A63B;
+.form {
+  width: 25rem;
+  height: 25rem;
+  padding: 2rem;
+  box-shadow: 1px 1px 0.5rem rgb(128, 128, 128);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.form-select:focus, .form-control:focus, .exit:focus {
-  box-shadow: 0 0 10px #A65B38;
-}
-
-/*# sourceMappingURL=operator.css.map */
+/*# sourceMappingURL=index.css.map */

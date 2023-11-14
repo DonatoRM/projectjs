@@ -80,17 +80,21 @@ class Services
             'aud'=>$_ENV['URL_FRONT'],
             'iat'=>strtotime('now'),
             'nbf'=>strtotime('now'),
-            'exp'=>strtotime('now')+$_ENV['AUTH_TOKEN_EXPIRATION'],
+            'exp'=>strtotime('now')+($_ENV['AUTH_TOKEN_EXPIRATION']*3600),
             'username'=>$_SERVER['PHP_AUTH_USER'],
             'password'=>$_SERVER['PHP_AUTH_PW']
         );
         return JWT::encode($payload,$_ENV['AUTH_KEY'],'HS256');
     }
     private static function decodeAuthToken($authToken):void {
-        $decode=JWT::decode($authToken,new Key($_ENV['AUTH_KEY'],'HS256'));
-        if($decode->exp<strtotime('now')) self::unauthorizedAccess();
-        $_SERVER['PHP_AUTH_USER']=$decode->username;
-        $_SERVER['PHP_AUTH_PW']=$decode->password;
+        try {
+            $decode=JWT::decode($authToken,new Key($_ENV['AUTH_KEY'],'HS256'));
+            if($decode->exp<strtotime('now')) self::unauthorizedAccess();
+            $_SERVER['PHP_AUTH_USER']=$decode->username;
+            $_SERVER['PHP_AUTH_PW']=$decode->password;
+        } catch (err) {
+            self::unauthorizedAccess();
+        }
     }
     /**
      * Método que lanza un error 404 si no está definido el Controller

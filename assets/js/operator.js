@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectClients = document.getElementById('clients');
   const selectInstallations = document.getElementById('installations');
   const selectLocations = document.getElementById('locations');
+  const table = document.getElementById('table');
   // Falta selectPositions que es la tabla con los datos
 
   let selectClientValue = 1;
@@ -31,27 +32,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const authorization = 'Bearer ' + authToken;
     window.localStorage.setItem('selectClient', event.target.value);
     let url = 'http://192.168.0.2:81/installations?client=' + event.target.value;
-    const selectInstallationsValue=await getInstallations(url, authorization, method, selectInstallations, selectLocations, selectInstallationValue);
+    const selectInstallationsValue = await getInstallations(url, authorization, method, selectInstallations, selectLocations, selectInstallationValue);
     window.localStorage.setItem('selectInstallation', selectInstallationsValue);
-    url = 'http://192.168.0.2:81/locations?installation='+selectInstallationsValue;
-    const selectLocationsValue=await getLocations(url,authorization,method,selectLocations);
+    url = 'http://192.168.0.2:81/locations?installation=' + selectInstallationsValue;
+    const selectLocationsValue = await getLocations(url, authorization, method, selectLocations);
     window.localStorage.setItem('selectLocation', selectLocationsValue);
+    url = 'http://192.168.0.2:81/positions?location=' + selectLocationsValue;
+    await getPositions(url, authorization, method, table);
   }
   const changeInstallations = async (event) => {
     const method = 'GET';
     const authToken = window.localStorage.getItem('AUTH_CLIENT');
     const authorization = 'Bearer ' + authToken;
     window.localStorage.setItem('selectInstallation', event.target.value);
-    const url = 'http://192.168.0.2:81/locations?installation=' + event.target.value;
-    const selectLocationsValue=await getLocations(url, authorization, method, selectLocations);
+    let url = 'http://192.168.0.2:81/locations?installation=' + event.target.value;
+    const selectLocationsValue = await getLocations(url, authorization, method, selectLocations);
     window.localStorage.setItem('selectLocation', selectLocationsValue);
+    url = 'http://192.168.0.2:81/positions?location=' + selectLocationsValue;
+    await getPositions(url, authorization, method, table);
+  }
+  const changeLocations = async (event) => {
+    const method = 'GET';
+    const authToken = window.localStorage.getItem('AUTH_CLIENT');
+    const authorization = 'Bearer ' + authToken;
+    window.localStorage.setItem('selectLocation', event.target.value);
+    let url = 'http://192.168.0.2:81/positions?location=' + event.target.value;
+    const selectPositionsValue = await getPositions(url, authorization, method, table);
+    window.localStorage.setItem('selectPosition', selectPositionsValue);
   }
 
   selectClients.addEventListener('change', changeClients, false);
   selectInstallations.addEventListener('change', changeInstallations, false);
+  selectLocations.addEventListener('change', changeLocations, false);
 
   void initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
-
 }, false);
 const getClients = async (url, authorization, method, selectClients, selectClientValue) => {
   const {data, error} = await fetchData(url, authorization, method);
@@ -84,7 +98,7 @@ const getInstallations = async (url, authorization, method, selectInstallations,
 
   return selectInstallations.options[0].value;
 };
-const getLocations = async (url, authorization, method, selectLocations,selectLocationValue) => {
+const getLocations = async (url, authorization, method, selectLocations, selectLocationValue) => {
   const {data, error} = await fetchData(url, authorization, method);
   if (error) throw new error('Error al busca: ' + error);
   selectLocations.innerHTML = '';
@@ -100,17 +114,67 @@ const getLocations = async (url, authorization, method, selectLocations,selectLo
   });
   return selectLocations.options[0].value;
 };
-// TODO: GET POSITIONS
-
-// TODO: END GET POSITIONS
+const getPositions = async (url, authorization, method, table) => {
+  const {data, error} = await fetchData(url, authorization, method);
+  if (error) throw new error('Error al buscar: ' + error);
+  const tds = table.getElementsByTagName('td');
+  while (tds.length > 0) {
+    tds[0].parentNode.removeChild(tds[0]);
+  }
+  data.data.map(position => {
+    const row = document.createElement('tr');
+    const tdId = document.createElement('td');
+    tdId.textContent = position.id;
+    row.appendChild(tdId);
+    const tdPosition = document.createElement('td');
+    tdPosition.textContent = position.name;
+    row.appendChild(tdPosition);
+    const tdElement = document.createElement('td');
+    tdElement.textContent = position.element;
+    tdElement.setAttribute('class', 'text-center align-middle');
+    row.appendChild(tdElement);
+    const tdPoint = document.createElement('td');
+    tdPoint.textContent = position.point;
+    row.appendChild(tdPoint);
+    const tdFase = document.createElement('td');
+    tdFase.textContent = position.fase;
+    tdFase.setAttribute('class', 'text-center align-middle');
+    row.appendChild(tdFase);
+    const tdTrash = document.createElement('td');
+    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle'><i class=\"fa-solid fa-trash\"></i></button>";
+    tdTrash.setAttribute('class', 'text-center align-middle');
+    row.appendChild(tdTrash);
+    const tdType = document.createElement('td');
+    table.appendChild(row);
+    const rowsTable = table.getElementsByTagName('tr');
+    for (let i = 0; i < rowsTable.length; i++) {
+      rowsTable[i].addEventListener('click', clickRow, false);
+    }
+  });
+};
+const clickRow = event => {
+  // console.log(parseInt(event.target.parentNode.children[0].textContent));
+  const tr=event.target.parentNode;
+  const objPosition={
+    id: parseInt(tr.children[0].textContent),
+    position: tr.children[1].textContent,
+    element: tr.children[2].textContent,
+    point: tr.children[3].textContent,
+    fase: tr.children[4].textContent
+  }
+  window.localStorage.setItem('row',JSON.stringify(objPosition));
+  window.location='../../views/defects.html';
+};
 const initialStateComponents = async (selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue) => {
   const authToken = window.localStorage.getItem('AUTH_CLIENT');
   const authorization = 'Bearer ' + authToken;
   let url = 'http://192.168.0.2:81/clients';
   let method = 'GET';
-  await getClients(url, authorization, method, selectClients,selectClientValue);
+  await getClients(url, authorization, method, selectClients, selectClientValue);
   url = `http://192.168.0.2:81/installations?client=${selectClientValue}`;
   await getInstallations(url, authorization, method, selectInstallations, selectLocations, selectInstallationValue);
-  url='http://192.168.0.2:81/locations?installation='+selectLocationValue;
-  await getLocations(url,authorization,method,selectLocations,selectLocationValue);
+  url = 'http://192.168.0.2:81/locations?installation=' + selectLocationValue;
+  await getLocations(url, authorization, method, selectLocations, selectLocationValue);
+  url = 'http://192.168.0.2:81/positions?location=' + selectLocationValue;
+  await getPositions(url, authorization, method, table);
 };
