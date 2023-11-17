@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href=../assets/css/operator.css>
-    <script type="module" src="../assets/js/operator.js" defer></script>
     <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js" defer></script>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js" defer></script>
-    <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js" defer></script>
+    <script type="module" src="../assets/js/operator.js" defer></script>
 </head>
 <body>
-<main class="container-fluid d-flex flex-column vh-100 bg-color-background">
+<main class="container-fluid d-flex flex-column h-100 bg-color-background">
     <div class="row my-1">
         <div class="col d-flex flex-row justify-content-evenly bg-color-background pt-2 pb-2">
             <button id="client" name="client" class="btn bg-color-black text-white px-5">Cliente</button>
@@ -41,7 +41,8 @@
     </div>
     <div class="row my-2 mx-1 d-flex align-items-center">
         <div class="searchContainer col-8 p-3 bg-color-blue rounded">
-            <input type="text" id="search" name="search" placeholder="Buscar..." class="form-control search"/>
+            <label for="search" class="d-none"></label>
+            <input type="search" id="search" name="search" placeholder="Buscar..." class="form-control search"/>
             <span class="icon"><i class="fa-solid fa-magnifying-glass text-secondary"></i></span>
         </div>
         <div class="col-4 d-flex justify-content-end align-items-center px-0">
@@ -51,35 +52,37 @@
         </div>
     </div>
     <div class="row mt-2 mx-1">
-        <table class="col table table-striped table-hover table-sm">
-            <thead>
-            <tr class="text-center table-secondary">
-                <th>ID</th>
-                <th>Posición</th>
-                <th>Elemento</th>
-                <th>Punto</th>
-                <th>Fase</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody id="table" class="overflow-auto"></tbody>
-        </table>
-    </div>
-    <div id="popupClients" class="modal text-black" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title ms-3">Ha ocurrido un error</h5>
-                    <button type="button" class="btn-close closeModal" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="errorLogin"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary closeModal" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
+        <div class="col px-0 ">
+            <table class="table table-striped">
+                <thead class="position-relative">
+                <tr class="text-center table-secondary position-sticky sticky-top">
+                    <th>ID</th>
+                    <th>Posición</th>
+                    <th>Elemento</th>
+                    <th>Punto</th>
+                    <th>Fase</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="table"></tbody>
+            </table>
         </div>
     </div>
 </main>
+<div id="popupClients" class="modal text-black" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title ms-3">Ha ocurrido un error</h5>
+                <button type="button" class="btn-close closeModal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="errorLogin"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary closeModal" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectClients = document.getElementById('clients');
   const selectInstallations = document.getElementById('installations');
   const selectLocations = document.getElementById('locations');
+  const searchContainer = document.getElementById('search');
   const table = document.getElementById('table');
-  // Falta selectPositions que es la tabla con los datos
 
   let selectClientValue = 1;
   let selectInstallationValue = 1;
@@ -60,12 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectPositionsValue = await getPositions(url, authorization, method, table);
     window.localStorage.setItem('selectPosition', selectPositionsValue);
   }
+  const changeSearch = (event) => {
+    const searchText = event.target.value;
+    const positions = JSON.parse(sessionStorage.getItem('positions'));
+    getNewPositions(table, positions, searchText);
+  };
 
   selectClients.addEventListener('change', changeClients, false);
   selectInstallations.addEventListener('change', changeInstallations, false);
   selectLocations.addEventListener('change', changeLocations, false);
+  searchContainer.addEventListener('input', changeSearch, false);
 
-  void initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
+void  initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
 }, false);
 const getClients = async (url, authorization, method, selectClients, selectClientValue) => {
   const {data, error} = await fetchData(url, authorization, method);
@@ -114,19 +120,22 @@ const getLocations = async (url, authorization, method, selectLocations, selectL
   });
   return selectLocations.options[0].value;
 };
-const getPositions = async (url, authorization, method, table) => {
-  const {data, error} = await fetchData(url, authorization, method);
-  if (error) throw new error('Error al buscar: ' + error);
+const getNewPositions = (table, positions, searchText) => {
   const tds = table.getElementsByTagName('td');
   while (tds.length > 0) {
     tds[0].parentNode.removeChild(tds[0]);
   }
-  data.data.map(position => {
+  if (searchText !== '') {
+    positions = positions.filter(position => position.name.includes(searchText) || position.element.includes(searchText) || position.point.includes(searchText));
+  }
+  positions.map(position => {
     const row = document.createElement('tr');
     const tdId = document.createElement('td');
+    tdId.setAttribute('class', 'text-center align-middle');
     tdId.textContent = position.id;
     row.appendChild(tdId);
     const tdPosition = document.createElement('td');
+    tdPosition.setAttribute('class', 'text-center align-middle');
     tdPosition.textContent = position.name;
     row.appendChild(tdPosition);
     const tdElement = document.createElement('td');
@@ -134,6 +143,7 @@ const getPositions = async (url, authorization, method, table) => {
     tdElement.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdElement);
     const tdPoint = document.createElement('td');
+    tdPoint.setAttribute('class', 'text-center align-middle');
     tdPoint.textContent = position.point;
     row.appendChild(tdPoint);
     const tdFase = document.createElement('td');
@@ -151,19 +161,65 @@ const getPositions = async (url, authorization, method, table) => {
       rowsTable[i].addEventListener('click', clickRow, false);
     }
   });
+  return positions;
+};
+const getPositions = async (url, authorization, method, table) => {
+  const {data, error} = await fetchData(url, authorization, method);
+  if (error) throw new error('Error al buscar: ' + error);
+  const tds = table.getElementsByTagName('td');
+  while (tds.length > 0) {
+    tds[0].parentNode.removeChild(tds[0]);
+  }
+  data.data.map(position => {
+    const row = document.createElement('tr');
+    const tdId = document.createElement('td');
+    tdId.setAttribute('class', 'text-center align-middle');
+    tdId.textContent = position.id;
+    row.appendChild(tdId);
+    const tdPosition = document.createElement('td');
+    tdPosition.setAttribute('class', 'text-center align-middle');
+    tdPosition.textContent = position.name;
+    row.appendChild(tdPosition);
+    const tdElement = document.createElement('td');
+    tdElement.textContent = position.element;
+    tdElement.setAttribute('class', 'text-center align-middle');
+    row.appendChild(tdElement);
+    const tdPoint = document.createElement('td');
+    tdPoint.setAttribute('class', 'text-center align-middle');
+    tdPoint.textContent = position.point;
+    row.appendChild(tdPoint);
+    const tdFase = document.createElement('td');
+    tdFase.textContent = position.fase;
+    tdFase.setAttribute('class', 'text-center align-middle');
+    row.appendChild(tdFase);
+    const tdTrash = document.createElement('td');
+    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle'><i class=\"fa-solid fa-trash\"></i></button>";
+    tdTrash.setAttribute('class', 'text-center align-middle');
+    row.appendChild(tdTrash);
+    const tdType = document.createElement('td');
+    table.appendChild(row);
+    const rowsTable = table.getElementsByTagName('tr');
+    for (let i = 0; i < rowsTable.length; i++) {
+      rowsTable[i].addEventListener('click', clickRow, false);
+    }
+  });
+  if (sessionStorage.getItem('positions')) {
+    sessionStorage.removeItem(('positions'));
+  }
+  sessionStorage.setItem('positions', JSON.stringify(data.data));
 };
 const clickRow = event => {
   // console.log(parseInt(event.target.parentNode.children[0].textContent));
-  const tr=event.target.parentNode;
-  const objPosition={
+  const tr = event.target.parentNode;
+  const objPosition = {
     id: parseInt(tr.children[0].textContent),
     position: tr.children[1].textContent,
     element: tr.children[2].textContent,
     point: tr.children[3].textContent,
     fase: tr.children[4].textContent
   }
-  window.localStorage.setItem('row',JSON.stringify(objPosition));
-  window.location='../../views/defects.html';
+  window.localStorage.setItem('row', JSON.stringify(objPosition));
+  window.location = '../../views/defects.html';
 };
 const initialStateComponents = async (selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue) => {
   const authToken = window.localStorage.getItem('AUTH_CLIENT');
