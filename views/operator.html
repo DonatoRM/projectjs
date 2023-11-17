@@ -69,10 +69,29 @@
         </div>
     </div>
 </main>
+<!--Popup Cerrar Sesión-->
+<div class="modal fade" id="popupExit" tabindex="-1" aria-labelledby="modalExitSession" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-color-green text-white">
+                <h1 class="modal-title fs-5" id="titleModal">Cerrar sesión</h1>
+                <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span>¿Desea cerrar la sessión?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-color-green text-white border-1 close" data-bs-dismiss="modal">Atrás</button>
+                <button type="button" class="btn bg-color-red text-white border-1" id="exitSession">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="popupClients" class="modal text-black" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
+            <div class="modal-header bg-color-red text-white">
                 <h5 class="modal-title ms-3">Ha ocurrido un error</h5>
                 <button type="button" class="btn-close closeModal" data-bs-dismiss="modal"
                         aria-label="Close"></button>

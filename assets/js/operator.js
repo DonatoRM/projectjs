@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectLocations = document.getElementById('locations');
   const searchContainer = document.getElementById('search');
   const table = document.getElementById('table');
+  const buttonExit = document.getElementById('exit');
+  const buttonsBack = document.getElementsByClassName('close');
+  const buttonSession = document.getElementById('exitSession');
+  const popupExit = document.getElementById('popupExit');
 
   let selectClientValue = 1;
   let selectInstallationValue = 1;
@@ -65,13 +69,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const positions = JSON.parse(sessionStorage.getItem('positions'));
     getNewPositions(table, positions, searchText);
   };
+  const exitSession = (event) => {
+
+    popupExit.classList.add('show');
+    popupExit.style.display = 'block';
+  };
+  const backPopup = () => {
+    popupExit.classList.remove('show');
+    popupExit.style.display = 'none';
+  };
+  const goToLogin = () => {
+    sessionStorage.removeItem('positions');
+    localStorage.removeItem('row');
+    localStorage.removeItem('selectClient');
+    localStorage.removeItem('selectInstallation');
+    localStorage.removeItem('selectLocation');
+    localStorage.removeItem('selectPosition');
+    localStorage.removeItem('role');
+    localStorage.removeItem('AUTH_CLIENT');
+    window.location.href = '../../index.html';
+  };
 
   selectClients.addEventListener('change', changeClients, false);
   selectInstallations.addEventListener('change', changeInstallations, false);
   selectLocations.addEventListener('change', changeLocations, false);
   searchContainer.addEventListener('input', changeSearch, false);
+  buttonExit.addEventListener('click', exitSession, false);
+  for(let i=0;i<buttonsBack.length;i++) {
+    buttonsBack[i].addEventListener('click', backPopup, false);
+  }
+  buttonSession.addEventListener('click', goToLogin, false);
 
-void  initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
+  void initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
 }, false);
 const getClients = async (url, authorization, method, selectClients, selectClientValue) => {
   const {data, error} = await fetchData(url, authorization, method);
