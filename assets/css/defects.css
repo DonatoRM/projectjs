@@ -12420,5 +12420,11 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.modal-message {
+  width: fit-content;
+}
+.modal-message .icon {
+  width: 2.5rem;
+}
 
 /*# sourceMappingURL=defects.css.map */

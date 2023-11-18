@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const table = document.getElementById('table');
   const buttonNew = document.getElementById('new');
   const buttonBack = document.getElementById('back');
+  const buttonsBackMessage = document.getElementsByClassName('backMessage');
 
   document.getElementById('position').value = objPosition.position;
   document.getElementById('element').value = objPosition.element;
@@ -17,10 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buttonNew.addEventListener('click', handleNewDefect, false);
   buttonBack.addEventListener('click', handleBack, false);
+  for (let i = 0; i < buttonsBackMessage.length; i++) {
+    buttonsBackMessage[i].addEventListener('click',goBack,false);
+  }
 
   void getDefects(objPosition.id, table);
 
 }, false);
+const goBack = event => {
+  const modalDanger=document.getElementById('modalDanger');
+  const modalWarning=document.getElementById('modalWarning');
+  modalDanger.classList.remove('show');
+  modalDanger.style.display='none';
+  modalWarning.classList.remove('show');
+  modalWarning.style.display='none';
+};
 const handleBack = (event) => {
   console.log('Volver atrás');
 };
@@ -31,7 +43,9 @@ const handleUpdate = (event) => {
   console.log('actualizar registro de defecto');
 };
 const handleDelete = (event) => {
-  console.log('Borrar registro de defecto');
+  const modalDanger = document.getElementById('modalDanger');
+  modalDanger.classList.add('show');
+  modalDanger.style.display = 'block';
 };
 const getDefects = async (id, table) => {
   const method = 'GET';
@@ -55,35 +69,35 @@ const getDefects = async (id, table) => {
     tdDate.setAttribute('class', 'text-center');
     row.appendChild(tdDate);
     const tdWind = document.createElement('td');
-    tdWind.textContent = point.wind;
+    tdWind.textContent = parseFloat(point.wind);
     tdWind.setAttribute('class', 'text-center');
     row.appendChild(tdWind);
     const tdEmissivity = document.createElement('td');
-    tdEmissivity.textContent = point.emissivity;
+    tdEmissivity.textContent = parseFloat(point.emissivity);
     tdEmissivity.setAttribute('class', 'text-center');
     row.appendChild(tdEmissivity);
     const tdPointTemperature = document.createElement('td');
-    tdPointTemperature.textContent = point.point_temperature;
+    tdPointTemperature.textContent = parseFloat(point.point_temperature);
     tdPointTemperature.setAttribute('class', 'text-center');
     row.appendChild(tdPointTemperature);
     const tdReferenceTemperature = document.createElement('td');
-    tdReferenceTemperature.textContent = point.reference_temperature;
+    tdReferenceTemperature.textContent = parseFloat(point.reference_temperature);
     tdReferenceTemperature.setAttribute('class', 'text-center');
     row.appendChild(tdReferenceTemperature);
     const tdRoomTemperature = document.createElement('td');
-    tdRoomTemperature.textContent = point.room_temperature;
+    tdRoomTemperature.textContent = parseFloat(point.room_temperature);
     tdRoomTemperature.setAttribute('class', 'text-center');
     row.appendChild(tdRoomTemperature);
     const tdReflectedApparentTemperatute = document.createElement('td');
-    tdReflectedApparentTemperatute.textContent = point.reflected_apparent_temperature;
+    tdReflectedApparentTemperatute.textContent = parseFloat(point.reflected_apparent_temperature);
     tdReflectedApparentTemperatute.setAttribute('class', 'text-center');
     row.appendChild(tdReflectedApparentTemperatute);
     const tdMaximumCurrent = document.createElement('td');
-    tdMaximumCurrent.textContent = point.maximum_current;
+    tdMaximumCurrent.textContent = parseFloat(point.maximum_current);
     tdMaximumCurrent.setAttribute('class', 'text-center');
     row.appendChild(tdMaximumCurrent);
     const tdCurrent = document.createElement('td');
-    tdCurrent.textContent = point.current;
+    tdCurrent.textContent = parseFloat(point.current);
     tdCurrent.setAttribute('class', 'text-center');
     row.appendChild(tdCurrent);
     const tdIcons = document.createElement('td');
