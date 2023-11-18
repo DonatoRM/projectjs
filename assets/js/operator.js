@@ -238,7 +238,6 @@ const getPositions = async (url, authorization, method, table) => {
   sessionStorage.setItem('positions', JSON.stringify(data.data));
 };
 const clickRow = event => {
-  // console.log(parseInt(event.target.parentNode.children[0].textContent));
   const tr = event.target.parentNode;
   const objPosition = {
     id: parseInt(tr.children[0].textContent),

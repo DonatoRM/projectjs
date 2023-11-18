@@ -6,20 +6,38 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '../../index.html';
   }
   const objPosition = JSON.parse(window.localStorage.getItem('row'));
-  // window.localStorage.removeItem('row');
-  const table=document.getElementById('table');
-  document.getElementById('id').textContent = objPosition.id;
-  document.getElementById('position').textContent = objPosition.position;
-  document.getElementById('element').textContent = objPosition.element;
-  document.getElementById('point').textContent = objPosition.point;
-  document.getElementById('fase').textContent = objPosition.fase;
-  void getDefects(objPosition.id,table);
+  const table = document.getElementById('table');
+  const buttonNew = document.getElementById('new');
+  const buttonBack = document.getElementById('back');
+
+  document.getElementById('position').value = objPosition.position;
+  document.getElementById('element').value = objPosition.element;
+  document.getElementById('point').value = objPosition.point;
+  document.getElementById('fase').value = objPosition.fase;
+
+  buttonNew.addEventListener('click', handleNewDefect, false);
+  buttonBack.addEventListener('click', handleBack, false);
+
+  void getDefects(objPosition.id, table);
+
 }, false);
-const getDefects = async(id,table) => {
+const handleBack = (event) => {
+  console.log('Volver atrás');
+};
+const handleNewDefect = (event) => {
+  console.log('Nuevo defecto');
+};
+const handleUpdate = (event) => {
+  console.log('actualizar registro de defecto');
+};
+const handleDelete = (event) => {
+  console.log('Borrar registro de defecto');
+};
+const getDefects = async (id, table) => {
   const method = 'GET';
   const authToken = window.localStorage.getItem('AUTH_CLIENT');
   const authorization = 'Bearer ' + authToken;
-  const url = 'http://192.168.0.2:81/defects?position='+id;
+  const url = 'http://192.168.0.2:81/defects?position=' + id;
   const {data, error} = await fetchData(url, authorization, method);
   if (error) throw new error('Error al buscar: ' + error);
   const tds = table.getElementsByTagName('td');
@@ -48,12 +66,10 @@ const getDefects = async(id,table) => {
     tdPointTemperature.textContent = point.point_temperature;
     tdPointTemperature.setAttribute('class', 'text-center');
     row.appendChild(tdPointTemperature);
-    // TODO
     const tdReferenceTemperature = document.createElement('td');
     tdReferenceTemperature.textContent = point.reference_temperature;
     tdReferenceTemperature.setAttribute('class', 'text-center');
     row.appendChild(tdReferenceTemperature);
-    // TODO
     const tdRoomTemperature = document.createElement('td');
     tdRoomTemperature.textContent = point.room_temperature;
     tdRoomTemperature.setAttribute('class', 'text-center');
@@ -70,22 +86,19 @@ const getDefects = async(id,table) => {
     tdCurrent.textContent = point.current;
     tdCurrent.setAttribute('class', 'text-center');
     row.appendChild(tdCurrent);
-    const tdFeedback = document.createElement('td');
-    tdFeedback.textContent = point.feedback;
-    tdFeedback.setAttribute('class', 'text-center');
-    row.appendChild(tdFeedback);
-    const tdThermogram = document.createElement('td');
-    tdThermogram.textContent = point.thermogram;
-    tdThermogram.setAttribute('class', 'text-center');
-    row.appendChild(tdThermogram);
-    const tdPhoto = document.createElement('td');
-    tdPhoto.textContent = point.photo;
-    tdPhoto.setAttribute('class', 'text-center');
-    row.appendChild(tdPhoto);
+    const tdIcons = document.createElement('td');
+    const buttonUpdate = document.createElement('button');
+    buttonUpdate.setAttribute('class', 'btn bg-color-green text-white rounded-circle me-2 update');
+    buttonUpdate.innerHTML = '<i class=\"fa-solid fa-pencil\"></i>';
+    buttonUpdate.addEventListener('click', handleUpdate, false);
+    tdIcons.appendChild(buttonUpdate);
+    const buttonDelete = document.createElement('button');
+    buttonDelete.setAttribute('class', 'btn bg-color-marron text-white rounded-circle delete');
+    buttonDelete.innerHTML = '<i class=\"fa-solid fa-trash\"></i>';
+    buttonDelete.addEventListener('click', handleDelete, false);
+    tdIcons.appendChild(buttonDelete);
+    tdIcons.setAttribute('class', 'text-center');
+    row.appendChild(tdIcons);
     table.appendChild(row);
-    // const rowsTable = table.getElementsByTagName('tr');
-    // for (let i = 0; i < rowsTable.length; i++) {
-    //   rowsTable[i].addEventListener('click', clickRow, false);
-    // }
   });
 };
