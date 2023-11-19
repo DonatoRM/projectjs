@@ -18,28 +18,32 @@
 <body class="container-fluid w-100 bg-color-background p-0">
 <header class="row p-0 m-0">
     <div class="col-8 p-0 m-0 ps-2 pe-1">
-        <button type="button" name="new" id="new" class="btn bg-color-black text-white rounded w-100 my-2">Nuevo Defecto</button>
+        <button type="button" name="new" id="new" class="btn bg-color-black text-white rounded w-100 my-2">Nuevo
+            Defecto
+        </button>
     </div>
     <div class="col-4 p-0 m-0 ps-1 pe-2 my-2">
-        <button type="button" name="back" id="back" class="btn bg-color-green text-white border-1 w-100 rounded border-1 border-color-black">Atrás</button>
+        <button type="button" name="back" id="back"
+                class="btn bg-color-green text-white border-1 w-100 rounded border-1 border-color-black">Atrás
+        </button>
     </div>
 </header>
 <nav class="row d-flex flex-column bg-color-blue py-2 pb-2 pt-3 mx-2 rounded">
     <div class="col mb-2">
         <label for="position" class="form-label d-none"></label>
-        <input type="text" class="form-control" id="position" aria-describedby="id" placeholder="Posición" disabled>
+        <input type="text" class="form-control" id="position" aria-describedby="id" placeholder="Posición" readonly>
     </div>
     <div class="col mb-2">
         <label for="element" class="form-label d-none"></label>
-        <input type="text" class="form-control" id="element" aria-describedby="element" placeholder="Elemento" disabled>
+        <input type="text" class="form-control" id="element" aria-describedby="element" placeholder="Elemento" readonly>
     </div>
     <div class="col mb-2">
         <label for="point" class="form-label d-none"></label>
-        <input type="text" class="form-control" id="point" aria-describedby="point" placeholder="Punto" disabled>
+        <input type="text" class="form-control" id="point" aria-describedby="point" placeholder="Punto" readonly>
     </div>
     <div class="col mb-2">
         <label for="fase" class="form-label d-none"></label>
-        <input type="text" class="form-control" id="fase" aria-describedby="fase" placeholder="Fase" disabled>
+        <input type="text" class="form-control" id="fase" aria-describedby="fase" placeholder="Fase" readonly>
     </div>
 </nav>
 <main class="row">
@@ -81,8 +85,13 @@
                 <span class="text-color-red fw-bold">Los datos se perderán de forma definitiva</span>
             </div>
             <div class="modal-footer border-0 d-flex justify-content-evenly">
-                <button type="button" class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage" data-bs-dismiss="modal">atrás</button>
-                <button type="button" class="btn bg-color-red border-color-black border-1 text-white closeModal px-3" data-bs-dismiss="modal">borrar</button>
+                <button type="button"
+                        class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
+                        data-bs-dismiss="modal">atrás
+                </button>
+                <button type="button" class="btn bg-color-red border-color-black border-1 text-white closeModal px-3"
+                        data-bs-dismiss="modal" id="borrar">borrar
+                </button>
             </div>
         </div>
     </div>
@@ -93,19 +102,148 @@
             <div class="modal-header bg-white text-color-marron border-0 py-1 px-4 pt-2">
                 <div class="d-flex w-100">
                     <div>
-                        <img src="../assets/images/advertencia.png" alt="Modal de actualizar defectos" class="icon">
+                        <img src="../assets/images/advertencia.png" alt="Modal de advertencia" class="icon">
                     </div>
                     <div class="w-100 d-flex align-items-center">
-                        <h5 class="modal-title mx-auto fw-bold fs-5 pe-3">¿ ESTÁS SEGURO ?</h5>
+                        <h5 id="idTitleModalWarning" class="modal-title mx-auto fw-bold fs-5 pe-3"></h5>
                     </div>
                 </div>
             </div>
-            <div class="modal-body text-center py-1 px-4" id="errorLogin">
-                <span class="text-color-marron fw-bold">Los datos se actualizarán de forma definitiva</span>
+            <div class="modal-body text-center py-1 px-4">
+                <span id="idMessageModalWarning" class="text-color-marron fw-bold"></span>
             </div>
             <div class="modal-footer border-0 d-flex justify-content-evenly">
-                <button type="button" class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage" data-bs-dismiss="modal">atrás</button>
-                <button type="button" class="btn bg-color-marron border-color-black border-1 text-white closeModal px-3" data-bs-dismiss="modal">actualizar</button>
+                <button type="button"
+                        class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
+                        data-bs-dismiss="modal">atrás
+                </button>
+                <button type="button" class="btn bg-color-marron border-color-black border-1 text-white closeModal px-3"
+                        data-bs-dismiss="modal">actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalDefects" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-message">
+        <div class="modal-content bg-color-background">
+            <form>
+                <div class="modal-header bg-color-background border-0 p-2">
+                    <h5 id="titleModal"
+                        class="modal-title py-2 bg-color-blue text-white w-100 text-center rounded fw-normal"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="date" class="form-label fw-bold mb-0 $fs-labels">Fecha</label>
+                            <input type="date" class="form-control valid" id="date" aria-describedby="fecha" required>
+                            <div id="errorData" class="form-text text-color-red err"></div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="wind" class="form-label fw-bold mb-0">V. Viento (m/s)</label>
+                            <input type="number" class="form-control valid" id="wind" aria-describedby="velocidad del viento"
+                                   required>
+                            <div id="errorWind" class="form-text text-color-red err"></div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="emissivity" class="form-label fw-bold mb-0">Emisividad</label>
+                            <input type="number" class="form-control valid" id="emissivity" aria-describedby="emisividad"
+                                   required>
+                            <div id="errorEmissivity" class="form-text text-color-red err"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="temp" class="form-label fw-bold mb-0">Temp. Punto</label>
+                            <input type="number" class="form-control valid" id="temp" aria-describedby="temperatura del punto"
+                                   required>
+                            <div id="errorTemp" class="form-text text-color-red err"></div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="temp_ref" class="form-label fw-bold mb-0">Temp. referencia</label>
+                            <input type="number" class="form-control valid" id="temp_ref"
+                                   aria-describedby="temperatura de referencia" required>
+                            <div id="errorTempRef" class="form-text text-color-red err"></div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="temp_amb" class="form-label fw-bold mb-0">Temp. ambiente</label>
+                            <input type="number" class="form-control valid" id="temp_amb"
+                                   aria-describedby="temperatura ambiente" required>
+                            <div id="errorTempAmb" class="form-text text-color-red err"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="temp_ap" class="form-label fw-bold mb-0">Temp. reflejada</label>
+                            <input type="number" class="form-control valid" id="temp_ap"
+                                   aria-describedby="temperatura aparente reflejada" required>
+                            <div id="errorTempAp" class="form-text text-color-red err"></div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="Imax" class="form-label fw-bold mb-0">I. máxima (A)</label>
+                            <input type="number" class="form-control valid" id="Imax" aria-describedby="intensidad máxima"
+                                   required>
+                            <div id="errorIMax" class="form-text text-color-red err"></div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="I" class="form-label fw-bold mb-0">I. real (A)</label>
+                            <input type="number" class="form-control valid" id="I" aria-describedby="intensidad real"
+                                   required>
+                            <div id="errorI" class="form-text text-color-red err"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 mb-3">
+                            <label for="image" class="form-label fw-bold mb-0">Termograma</label>
+                            <input type="text" class="form-control" id="image" aria-describedby="termograma">
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label for="photo" class="form-label fw-bold mb-0">Fotografía</label>
+                            <input type="text" class="form-control" id="photo" aria-describedby="fotografía">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="status" class="form-label fw-bold mb-0">Comentarios</label>
+                            <textarea class="form-control" placeholder="Comentarios..." id="status" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-evenly">
+                    <button type="button" id="backNewDefect"
+                            class="btn bg-color-marron border-color-black border-1 text-white closeModal px-3"
+                            data-bs-dismiss="modal">atrás
+                    </button>
+                    <button type="button" id="typeButtonDefect"
+                            class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
+                            data-bs-dismiss="modal">insertar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="modalInfo" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-message">
+        <div class="modal-content border-3 border-color-blue">
+            <div class="modal-header bg-white text-color-marron border-0 py-1 px-4 pt-2">
+                <div class="d-flex w-100">
+                    <div>
+                        <img src="../assets/images/info.webp" alt="Modal de información" class="icon">
+                    </div>
+                    <div class="w-100 d-flex align-items-center">
+                        <h5 id="idTitleModalInfo" class="modal-title mx-auto fw-bold fs-5 pe-3 ms-2"></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body text-center py-1 px-4">
+                <span id="idMessageModalInfo" class="text-color-marron fw-bold"></span>
+            </div>
+            <div class="modal-footer border-0 d-flex justify-content-evenly">
+                <button type="button" id="backInfo"
+                        class="btn bg-color-green border-color-black border-1 text-white closeModal px-3"
+                        data-bs-dismiss="modal">aceptar
+                </button>
             </div>
         </div>
     </div>

@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
   selectLocations.addEventListener('change', changeLocations, false);
   searchContainer.addEventListener('input', changeSearch, false);
   buttonExit.addEventListener('click', exitSession, false);
-  for(let i=0;i<buttonsBack.length;i++) {
+  for (let i = 0; i < buttonsBack.length; i++) {
     buttonsBack[i].addEventListener('click', backPopup, false);
   }
   buttonSession.addEventListener('click', goToLogin, false);
@@ -155,7 +155,7 @@ const getNewPositions = (table, positions, searchText) => {
     tds[0].parentNode.removeChild(tds[0]);
   }
   if (searchText !== '') {
-    positions = positions.filter(position => position.name.includes(searchText) || position.element.includes(searchText) || position.point.includes(searchText));
+    positions = positions.filter(position => position.name.toLowerCase().includes(searchText.toLowerCase()) || position.element.toLowerCase().includes(searchText.toLowerCase()) || position.point.toLowerCase().includes(searchText.toLowerCase()));
   }
   positions.map(position => {
     const row = document.createElement('tr');

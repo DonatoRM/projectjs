@@ -142,7 +142,7 @@ class Services
     #[NoReturn] public static function insertionOK(): void
     {
         header("HTTP/1.0 201 Created");
-        echo('Congratulations. The operation was successful');
+        echo json_encode('Congratulations. The operation was successful');
     }
     /**
      * Método que lanza un error 400 si existe un error indefinido
