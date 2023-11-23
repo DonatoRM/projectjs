@@ -1,8 +1,5 @@
 @charset "UTF-8";
-@font-face {
-  font-family: "poppins";
-  src: url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
-}
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
@@ -12423,6 +12420,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+:root {
+  --bs-font-sans-serif: "Poppins", sans-serif;
+}
+
 .searchContainer {
   position: relative;
 }
@@ -12433,6 +12434,17 @@ textarea.form-control-lg {
   position: absolute;
   top: 1.35rem;
   left: 1.5rem;
+}
+
+.modal-clients {
+  width: fit-content;
+}
+
+.modal-message {
+  width: fit-content;
+}
+.modal-message .icon {
+  width: 2.5rem;
 }
 
 .btn:focus {

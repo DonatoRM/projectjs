@@ -124,7 +124,7 @@
         </div>
     </div>
 </div>
-<div id="modalDefects" class="modal" tabindex="-1">
+<div id="modalDefects" class="modal fade" tabindex="-1" aria-labelledby="Modal de Defectos" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-message">
         <div class="modal-content bg-color-background">
             <form>
@@ -140,7 +140,7 @@
                             <div id="errorData" class="form-text text-color-red err"></div>
                         </div>
                         <div class="col mb-3">
-                            <label for="wind" class="form-label fw-bold mb-0">V. Viento (m/s)</label>
+                            <label for="wind" class="form-label fw-bold mb-0">V. Viento</label>
                             <input type="number" class="form-control valid" id="wind" aria-describedby="velocidad del viento"
                                    required>
                             <div id="errorWind" class="form-text text-color-red err"></div>
@@ -154,19 +154,19 @@
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label for="temp" class="form-label fw-bold mb-0">Temp. Punto</label>
+                            <label for="temp" class="form-label fw-bold mb-0">T. Punto</label>
                             <input type="number" class="form-control valid" id="temp" aria-describedby="temperatura del punto"
                                    required>
                             <div id="errorTemp" class="form-text text-color-red err"></div>
                         </div>
                         <div class="col mb-3">
-                            <label for="temp_ref" class="form-label fw-bold mb-0">Temp. referencia</label>
+                            <label for="temp_ref" class="form-label fw-bold mb-0">T. referencia</label>
                             <input type="number" class="form-control valid" id="temp_ref"
                                    aria-describedby="temperatura de referencia" required>
                             <div id="errorTempRef" class="form-text text-color-red err"></div>
                         </div>
                         <div class="col mb-3">
-                            <label for="temp_amb" class="form-label fw-bold mb-0">Temp. ambiente</label>
+                            <label for="temp_amb" class="form-label fw-bold mb-0">T. ambiente</label>
                             <input type="number" class="form-control valid" id="temp_amb"
                                    aria-describedby="temperatura ambiente" required>
                             <div id="errorTempAmb" class="form-text text-color-red err"></div>
@@ -174,19 +174,19 @@
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label for="temp_ap" class="form-label fw-bold mb-0">Temp. reflejada</label>
+                            <label for="temp_ap" class="form-label fw-bold mb-0">T. reflejada</label>
                             <input type="number" class="form-control valid" id="temp_ap"
                                    aria-describedby="temperatura aparente reflejada" required>
                             <div id="errorTempAp" class="form-text text-color-red err"></div>
                         </div>
                         <div class="col mb-3">
-                            <label for="Imax" class="form-label fw-bold mb-0">I. máxima (A)</label>
+                            <label for="Imax" class="form-label fw-bold mb-0">I. máxima</label>
                             <input type="number" class="form-control valid" id="Imax" aria-describedby="intensidad máxima"
                                    required>
                             <div id="errorIMax" class="form-text text-color-red err"></div>
                         </div>
                         <div class="col mb-3">
-                            <label for="I" class="form-label fw-bold mb-0">I. real (A)</label>
+                            <label for="I" class="form-label fw-bold mb-0">I. real</label>
                             <input type="number" class="form-control valid" id="I" aria-describedby="intensidad real"
                                    required>
                             <div id="errorI" class="form-text text-color-red err"></div>
@@ -216,7 +216,7 @@
                     </button>
                     <button type="button" id="typeButtonDefect"
                             class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
-                            data-bs-dismiss="modal">insertar
+                            >insertar
                     </button>
                 </div>
             </form>

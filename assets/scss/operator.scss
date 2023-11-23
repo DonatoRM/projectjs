@@ -1,9 +1,8 @@
-@font-face {
-  font-family: 'poppins';
-  src: url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap')
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
 @import './colors';
-
+:root {
+  --bs-font-sans-serif: 'Poppins', sans-serif;
+}
 .searchContainer {
   position: relative;
 
@@ -17,7 +16,16 @@
     left: 1.5rem;
   }
 }
+.modal-clients {
+  width: fit-content;
+}
+.modal-message {
+  width: fit-content;
 
+  .icon {
+    width: 2.5rem;
+  }
+}
 .btn:focus {
   box-shadow: 0 0 10px #59A63B;
 }

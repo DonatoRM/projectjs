@@ -283,8 +283,10 @@ const goBack = event => {
   modalWarning.style.display = 'none';
 };
 const handleBack = (event) => {
+  localStorage.removeItem('row');
   sessionStorage.removeItem('positions');
   sessionStorage.removeItem('NEW_DEFECT');
+  sessionStorage.removeItem('position');
   sessionStorage.removeItem('position');
   window.location.href = '../../views/operator.html';
 };

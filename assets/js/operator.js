@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonsBack = document.getElementsByClassName('close');
   const buttonSession = document.getElementById('exitSession');
   const popupExit = document.getElementById('popupExit');
+  const modalNewClient = document.getElementById('modalClients');
 
   let selectClientValue = 1;
   let selectInstallationValue = 1;
@@ -95,13 +96,191 @@ document.addEventListener('DOMContentLoaded', () => {
   selectLocations.addEventListener('change', changeLocations, false);
   searchContainer.addEventListener('input', changeSearch, false);
   buttonExit.addEventListener('click', exitSession, false);
+  modalNewClient.addEventListener('shown.bs.modal', handleNewClientModal, false);
   for (let i = 0; i < buttonsBack.length; i++) {
     buttonsBack[i].addEventListener('click', backPopup, false);
   }
   buttonSession.addEventListener('click', goToLogin, false);
+  const countryNewClient = document.getElementById('countryNewClient');
+  countryNewClient.addEventListener('change', handleChangeNewCountry, false);
+
+  const provinceNewClient = document.getElementById('provinceNewClient');
+  provinceNewClient.addEventListener('change', handleChangeNewProvince, false);
+
+  const buttonDeleteNewClients = document.getElementById('resetNewClient');
+  buttonDeleteNewClients.addEventListener('click', handleButtonDeleteNewClients, false);
+
+  modalNewClient.addEventListener('hidden.bs.modal', handleButtonBackNewClients, false);
 
   void initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
 }, false);
+
+const handleButtonBackNewClients = event => {
+  const modal=event.target;
+  const objNewClient={
+    name: document.querySelector('#modalClients #nameNewClient').value,
+    cp: document.querySelector('#modalClients #zipCodeNewClient').value,
+    country: document.querySelector('#modalClients #countryNewClient').value,
+    province: document.querySelector('#modalClients #provinceNewClient').value,
+    municipality: document.querySelector('#modalClients #municipalityNewClient').value,
+    address: document.querySelector('#modalClients #addressNewClient').value,
+    phone: document.querySelector('#modalClients #phoneNewClient').value,
+    email: document.querySelector('#modalClients #emailNewClient').value,
+  }
+  sessionStorage.setItem('objNewClient',JSON.stringify(objNewClient));
+};
+
+const handleButtonDeleteNewClients = async event => {
+  const provinceNewClient = document.getElementById('provinceNewClient');
+  for (let i = provinceNewClient.length - 1; i >= 0; i--) {
+    provinceNewClient.options[i] = null;
+  }
+  const municipalityNewClient = document.getElementById('municipalityNewClient');
+  for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
+    municipalityNewClient.options[i] = null;
+  }
+  const selectNewCountry = document.getElementById('countryNewClient');
+  const valueNewCountry = parseInt(selectNewCountry.options[selectNewCountry.selectedIndex].value);
+  let url = `http://localhost:81/provinces?country=${valueNewCountry}`;
+  const method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const objProvinces = await fetchData(url, authorization, method);
+  if (objProvinces.error) throw new error('Error al solicitar las provincias');
+  objProvinces.data.data.map(province => {
+    const option = document.createElement('option');
+    option.value = province.id;
+    option.text = province.name;
+    provinceNewClient.appendChild(option);
+  });
+  url = `http://localhost:81/municipalities?province=${objProvinces.data.data[0].id}`;
+  const objMunicipalities = await fetchData(url, authorization, method);
+  if (objMunicipalities.error) throw new error('Error al solicitar los municipios');
+  objMunicipalities.data.data.map(municipality => {
+    const option = document.createElement('option');
+    option.value = municipality.id;
+    option.text = municipality.name;
+    municipalityNewClient.appendChild(option);
+  });
+};
+
+const handleChangeNewProvince = async event => {
+  const municipalityNewClient = document.getElementById('municipalityNewClient');
+  for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
+    municipalityNewClient.options[i] = null;
+  }
+  const selectNewProvince = event.target;
+  const valueNewProvince = parseInt(selectNewProvince.options[selectNewProvince.selectedIndex].value);
+  let url = `http://localhost:81/municipalities?province=${valueNewProvince}`;
+  const method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const objMunicipalities = await fetchData(url, authorization, method);
+  if (objMunicipalities.error) throw new error('Error al solicitar las provincias');
+  objMunicipalities.data.data.map(municipality => {
+    const option = document.createElement('option');
+    option.value = municipality.id;
+    option.text = municipality.name;
+    municipalityNewClient.appendChild(option);
+  });
+
+};
+
+const handleChangeNewCountry = async event => {
+  const provinceNewClient = document.getElementById('provinceNewClient');
+  for (let i = provinceNewClient.length - 1; i >= 0; i--) {
+    provinceNewClient.options[i] = null;
+  }
+  const municipalityNewClient = document.getElementById('municipalityNewClient');
+  for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
+    municipalityNewClient.options[i] = null;
+  }
+  const selectNewCountry = event.target;
+  const valueNewCountry = parseInt(selectNewCountry.options[selectNewCountry.selectedIndex].value);
+  let url = `http://localhost:81/provinces?country=${valueNewCountry}`;
+  const method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const objProvinces = await fetchData(url, authorization, method);
+  if (objProvinces.error) throw new error('Error al solicitar las provincias');
+  objProvinces.data.data.map(province => {
+    const option = document.createElement('option');
+    option.value = province.id;
+    option.text = province.name;
+    provinceNewClient.appendChild(option);
+  });
+  url = `http://localhost:81/municipalities?province=${objProvinces.data.data[0].id}`;
+  const objMunicipalities = await fetchData(url, authorization, method);
+  if (objMunicipalities.error) throw new error('Error al solicitar los municipios');
+  objMunicipalities.data.data.map(municipality => {
+    const option = document.createElement('option');
+    option.value = municipality.id;
+    option.text = municipality.name;
+    municipalityNewClient.appendChild(option);
+  });
+
+};
+const handleNewClientModal = async (event) => {
+  const countryNewClient = document.querySelector('#modalClients #countryNewClient');
+  const provinceNewClient = document.querySelector('#modalClients #provinceNewClient');
+  const municipalityNewClient = document.querySelector('#modalClients #municipalityNewClient');
+  let objNewClient=null;
+  if(sessionStorage.getItem('objNewClient')) {
+    objNewClient=JSON.parse(sessionStorage.getItem('objNewClient'));
+    sessionStorage.removeItem('objNewClient');
+  }
+  for (let i = countryNewClient.length - 1; i >= 0; i--) {
+    countryNewClient.options[i] = null;
+  }
+  for (let i = provinceNewClient.length - 1; i >= 0; i--) {
+    provinceNewClient.options[i] = null;
+  }
+  for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
+    municipalityNewClient.options[i] = null;
+  }
+  let url = 'http://localhost:81/countries';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const method = 'GET';
+  const objCountries = await fetchData(url, authorization, method);
+  if (objCountries.error) new error('Error al solicitar los clientes');
+  objCountries.data.data.map(country => {
+    const option = document.createElement('option');
+    option.value = country.id;
+    option.text = country.name;
+    if(objNewClient && option.value===objNewClient.country) {
+      option.setAttribute('selected',true);
+    }
+    countryNewClient.appendChild(option);
+  });
+  url = 'http://localhost:81/provinces?country=' + countryNewClient.options[countryNewClient.selectedIndex].value;
+  const objProvinces = await fetchData(url, authorization, method);
+  if (objProvinces.error) throw new error('Error al solicitar las provincias');
+  objProvinces.data.data.map(province => {
+    const option = document.createElement('option');
+    option.value = province.id;
+    option.text = province.name;
+    if(objNewClient && option.value===objNewClient.province) {
+      option.setAttribute('selected',true);
+    }
+    provinceNewClient.appendChild(option);
+  });
+  url = 'http://localhost:81/municipalities?province='+ provinceNewClient.options[provinceNewClient.selectedIndex].value;
+  const objMunicipality = await fetchData(url, authorization, method);
+  if (objMunicipality.error) throw new error('Error al solicitar los municipios');
+  objMunicipality.data.data.map(province => {
+    const option = document.createElement('option');
+    option.value = province.id;
+    option.text = province.name;
+    if(objNewClient && option.value===objNewClient.municipality) {
+      option.setAttribute('selected',true);
+    }
+    municipalityNewClient.appendChild(option);
+  });
+  if(objNewClient) {
+    document.getElementById('nameNewClient').value=objNewClient.name;
+    document.getElementById('zipCodeNewClient').value=objNewClient.cp;
+    document.getElementById('addressNewClient').value=objNewClient.address;
+    document.getElementById('phoneNewClient').value=objNewClient.phone;
+    document.getElementById('emailNewClient').value=objNewClient.email;
+  }
+};
 const getClients = async (url, authorization, method, selectClients, selectClientValue) => {
   const {data, error} = await fetchData(url, authorization, method);
   if (error) throw new error('Error al busca: ' + error);
@@ -115,6 +294,7 @@ const getClients = async (url, authorization, method, selectClients, selectClien
     }
     selectClients.appendChild(option);
   });
+  return data.data;
 };
 const getInstallations = async (url, authorization, method, selectInstallations, selectLocations, selectInstallationValue) => {
   const {data, error} = await fetchData(url, authorization, method);
@@ -180,7 +360,7 @@ const getNewPositions = (table, positions, searchText) => {
     tdFase.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdFase);
     const tdTrash = document.createElement('td');
-    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle'><i class=\"fa-solid fa-trash\"></i></button>";
+    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle' data='position.id'><i class=\"fa-solid fa-trash\"></i></button>";
     tdTrash.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdTrash);
     const tdType = document.createElement('td');
@@ -222,43 +402,100 @@ const getPositions = async (url, authorization, method, table) => {
     tdFase.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdFase);
     const tdTrash = document.createElement('td');
-    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle'><i class=\"fa-solid fa-trash\"></i></button>";
+    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle' value='" + position.id + "'><i class=\"fa-solid fa-trash\"></i></button>";
     tdTrash.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdTrash);
-    const tdType = document.createElement('td');
     table.appendChild(row);
-    const rowsTable = table.getElementsByTagName('tr');
-    for (let i = 0; i < rowsTable.length; i++) {
-      rowsTable[i].addEventListener('click', clickRow, false);
-    }
   });
+  const buttonsDelete = table.querySelectorAll('tr td button');
+  for (let i = 0; i < buttonsDelete.length; i++) {
+    buttonsDelete[i].addEventListener('click', handleButtonDelete, false);
+  }
+  const rowsTable = table.getElementsByTagName('tr');
+  for (let i = 0; i < rowsTable.length; i++) {
+    rowsTable[i].addEventListener('click', clickRow, false);
+  }
   if (sessionStorage.getItem('positions')) {
     sessionStorage.removeItem(('positions'));
   }
   sessionStorage.setItem('positions', JSON.stringify(data.data));
 };
-const clickRow = event => {
-  const tr = event.target.parentNode;
-  const objPosition = {
-    id: parseInt(tr.children[0].textContent),
-    position: tr.children[1].textContent,
-    element: tr.children[2].textContent,
-    point: tr.children[3].textContent,
-    fase: tr.children[4].textContent
+const handleButtonDelete = async event => {
+  event.stopPropagation();
+  let tr = event.target.parentNode;
+  while (tr.nodeName.toLowerCase() !== 'tr') {
+    tr = tr.parentNode;
   }
-  window.localStorage.setItem('row', JSON.stringify(objPosition));
-  window.location = '../../views/defects.html';
+  const idRowSelected = parseInt(tr.cells[0].innerHTML);
+  sessionStorage.setItem('idRowDeleted', idRowSelected);
+  let button = event.target;
+  if (button.nodeName.toLowerCase() !== 'button') {
+    button = button.parentNode;
+  }
+  const modalDanger = document.getElementById('modalDanger');
+  modalDanger.classList.add('show');
+  modalDanger.style.display = 'block';
+  const buttonBack = modalDanger.getElementsByClassName('backMessage')[0];
+  buttonBack.addEventListener('click', handleBackModalDanger, false);
+  const buttonDelete = modalDanger.querySelector('#borrar');
+  buttonDelete.addEventListener('click', deleteRowPosition, false);
+};
+const handleBackModalDanger = event => {
+  const modalDanger = document.getElementById('modalDanger');
+  modalDanger.classList.remove('show');
+  modalDanger.style.display = 'none';
+};
+const deleteRowPosition = async event => {
+  const modalDanger = document.getElementById('modalDanger');
+  const idRowSelected = parseInt(JSON.parse(sessionStorage.getItem('idRowDeleted')));
+  const objDelete = {
+    id: idRowSelected
+  }
+  sessionStorage.removeItem(('idRowDeleted'));
+  const method = 'DELETE';
+  const authToken = window.localStorage.getItem('AUTH_CLIENT');
+  const authorization = 'Bearer ' + authToken;
+  let url = 'http://192.168.0.2:81/positions';
+  const {data, error} = await fetchData(url, authorization, method, objDelete);
+  if (error) throw new Error('Error al buscar: ' + error);
+  window.location.href = '../../views/operator.html';
+};
+const clickRow = event => {
+  if (event.target.nodeName.toLowerCase() !== 'tr') {
+    let tr = event.target.parentNode;
+    while (tr.nodeName.toLowerCase() !== 'tr') {
+      tr = tr.parentNode;
+    }
+    const hijo = tr.children;
+    const objPosition = {
+      id: parseInt(tr.children[0].textContent),
+      position: tr.children[1].textContent,
+      element: tr.children[2].textContent,
+      point: tr.children[3].textContent,
+      fase: tr.children[4].textContent
+    }
+    window.localStorage.setItem('row', JSON.stringify(objPosition));
+    window.location = '../../views/defects.html';
+  }
 };
 const initialStateComponents = async (selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue) => {
   const authToken = window.localStorage.getItem('AUTH_CLIENT');
   const authorization = 'Bearer ' + authToken;
   let url = 'http://192.168.0.2:81/clients';
   let method = 'GET';
-  await getClients(url, authorization, method, selectClients, selectClientValue);
+  const arrayClientes = await getClients(url, authorization, method, selectClients, selectClientValue);
   url = `http://192.168.0.2:81/installations?client=${selectClientValue}`;
   await getInstallations(url, authorization, method, selectInstallations, selectLocations, selectInstallationValue);
   url = 'http://192.168.0.2:81/locations?installation=' + selectLocationValue;
   await getLocations(url, authorization, method, selectLocations, selectLocationValue);
   url = 'http://192.168.0.2:81/positions?location=' + selectLocationValue;
   await getPositions(url, authorization, method, table);
+  const selectTotalClients = document.querySelector('#modalClients #totalClients');
+  arrayClientes.forEach((objectClient, index) => {
+    const option = document.createElement('option');
+    option.value = objectClient.id;
+    option.text = objectClient.name;
+    selectTotalClients.appendChild((option));
+  });
+  selectTotalClients.selectedIndex = -1;
 };
