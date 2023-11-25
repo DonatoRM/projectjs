@@ -12424,26 +12424,34 @@ textarea.form-control-lg {
   --bs-font-sans-serif: "Poppins", sans-serif;
 }
 
-.searchContainer {
+body main #spinnerOperator {
+  display: block;
+}
+body main #spinnerOperator .spinner-border {
+  width: 5rem;
+  height: 5rem;
+}
+body main #operator {
+  display: none;
+}
+body main .searchContainer {
   position: relative;
 }
-.searchContainer .search {
+body main .searchContainer .search {
   padding-left: 2rem;
 }
-.searchContainer .icon {
+body main .searchContainer .icon {
   position: absolute;
   top: 1.35rem;
   left: 1.5rem;
 }
-
-.modal-clients {
+body .modal-clients {
   width: fit-content;
 }
-
-.modal-message {
+body .modal-message {
   width: fit-content;
 }
-.modal-message .icon {
+body .modal-message .icon {
   width: 2.5rem;
 }
 

@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonSession = document.getElementById('exitSession');
   const popupExit = document.getElementById('popupExit');
   const modalNewClient = document.getElementById('modalClients');
+  const idNewClient = document.getElementById('idNewClient');
+  const buttonNewClient = document.getElementById('client');
+  const buttonDeleteClient = document.querySelector('#modalClients #idDeleteNewClient');
 
   let selectClientValue = 1;
   let selectInstallationValue = 1;
@@ -96,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
   selectLocations.addEventListener('change', changeLocations, false);
   searchContainer.addEventListener('input', changeSearch, false);
   buttonExit.addEventListener('click', exitSession, false);
-  modalNewClient.addEventListener('shown.bs.modal', handleNewClientModal, false);
+  buttonNewClient.addEventListener('click', handleNewClientModal, false);
   for (let i = 0; i < buttonsBack.length; i++) {
     buttonsBack[i].addEventListener('click', backPopup, false);
   }
@@ -112,12 +115,207 @@ document.addEventListener('DOMContentLoaded', () => {
 
   modalNewClient.addEventListener('hidden.bs.modal', handleButtonBackNewClients, false);
 
+  const totalClientsNewClientes = document.querySelector('#modalClients #totalClients');
+  totalClientsNewClientes.addEventListener('change', handleTotalClientsNewClientes, false);
+
+  idNewClient.addEventListener('click', handleActionIdNewClient, false);
+  const backInfo = document.getElementById('backInfo');
+  backInfo.addEventListener('click', handleBackInfo, false);
+
+  buttonDeleteClient.addEventListener('click', handleDeleteClient, false);
+
   void initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
 }, false);
+const handleDeleteClient = event => {
+  const inputsModal = document.querySelectorAll('#modalClients input:not([type="hidden"])');
+  const selectsModal = document.querySelectorAll('#modalClients select');
+  for (let i = 0; i < selectsModal.length; i++) {
+    for (let j = selectsModal[i].length - 1; j >= 0; j--) {
+      selectsModal[i].options[j] = null;
+    }
+  }
+  for (let i = 0; i < inputsModal.length; i++) {
+    for (let j = inputsModal[i].length - 1; j >= 0; i--) {
+      inputsModal[i][j].value = '';
+    }
+  }
+  const dangerModal = document.getElementById('modalDanger');
+  const idClient = document.querySelector('#modalClients #idClient').value;
+  const buttonBack = document.querySelector('#modalDanger #back');
+  const buttonDelete = document.querySelector('#modalDanger #borrar');
+  buttonBack.addEventListener('click', handleBackDeleteClient, false);
+  buttonDelete.addEventListener('click', handleDeleteOldClient, false);
+  sessionStorage.removeItem('updateClient');
+  dangerModal.classList.add('show');
+  dangerModal.style.display = 'block';
+  sessionStorage.removeItem('objNewClient');
+};
+const handleBackDeleteClient = event => {
+  const dangerModal = document.getElementById('modalDanger');
+  dangerModal.classList.remove('show');
+  dangerModal.style.display = 'none';
+  window.location.href = '../../views/operator.html';
+};
+const handleDeleteOldClient = async event => {
+  const inputsModal = document.querySelector('#modalClients input[type="hidden"]');
+  const url=`http://localhost:81/clients`;
+  const method='DELETE';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const objData={
+    id: inputsModal.value
+  }
+  const objDeleteClient=await fetchData(url,authorization,method,objData);
+  if(objDeleteClient.error) throw new error('Error al borrar el cliente');
+  window.location.href='../../views/operator.html';
+};
+const handleBackInfo = event => {
+  const modalInfo = document.getElementById('modalInfo');
+  modalInfo.classList.remove('show');
+  modalInfo.style.display = 'none';
+};
+const handleActionIdNewClient = async event => {
+  event.preventDefault();
+  const allInputsModalClients = document.querySelectorAll('#modalClients input');
+  let operationOk = true;
+  for (let i = 0; i < allInputsModalClients.length; i++) {
+    if (allInputsModalClients[i].value === '' && allInputsModalClients[i].type !== 'hidden') operationOk = false;
+  }
+  if (!operationOk) {
+    const modalInfo = document.getElementById('modalInfo');
+    modalInfo.classList.add('show');
+    modalInfo.style.display = 'block';
+    document.querySelector('#modalInfo #idTitleModalInfo').textContent = 'Operación incompleta';
+    document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
+  }
+  let update;
+  if (sessionStorage.getItem('updateClient')) {
+    update = sessionStorage.getItem('updateClient');
+  }
+  const url = `http://localhost:81/clients`;
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const inputsClients = document.querySelectorAll('#modalClients input');
+  const selectsClients = document.querySelectorAll('#modalClients select');
+  if (update === undefined) {
+    // Es una inserción
+    const method = 'POST';
+    const objData = {
+      name: inputsClients.item(1).value,
+      address: inputsClients.item(3).value,
+      cp: inputsClients.item(2).value,
+      country: selectsClients.item(0).value === '' ? 1 : parseInt(selectsClients.item(1).value),
+      province: parseInt(selectsClients.item(2).value),
+      municipality: parseInt(selectsClients.item(3).value),
+      location: inputsClients.item(3).value,
+      phone: inputsClients.item(4).value,
+      email: inputsClients.item(5).value
+    }
+    const objResultInsertNewClient = await fetchData(url, authorization, method, objData);
+    if (objResultInsertNewClient.error) throw new error('Error al insertar el nuevo cliente')
+  } else {
+    sessionStorage.removeItem('updateClient');
+    // Es una actualización
+    const method = 'PUT';
+    const objData = {
+      id: parseInt(inputsClients.item(0).value),
+      name: inputsClients.item(1).value,
+      address: inputsClients.item(3).value,
+      cp: inputsClients.item(2).value,
+      country: selectsClients.item(0).value === '' ? 1 : parseInt(selectsClients.item(1).value),
+      province: parseInt(selectsClients.item(2).value),
+      municipality: parseInt(selectsClients.item(3).value),
+      location: inputsClients.item(3).value,
+      phone: inputsClients.item(4).value,
+      email: inputsClients.item(5).value
+    }
+    const objResultUpdateClient = await fetchData(url, authorization, method, objData);
+    if (objResultUpdateClient.error) throw new error('Error al insertar el nuevo cliente')
+  }
+  window.location.href = '../../views/operator.html';
+};
+const handleTotalClientsNewClientes = async event => {
+  console.log(event.target);
+  const totalClientsHeader = document.querySelector('#modalClients .modal-header');
+  const totalClientsBody = document.querySelector('#modalClients .modal-body');
+  const totalClientsFooter = document.querySelector('#modalClients .modal-footer');
+  const spinnerUpdateClient = document.getElementById('spinnerUpdateClient');
+  totalClientsHeader.style.display = 'none';
+  totalClientsBody.style.display = 'none';
+  totalClientsFooter.style.display = 'none';
+  spinnerUpdateClient.classList.remove('d-none');
+  spinnerUpdateClient.classList.add('d-block');
 
+  sessionStorage.setItem('updateClient', JSON.stringify(true));
+  document.getElementById('idNewClient').textContent = 'Actualizar';
+  const clientSelectedForUpdate = event.target.options[event.target.selectedIndex].value;
+  let url = `http://localhost:81/clients?id=${clientSelectedForUpdate}`;
+  const method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  const objClients = await fetchData(url, authorization, method);
+  if (objClients.error) throw new error('Error al buscar el cliente');
+  document.getElementById('idClient').value = objClients.data.data[0].id;
+  document.getElementById('nameNewClient').value = objClients.data.data[0].name;
+  document.getElementById('zipCodeNewClient').value = objClients.data.data[0].cp;
+  //
+  url = 'http://localhost:81/countries';
+  const objCountries = await fetchData(url, authorization, method);
+  if (objCountries.error) new error('Error al solicitar los clientes');
+  const selectCountriesClients = document.querySelector('#modalClients #countryNewClient');
+  for (let i = selectCountriesClients.length - 1; i >= 0; i--) {
+    selectCountriesClients.options[i] = null;
+  }
+  objCountries.data.data.map(country => {
+    const option = document.createElement('option');
+    option.value = country.id;
+    option.text = country.name;
+    if (parseInt(option.value) === objClients.data.data[0].country) option.setAttribute('selected', 'true');
+    selectCountriesClients.appendChild(option);
+  });
+  //
+  url = `http://localhost:81/provinces?country=${selectCountriesClients.options[selectCountriesClients.selectedIndex].value}`;
+  const objProvinces = await fetchData(url, authorization, method);
+  if (objProvinces.error) new error('Error al solicitar las provincias');
+  const selectProvincesClients = document.querySelector('#modalClients #provinceNewClient');
+  for (let i = selectProvincesClients.length - 1; i >= 0; i--) {
+    selectProvincesClients.options[i] = null;
+  }
+  objProvinces.data.data.map(province => {
+    const option = document.createElement('option');
+    option.value = province.id;
+    option.text = province.name;
+    if (parseInt(option.value) === objClients.data.data[0].province) option.setAttribute('selected', 'true');
+    selectProvincesClients.appendChild(option);
+  });
+  //
+  url = `http://localhost:81/municipalities?province=${selectProvincesClients.options[selectProvincesClients.selectedIndex].value}`;
+  const objMunicipalities = await fetchData(url, authorization, method);
+  if (objMunicipalities.error) new error('Error al solicitar los Municipios');
+  const selectMunicipalitiesClients = document.querySelector('#modalClients #municipalityNewClient');
+  for (let i = selectMunicipalitiesClients.length - 1; i >= 0; i--) {
+    selectMunicipalitiesClients.options[i] = null;
+  }
+  objMunicipalities.data.data.map(municipality => {
+    const option = document.createElement('option');
+    option.value = municipality.id;
+    option.text = municipality.name;
+    if (parseInt(option.value) === objClients.data.data[0].municipality) option.setAttribute('selected', 'true');
+    selectMunicipalitiesClients.appendChild(option);
+  });
+  document.getElementById('addressNewClient').value = objClients.data.data[0].address;
+  document.getElementById('phoneNewClient').value = objClients.data.data[0].phone;
+  document.getElementById('emailNewClient').value = objClients.data.data[0].email;
+
+  totalClientsHeader.style.display = 'block';
+  totalClientsBody.style.display = 'block';
+  totalClientsFooter.style.display = 'block';
+  spinnerUpdateClient.classList.remove('d-block');
+  spinnerUpdateClient.classList.add('d-none');
+  const buttonDeleteClient = document.querySelector('#modalClients #idDeleteNewClient');
+  buttonDeleteClient.disabled = false;
+
+};
 const handleButtonBackNewClients = event => {
-  const modal=event.target;
-  const objNewClient={
+  const modal = event.target;
+  const objNewClient = {
     name: document.querySelector('#modalClients #nameNewClient').value,
     cp: document.querySelector('#modalClients #zipCodeNewClient').value,
     country: document.querySelector('#modalClients #countryNewClient').value,
@@ -127,10 +325,11 @@ const handleButtonBackNewClients = event => {
     phone: document.querySelector('#modalClients #phoneNewClient').value,
     email: document.querySelector('#modalClients #emailNewClient').value,
   }
-  sessionStorage.setItem('objNewClient',JSON.stringify(objNewClient));
+  sessionStorage.setItem('objNewClient', JSON.stringify(objNewClient));
 };
-
 const handleButtonDeleteNewClients = async event => {
+  sessionStorage.removeItem('updateClient');
+  document.querySelector('#modalClients #idNewClient').textContent = 'Aceptar';
   const provinceNewClient = document.getElementById('provinceNewClient');
   for (let i = provinceNewClient.length - 1; i >= 0; i--) {
     provinceNewClient.options[i] = null;
@@ -161,8 +360,8 @@ const handleButtonDeleteNewClients = async event => {
     option.text = municipality.name;
     municipalityNewClient.appendChild(option);
   });
+  document.querySelector('#modalClients #idDeleteNewClient').disabled = true;
 };
-
 const handleChangeNewProvince = async event => {
   const municipalityNewClient = document.getElementById('municipalityNewClient');
   for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
@@ -183,7 +382,6 @@ const handleChangeNewProvince = async event => {
   });
 
 };
-
 const handleChangeNewCountry = async event => {
   const provinceNewClient = document.getElementById('provinceNewClient');
   for (let i = provinceNewClient.length - 1; i >= 0; i--) {
@@ -218,12 +416,19 @@ const handleChangeNewCountry = async event => {
 
 };
 const handleNewClientModal = async (event) => {
+  const modalNewClient = document.getElementById('modalClients');
+  const spinnerButton = document.getElementById('spinnerClientsButton');
+  spinnerButton.classList.remove('d-none');
+  spinnerButton.classList.add('d-block');
+  const modalNewClients = document.getElementById('modalClients');
+  modalNewClient.style.display = 'none';
+
   const countryNewClient = document.querySelector('#modalClients #countryNewClient');
   const provinceNewClient = document.querySelector('#modalClients #provinceNewClient');
   const municipalityNewClient = document.querySelector('#modalClients #municipalityNewClient');
-  let objNewClient=null;
-  if(sessionStorage.getItem('objNewClient')) {
-    objNewClient=JSON.parse(sessionStorage.getItem('objNewClient'));
+  let objNewClient = null;
+  if (sessionStorage.getItem('objNewClient')) {
+    objNewClient = JSON.parse(sessionStorage.getItem('objNewClient'));
     sessionStorage.removeItem('objNewClient');
   }
   for (let i = countryNewClient.length - 1; i >= 0; i--) {
@@ -244,8 +449,8 @@ const handleNewClientModal = async (event) => {
     const option = document.createElement('option');
     option.value = country.id;
     option.text = country.name;
-    if(objNewClient && option.value===objNewClient.country) {
-      option.setAttribute('selected',true);
+    if (objNewClient && option.value === objNewClient.country) {
+      option.setAttribute('selected', true);
     }
     countryNewClient.appendChild(option);
   });
@@ -256,30 +461,34 @@ const handleNewClientModal = async (event) => {
     const option = document.createElement('option');
     option.value = province.id;
     option.text = province.name;
-    if(objNewClient && option.value===objNewClient.province) {
-      option.setAttribute('selected',true);
+    if (objNewClient && option.value === objNewClient.province) {
+      option.setAttribute('selected', true);
     }
     provinceNewClient.appendChild(option);
   });
-  url = 'http://localhost:81/municipalities?province='+ provinceNewClient.options[provinceNewClient.selectedIndex].value;
+  url = 'http://localhost:81/municipalities?province=' + provinceNewClient.options[provinceNewClient.selectedIndex].value;
   const objMunicipality = await fetchData(url, authorization, method);
   if (objMunicipality.error) throw new error('Error al solicitar los municipios');
   objMunicipality.data.data.map(province => {
     const option = document.createElement('option');
     option.value = province.id;
     option.text = province.name;
-    if(objNewClient && option.value===objNewClient.municipality) {
-      option.setAttribute('selected',true);
+    if (objNewClient && option.value === objNewClient.municipality) {
+      option.setAttribute('selected', true);
     }
     municipalityNewClient.appendChild(option);
   });
-  if(objNewClient) {
-    document.getElementById('nameNewClient').value=objNewClient.name;
-    document.getElementById('zipCodeNewClient').value=objNewClient.cp;
-    document.getElementById('addressNewClient').value=objNewClient.address;
-    document.getElementById('phoneNewClient').value=objNewClient.phone;
-    document.getElementById('emailNewClient').value=objNewClient.email;
+  if (objNewClient) {
+    document.getElementById('nameNewClient').value = objNewClient.name;
+    document.getElementById('zipCodeNewClient').value = objNewClient.cp;
+    document.getElementById('addressNewClient').value = objNewClient.address;
+    document.getElementById('phoneNewClient').value = objNewClient.phone;
+    document.getElementById('emailNewClient').value = objNewClient.email;
   }
+
+  spinnerButton.classList.remove('d-block');
+  spinnerButton.classList.add('d-none');
+  modalNewClient.style.display = 'block';
 };
 const getClients = async (url, authorization, method, selectClients, selectClientValue) => {
   const {data, error} = await fetchData(url, authorization, method);
@@ -498,4 +707,8 @@ const initialStateComponents = async (selectClients, selectInstallations, select
     selectTotalClients.appendChild((option));
   });
   selectTotalClients.selectedIndex = -1;
+  document.getElementById('spinnerOperator').classList.remove('d-flex');
+  document.getElementById('spinnerOperator').classList.add('d-none');
+  document.getElementById('operator').classList.remove('d-none');
+  document.getElementById('operator').classList.add('d-flex');
 };

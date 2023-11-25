@@ -3,29 +3,45 @@
 :root {
   --bs-font-sans-serif: 'Poppins', sans-serif;
 }
-.searchContainer {
-  position: relative;
+body {
+  main {
+    #spinnerOperator {
+      display: block;
+      .spinner-border {
+        width: 5rem;
+        height: 5rem;
+      }
+    }
+    #operator {
+      display: none;
+    }
+    .searchContainer {
+      position: relative;
 
-  .search {
-    padding-left: 2rem;
+      .search {
+        padding-left: 2rem;
+      }
+
+      .icon {
+        position: absolute;
+        top: 1.35rem;
+        left: 1.5rem;
+      }
+    }
   }
+  .modal-clients {
+    width: fit-content;
+  }
+  .modal-message {
+    width: fit-content;
 
-  .icon {
-    position: absolute;
-    top: 1.35rem;
-    left: 1.5rem;
+    .icon {
+      width: 2.5rem;
+    }
   }
 }
-.modal-clients {
-  width: fit-content;
-}
-.modal-message {
-  width: fit-content;
 
-  .icon {
-    width: 2.5rem;
-  }
-}
+
 .btn:focus {
   box-shadow: 0 0 10px #59A63B;
 }
