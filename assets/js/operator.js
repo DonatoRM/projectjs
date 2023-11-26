@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalNewClient = document.getElementById('modalClients');
   const idNewClient = document.getElementById('idNewClient');
   const buttonNewClient = document.getElementById('client');
+  const buttonNewInstallation = document.getElementById('installation');
+  const buttonNewLocation = document.getElementById('location');
   const buttonDeleteClient = document.querySelector('#modalClients #idDeleteNewClient');
 
   let selectClientValue = 1;
@@ -100,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
   searchContainer.addEventListener('input', changeSearch, false);
   buttonExit.addEventListener('click', exitSession, false);
   buttonNewClient.addEventListener('click', handleNewClientModal, false);
+  buttonNewInstallation.addEventListener('click', handleNewInstallationModal, false);
+  buttonNewLocation.addEventListener('click', handleNewLocationModal, false);
   for (let i = 0; i < buttonsBack.length; i++) {
     buttonsBack[i].addEventListener('click', backPopup, false);
   }
@@ -158,15 +162,18 @@ const handleBackDeleteClient = event => {
 };
 const handleDeleteOldClient = async event => {
   const inputsModal = document.querySelector('#modalClients input[type="hidden"]');
-  const url=`http://localhost:81/clients`;
-  const method='DELETE';
+  const url = `http://localhost:81/clients`;
+  const method = 'DELETE';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
-  const objData={
+  const objData = {
     id: inputsModal.value
   }
-  const objDeleteClient=await fetchData(url,authorization,method,objData);
-  if(objDeleteClient.error) throw new error('Error al borrar el cliente');
-  window.location.href='../../views/operator.html';
+  const objDeleteClient = await fetchData(url, authorization, method, objData);
+  if (objDeleteClient.error) throw new error('Error al borrar el cliente');
+  localStorage.removeItem('selectClient');
+  localStorage.removeItem('selectInstallation');
+  localStorage.removeItem('selectLocation');
+  window.location.href = '../../views/operator.html';
 };
 const handleBackInfo = event => {
   const modalInfo = document.getElementById('modalInfo');
@@ -186,51 +193,52 @@ const handleActionIdNewClient = async event => {
     modalInfo.style.display = 'block';
     document.querySelector('#modalInfo #idTitleModalInfo').textContent = 'Operación incompleta';
     document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
-  }
-  let update;
-  if (sessionStorage.getItem('updateClient')) {
-    update = sessionStorage.getItem('updateClient');
-  }
-  const url = `http://localhost:81/clients`;
-  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
-  const inputsClients = document.querySelectorAll('#modalClients input');
-  const selectsClients = document.querySelectorAll('#modalClients select');
-  if (update === undefined) {
-    // Es una inserción
-    const method = 'POST';
-    const objData = {
-      name: inputsClients.item(1).value,
-      address: inputsClients.item(3).value,
-      cp: inputsClients.item(2).value,
-      country: selectsClients.item(0).value === '' ? 1 : parseInt(selectsClients.item(1).value),
-      province: parseInt(selectsClients.item(2).value),
-      municipality: parseInt(selectsClients.item(3).value),
-      location: inputsClients.item(3).value,
-      phone: inputsClients.item(4).value,
-      email: inputsClients.item(5).value
-    }
-    const objResultInsertNewClient = await fetchData(url, authorization, method, objData);
-    if (objResultInsertNewClient.error) throw new error('Error al insertar el nuevo cliente')
   } else {
-    sessionStorage.removeItem('updateClient');
-    // Es una actualización
-    const method = 'PUT';
-    const objData = {
-      id: parseInt(inputsClients.item(0).value),
-      name: inputsClients.item(1).value,
-      address: inputsClients.item(3).value,
-      cp: inputsClients.item(2).value,
-      country: selectsClients.item(0).value === '' ? 1 : parseInt(selectsClients.item(1).value),
-      province: parseInt(selectsClients.item(2).value),
-      municipality: parseInt(selectsClients.item(3).value),
-      location: inputsClients.item(3).value,
-      phone: inputsClients.item(4).value,
-      email: inputsClients.item(5).value
+    let update;
+    if (sessionStorage.getItem('updateClient')) {
+      update = sessionStorage.getItem('updateClient');
     }
-    const objResultUpdateClient = await fetchData(url, authorization, method, objData);
-    if (objResultUpdateClient.error) throw new error('Error al insertar el nuevo cliente')
+    const url = `http://localhost:81/clients`;
+    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+    const inputsClients = document.querySelectorAll('#modalClients input');
+    const selectsClients = document.querySelectorAll('#modalClients select');
+    if (update === undefined) {
+      // Es una inserción
+      const method = 'POST';
+      const objData = {
+        name: inputsClients.item(1).value,
+        address: inputsClients.item(3).value,
+        cp: inputsClients.item(2).value,
+        country: selectsClients.item(0).value === '' ? 1 : parseInt(selectsClients.item(1).value),
+        province: parseInt(selectsClients.item(2).value),
+        municipality: parseInt(selectsClients.item(3).value),
+        location: inputsClients.item(3).value,
+        phone: inputsClients.item(4).value,
+        email: inputsClients.item(5).value
+      }
+      const objResultInsertNewClient = await fetchData(url, authorization, method, objData);
+      if (objResultInsertNewClient.error) throw new error('Error al insertar el nuevo cliente')
+    } else {
+      sessionStorage.removeItem('updateClient');
+      // Es una actualización
+      const method = 'PUT';
+      const objData = {
+        id: parseInt(inputsClients.item(0).value),
+        name: inputsClients.item(1).value,
+        address: inputsClients.item(3).value,
+        cp: inputsClients.item(2).value,
+        country: selectsClients.item(0).value === '' ? 1 : parseInt(selectsClients.item(1).value),
+        province: parseInt(selectsClients.item(2).value),
+        municipality: parseInt(selectsClients.item(3).value),
+        location: inputsClients.item(3).value,
+        phone: inputsClients.item(4).value,
+        email: inputsClients.item(5).value
+      }
+      const objResultUpdateClient = await fetchData(url, authorization, method, objData);
+      if (objResultUpdateClient.error) throw new error('Error al insertar el nuevo cliente')
+    }
   }
-  window.location.href = '../../views/operator.html';
+  // window.location.href = '../../views/operator.html';
 };
 const handleTotalClientsNewClientes = async event => {
   console.log(event.target);
@@ -415,14 +423,293 @@ const handleChangeNewCountry = async event => {
   });
 
 };
+const handleNewInstallationModal = async (event) => {
+  let objNewInstallation = null;
+  if (sessionStorage.getItem('objNewInstallation')) {
+    objNewInstallation = JSON.parse(sessionStorage.getItem('objNewInstallation'));
+  }
+  const modalNewInstallation = document.getElementById('modalInstallations');
+  const spinnerButton = document.getElementById('spinnerInstallationsButton');
+  const clientSelect = document.getElementById('clientSelected');
+  clientSelect.addEventListener('change', async event => {
+    const clientValueSelected = parseInt(event.target.options[event.target.selectedIndex].value);
+    const url = `http://localhost:81/installations?client=${clientValueSelected}`;
+    const method = 'GET';
+    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+    await getInstallations(url, authorization, method, totalInstallations);
+  }, false);
+  const totalInstallations = document.getElementById('totalInstallations');
+  totalInstallations.addEventListener('change', event => {
+    sessionStorage.setItem('updateInstallation', JSON.stringify(true));
+    document.querySelector('#modalInstallations #idNewInstallation').textContent = 'Actualizar';
+    document.querySelector('#modalInstallations #nameNewInstallation').value = event.target.options[event.target.selectedIndex].textContent;
+    document.querySelector('#modalInstallations #idDeleteNewInstallation').disabled = false;
+    document.querySelector('#modalInstallations #idInstallation').value = event.target.options[event.target.selectedIndex].value;
+  }, false);
+  const resetNewInstallationButton = document.querySelector('#modalInstallations #resetNewInstallation');
+  resetNewInstallationButton.addEventListener('click', async event => {
+    const totalInstallations = document.getElementById('totalInstallations');
+    while (totalInstallations.firstChild) {
+      totalInstallations.removeChild(totalInstallations.firstChild);
+    }
+    let url = 'http://localhost:81/installations?client=1';
+    let method = 'GET';
+    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+    await getInstallations(url, authorization, method, totalInstallations);
+    document.querySelector('#modalInstallations #idNewInstallation').textContent = 'aceptar';
+    document.querySelector('#modalInstallations #idDeleteNewInstallation').disabled = true;
+    sessionStorage.removeItem('updateInstallation');
+    document.querySelector('#modalInstallations #idInstallation').value = 0;
+  }, false);
+  const idNewInstallation = document.querySelector('#modalInstallations #idNewInstallation');
+  idNewInstallation.addEventListener('click', async event => {
+    const inputModalInstallations = document.querySelector('#modalInstallations #nameNewInstallation');
+    let operationOk = inputModalInstallations.value !== '';
+    if (!operationOk) {
+      const modalInfo = document.getElementById('modalInfo');
+      modalInfo.classList.add('show');
+      modalInfo.style.display = 'block';
+      document.querySelector('#modalInfo #idTitleModalInfo').textContent = 'Operación incompleta';
+      document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
+    } else {
+      const clientSelected = document.querySelector('#modalInstallations #clientSelected');
+      url = 'http://localhost:81/installations';
+      const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+      if (sessionStorage.getItem('updateInstallation')) {
+        sessionStorage.removeItem('updateInstallation');
+        const idInstallation = parseInt(document.querySelector('#modalInstallations #idInstallation').value);
+        document.querySelector('#modalInstallations #idInstallation').value = 0;
+        const objData = {
+          id: idInstallation,
+          name: document.querySelector('#modalInstallations #nameNewInstallation').value,
+          client: parseInt(clientSelected.options[clientSelected.selectedIndex].value)
+        }
+        method = 'PUT';
+        const objUpdateInstallation = await fetchData(url, authorization, method, objData);
+        if (objUpdateInstallation.error) throw new error('Error al actualizar la instalación');
+      } else {
+        const objData = {
+          name: document.querySelector('#modalInstallations #nameNewInstallation').value,
+          client: parseInt(clientSelected.options[clientSelected.selectedIndex].value)
+        }
+        //
+        method = 'POST';
+        const objInsertInstallation = await fetchData(url, authorization, method, objData);
+        if (objInsertInstallation.error) throw new error('Error al insertar la instalación');
+
+      }
+      modalNewInstallation.classList.remove('show');
+      modalNewInstallation.style.display = 'none';
+      window.location.href = '../../views/operator.html';
+    }
+  }, false);
+  const idDeleteNewInstallation = document.querySelector('#modalInstallations #idDeleteNewInstallation');
+  idDeleteNewInstallation.addEventListener('click', async event => {
+    // Lanzamos el modal de peligro
+    // Luego definimos los eventos del modal y en los eventos del modal indicamos lo de abajo
+    const modalDanger = document.getElementById('modalDanger');
+    const buttonBack = document.querySelector('#modalDanger #back');
+    buttonBack.addEventListener('click', event => {
+      const modalDanger = document.getElementById('modalDanger');
+      modalDanger.classList.remove('show');
+      modalDanger.style.display='none';
+    }, false);
+    const buttonDelete = document.querySelector('#modalDanger #borrar');
+    buttonDelete.addEventListener('click', async event => {
+      // donde se borra
+      url = 'http://localhost:81/installations';
+      if (sessionStorage.getItem('updateInstallation')) {
+        sessionStorage.removeItem('updateInstallation');
+        const idInstallation = parseInt(document.querySelector('#modalInstallations #idInstallation').value);
+        document.querySelector('#modalInstallations #idInstallation').value = 0;
+        const objData = {
+          id: idInstallation
+        }
+        method = 'DELETE';
+        const objUpdateInstallation = await fetchData(url, authorization, method, objData);
+        if (objUpdateInstallation.error) throw new error('Error al actualizar la instalación');
+        const modalInstallations=document.querySelector('#modalInstallations');
+        modalInstallations.classList.remove('show');
+        modalInstallations.style.display='none';
+        window.location.href='../../views/operator.html';
+      }
+    }, false);
+    modalDanger.classList.add('show');
+    modalDanger.style.display = 'block';
+    // Hasta aquí
+  }, false);
+  const idInstallationSelected = document.querySelector('#modalInstallations #idInstallation').value;
+  for (let i = clientSelect.options.length - 1; i >= 0; i--) {
+    clientSelect[i].options.value = null;
+  }
+  for (let i = totalInstallations.options.length - 1; i >= 0; i--) {
+    totalInstallations[i].options.value = null;
+  }
+  spinnerButton.classList.remove('d-none');
+  spinnerButton.classList.add('d-block');
+  const idInitialClient = (objNewInstallation && parseInt(objNewInstallation.id) !== 0) ? parseInt(objNewInstallation.id) : 1;
+  let url = 'http://localhost:81/clients';
+  let method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  await getClients(url, authorization, method, clientSelect, idInitialClient);
+  const idClientSelected = parseInt(clientSelect.options[clientSelect.selectedIndex].value);
+  url = `http://localhost:81/installations?client=${idClientSelected}`;
+  await getInstallations(url, authorization, method, totalInstallations);
+  spinnerButton.classList.remove('d-block');
+  spinnerButton.classList.add('d-none');
+  modalNewInstallation.classList.remove('d-none');
+  modalNewInstallation.classList.add('show');
+  modalNewInstallation.style.display = 'block';
+  sessionStorage.removeItem('objNewInstallation');
+}
+const handleNewLocationModal = async (event) => {
+  let objNewLocation = null;
+  if (sessionStorage.getItem('objNewLocation')) {
+    objNewLocation = JSON.parse(sessionStorage.getItem('objNewLocation'));
+  }
+  const modalNewLocation = document.getElementById('modalLocations');
+  const spinnerButton = document.getElementById('spinnerLocationsButton');
+  const installationSelect = document.querySelector('#modalLocations #installationSelected');
+  installationSelect.addEventListener('change', async event => {
+    const installationValueSelected = parseInt(event.target.options[event.target.selectedIndex].value);
+    const url = `http://localhost:81/locations?installation=${installationValueSelected}`;
+    const method = 'GET';
+    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+    await getLocations(url, authorization, method, totalLocations);
+  }, false);
+  const totalLocations = document.getElementById('totalLocations');
+  totalLocations.addEventListener('change', event => {
+    sessionStorage.setItem('updateLocation', JSON.stringify(true));
+    document.querySelector('#modalLocations #idNewLocation').textContent = 'Actualizar';
+    document.querySelector('#modalLocations #nameNewLocation').value = event.target.options[event.target.selectedIndex].textContent;
+    document.querySelector('#modalLocations #idDeleteNewLocation').disabled = false;
+    document.querySelector('#modalLocations #idLocation').value = event.target.options[event.target.selectedIndex].value;
+  }, false);
+  const resetNewLocationButton = document.querySelector('#modalLocations #resetNewLocation');
+  resetNewLocationButton.addEventListener('click', async event => {
+    const totalLocations = document.getElementById('totalLocations');
+    while (totalLocations.firstChild) {
+      totalLocations.removeChild(totalLocations.firstChild);
+    }
+    let url = 'http://localhost:81/locations?installation=1';
+    let method = 'GET';
+    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+    await getLocations(url, authorization, method, totalLocations);
+    document.querySelector('#modalLocations #idNewLocations').textContent = 'aceptar';
+    document.querySelector('#modalLocations #idDeleteNewLocation').disabled = true;
+    sessionStorage.removeItem('updateLocation');
+    document.querySelector('#modalLocations #idLocation').value = 0;
+  }, false);
+  const idNewLocation = document.querySelector('#modalLocations #idNewLocation');
+  idNewLocation.addEventListener('click', async event => {
+    const inputModalLocations = document.querySelector('#modalLocations #nameNewLocation');
+    let operationOk = inputModalLocations.value !== '';
+    if (!operationOk) {
+      const modalInfo = document.getElementById('modalInfo');
+      modalInfo.classList.add('show');
+      modalInfo.style.display = 'block';
+      document.querySelector('#modalInfo #idTitleModalInfo').textContent = 'Operación incompleta';
+      document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
+    } else {
+      const installationSelected = document.querySelector('#modalLocations #installationSelected');
+      url = 'http://localhost:81/locations';
+      const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+      if (sessionStorage.getItem('updateLocation')) {
+        sessionStorage.removeItem('updateLocation');
+        const idLocation = parseInt(document.querySelector('#modalLocations #idLocation').value);
+        document.querySelector('#modalLocations #idLocation').value = 0;
+        const objData = {
+          id: idLocation,
+          name: document.querySelector('#modalLocations #nameNewLocation').value,
+          columns: '',
+          installation: parseInt(installationSelected.options[installationSelected.selectedIndex].value)
+        }
+        method = 'PUT';
+        const objUpdateLocation = await fetchData(url, authorization, method, objData);
+        if (objUpdateLocation.error) throw new error('Error al actualizar la localización');
+      } else {
+        const objData = {
+          name: document.querySelector('#modalLocations #nameNewLocation').value,
+          columns: '',
+          installation: parseInt(installationSelected.options[installationSelected.selectedIndex].value)
+        }
+        //
+        method = 'POST';
+        const objInsertLocation = await fetchData(url, authorization, method, objData);
+        if (objInsertLocation.error) throw new error('Error al insertar la localización');
+
+      }
+      modalNewLocation.classList.remove('show');
+      modalNewLocation.style.display = 'none';
+      window.location.href = '../../views/operator.html';
+    }
+  }, false);
+  const idDeleteNewLocation = document.querySelector('#modalLocations #idDeleteNewLocation');
+  idDeleteNewLocation.addEventListener('click', async event => {
+    const modalDanger = document.getElementById('modalDanger');
+    const buttonBack = document.querySelector('#modalDanger #back');
+    buttonBack.addEventListener('click', event => {
+      const modalDanger = document.getElementById('modalDanger');
+      modalDanger.classList.remove('show');
+      modalDanger.style.display='none';
+    }, false);
+    const buttonDelete = document.querySelector('#modalDanger #borrar');
+    buttonDelete.addEventListener('click', async event => {
+      // donde se borra
+      url = 'http://localhost:81/locations';
+      if (sessionStorage.getItem('updateLocation')) {
+        sessionStorage.removeItem('updateLocation');
+        const idLocation = parseInt(document.querySelector('#modalLocations #idLocation').value);
+        document.querySelector('#modalLocations #idLocation').value = 0;
+        const objData = {
+          id: idLocation
+        }
+        method = 'DELETE';
+        const objUpdateLocation = await fetchData(url, authorization, method, objData);
+        if (objUpdateLocation.error) throw new error('Error al borrar la localización');
+        const modalLocations=document.querySelector('#modalLocations');
+        modalLocations.classList.remove('show');
+        modalLocations.style.display='none';
+        window.location.href='../../views/operator.html';
+      }
+    }, false);
+    modalDanger.classList.add('show');
+    modalDanger.style.display = 'block';
+  }, false);
+  const idLocationSelected = document.querySelector('#modalLocations #idLocation').value;
+  for (let i = installationSelect.options.length - 1; i >= 0; i--) {
+    installationSelect[i].options.value = null;
+  }
+  for (let i = totalLocations.options.length - 1; i >= 0; i--) {
+    totalLocations[i].options.value = null;
+  }
+  spinnerButton.classList.remove('d-none');
+  spinnerButton.classList.add('d-block');
+  const idInitialInstallation = (objNewLocation && parseInt(objNewLocation.id) !== 0) ? parseInt(objNewLocation.id) : 1;
+  let url = 'http://localhost:81/installations';
+  let method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  await getClients(url, authorization, method, installationSelect, idInitialInstallation);
+  const idInstallationSelected = parseInt(installationSelect.options[installationSelect.selectedIndex].value);
+  url = `http://localhost:81/locations?installation=${idInstallationSelected}`;
+  await getLocations(url, authorization, method, totalLocations);
+  spinnerButton.classList.remove('d-block');
+  spinnerButton.classList.add('d-none');
+  modalNewLocation.classList.remove('d-none');
+  modalNewLocation.classList.add('show');
+  modalNewLocation.style.display = 'block';
+  sessionStorage.removeItem('objNewLocation');
+}
+
+
+
+
 const handleNewClientModal = async (event) => {
   const modalNewClient = document.getElementById('modalClients');
   const spinnerButton = document.getElementById('spinnerClientsButton');
   spinnerButton.classList.remove('d-none');
   spinnerButton.classList.add('d-block');
-  const modalNewClients = document.getElementById('modalClients');
   modalNewClient.style.display = 'none';
-
   const countryNewClient = document.querySelector('#modalClients #countryNewClient');
   const provinceNewClient = document.querySelector('#modalClients #provinceNewClient');
   const municipalityNewClient = document.querySelector('#modalClients #municipalityNewClient');
@@ -519,7 +806,7 @@ const getInstallations = async (url, authorization, method, selectInstallations,
     }
     selectInstallations.appendChild(option);
   });
-
+  if (selectInstallations.options.length === 0) return null;
   return selectInstallations.options[0].value;
 };
 const getLocations = async (url, authorization, method, selectLocations, selectLocationValue) => {
@@ -536,6 +823,7 @@ const getLocations = async (url, authorization, method, selectLocations, selectL
     }
     selectLocations.appendChild(option);
   });
+  if (selectLocations.options.length === 0) return null;
   return selectLocations.options[0].value;
 };
 const getNewPositions = (table, positions, searchText) => {

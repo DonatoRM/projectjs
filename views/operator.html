@@ -30,12 +30,13 @@
                         data-bs-target="#modalClients">Cliente
                         <span id="spinnerClientsButton" class="spinner-border spinner-border-sm d-none position-absolute top-50 start-0 translate-middle ms-3" role="status" aria-hidden="true"></span>
                 </button>
-                <button id="installation" name="client" class="btn bg-color-black text-white px-5"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalInstallations">Instalación
+                <button id="installation" name="installation" class="btn bg-color-black text-white px-5 position-relative"
+                        data-bs-toggle="modal" data-bs-target="#modalInstallations">Instalación
+                    <span id="spinnerInstallationsButton" class="spinner-border spinner-border-sm d-none position-absolute top-50 start-0 translate-middle ms-3" role="status" aria-hidden="true"></span>
                 </button>
-                <button id="location" name="client" class="btn bg-color-black text-white px-5" data-bs-toggle="modal"
+                <button id="location" name="location" class="btn bg-color-black text-white px-5" data-bs-toggle="modal"
                         data-bs-target="#modalLocations">Localización
+                    <span id="spinnerLocationsButton" class="spinner-border spinner-border-sm d-none position-absolute top-50 start-0 translate-middle ms-3" role="status" aria-hidden="true"></span>
                 </button>
                 <button id="position" name="client" class="btn bg-color-black text-white px-5" data-bs-toggle="modal"
                         data-bs-target="#modalPositions">Posición
@@ -44,15 +45,15 @@
         </div>
         <div class="row bg-color-blue px-1 py-2 mb-2 mx-1 rounded">
             <div class="col clients">
-                <label for="clients" class="form-label mb-0">Cliente</label>
+                <label for="clients" class="form-label mb-0 text-white">Cliente</label>
                 <select id="clients" class="form-select form-select-mg mb-2 mt-0"></select>
             </div>
             <div class="col installations">
-                <label for="installations" class="form-label mb-0">Instalaciones</label>
+                <label for="installations" class="form-label mb-0 text-white">Instalaciones</label>
                 <select id="installations" class="form-select form-select-mg mb-2 mt-0"></select>
             </div>
             <div class="col locations">
-                <label for="locations" class="form-label mb-0">Localizaciones</label>
+                <label for="locations" class="form-label mb-0 text-white">Localizaciones</label>
                 <select id="locations" class="form-select form-select-mg mb-2 mt-0"></select>
             </div>
         </div>
@@ -239,52 +240,130 @@
     </div>
 </div>
 <!--Modal Nuevas Instalaciones-->
-<div class="modal fade" id="modalInstallations" tabindex="-1" aria-labelledby="Modal de Clientes" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-message">
+<div class="modal d-none" id="modalInstallations" tabindex="-1" aria-labelledby="Modal de Instalaciones" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-message modal-installations">
         <div class="modal-content bg-color-background">
-            <form>
-                <div class="modal-header bg-color-background border-0 p-2">
-                    <h5 class="modal-title py-2 bg-color-blue text-white w-100 text-center rounded fw-normal"
+            <form class="p-2">
+                <div class="modal-header bg-color-background border-0 p-0">
+                    <h5 class="modal-title py-1 bg-color-blue text-white w-100 text-center rounded fw-normal"
                         id="modalInstallationsTitle">Instalaciones</h5>
                 </div>
-                <div class="modal-body">
-
+                <div id="spinnerUpdateInstallation" class="v-100 h-100 d-flex justify-content-center align-items-center bg-color-background d-none p-5">
+                    <div class="spinner-border text-color-green" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
                 </div>
-                <div class="modal-footer">
-                    class="btn bg-color-marron border-color-black border-1 text-white closeModal px-3"
-                    <button type="button"
-                            data-bs-dismiss="modal" id="idBackNewInstallation">atrás
-                    </button>
-                    <button type="button"
-                            class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
-                            id="newInstallations">insertar
-                    </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col p-0 m-0">
+                            <label for="totalInstallations" class="form-label fw-bold mb-0 $fs-labels">Instalaciones</label>
+                            <select id="totalInstallations" class="form-select form-select-mg mb-2 mt-0" size="3"
+                                    aria-describedby="selector de clientes"></select>
+                            <input type="hidden" id="idInstallation" name="idInstallation" value="0"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col p-0 m-0">
+                            <label for="nameNewInstallation" class="form-label fw-bold mt-2 mb-0 $fs-labels">Nombre</label>
+                            <input type="text" id="nameNewInstallation" class="form-control valid"
+                                   aria-describedby="Nombre del cliente" placeholder="Instalación..."/>
+                        </div>
+                        <div class="col p-0 ps-2 mt-2">
+                            <label for="clientSelected" class="form-label fw-bold mb-0 $fs-labels">Cliente</label>
+                            <select id="clientSelected" class="form-select form-select-mg mb-2 mt-0"
+                                    aria-describedby="selector de cliente"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-start px-0">
+                    <div class="row m-0 p-0 w-100">
+                        <div class="col-4 p-0">
+                            <button type="button"
+                                    data-bs-dismiss="modal" id="idDeleteNewInstallation"
+                                    class="btn bg-color-red text-white border-1 border-color-black" disabled>Eliminar
+                            </button>
+                        </div>
+                        <div class="col-8 p-0 text-end">
+                            <button type="button"
+                                    id="idNewInstallation"
+                                    class="btn bg-color-green text-white border-1 border-color-black">Aceptar
+                            </button>
+                            <button type="reset"
+                                    class="btn bg-color-blue border-color-black border-1 text-white"
+                                    id="resetNewInstallation">Borrar
+                            </button>
+                            <button type="button" id="backNewInstallation"
+                                    data-bs-dismiss="modal"
+                                    class="btn bg-color-marron text-white border-1 border-color-black">Atrás
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 <!--Modal Nuevas Localizaciones-->
-<div class="modal fade" id="modalLocations" tabindex="-1" aria-labelledby="Modal de Clientes" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-message">
+<div class="modal d-none" id="modalLocations" tabindex="-1" aria-labelledby="Modal de Localizaciones" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-message modal-locations">
         <div class="modal-content bg-color-background">
-            <form>
-                <div class="modal-header bg-color-background border-0 p-2">
-                    <h5 class="modal-title py-2 bg-color-blue text-white w-100 text-center rounded fw-normal"
-                        id="modalLocationsTitle">Localizaciones</h5>
+            <form class="p-2">
+                <div class="modal-header bg-color-background border-0 p-0">
+                    <h5 class="modal-title py-1 bg-color-blue text-white w-100 text-center rounded fw-normal"
+                        id="modalLocationTitle">Localizaciones</h5>
+                </div>
+                <div id="spinnerUpdateLocation" class="v-100 h-100 d-flex justify-content-center align-items-center bg-color-background d-none p-5">
+                    <div class="spinner-border text-color-green" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col p-0 m-0">
+                            <label for="totalLocations" class="form-label fw-bold mb-0 fs-labels">Localizaciones</label>
+                            <select id="totalLocations" class="form-select form-select-mg mb-2 mt-0" size="3"
+                                    aria-describedby="selector de clientes"></select>
+                            <input type="hidden" id="idLocation" name="idLocation" value="0"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col p-0 m-0">
+                            <label for="nameNewLocation" class="form-label fw-bold mt-2 mb-0 fs-labels">Nombre</label>
+                            <input type="text" id="nameNewLocation" class="form-control valid"
+                                   aria-describedby="Nombre de la localización" placeholder="Localización..."/>
+                        </div>
+                        <div class="col p-0 ps-2 mt-2">
+                            <label for="installationSelected" class="form-label fw-bold mb-0 $fs-labels">Instalaciones</label>
+                            <select id="installationSelected" class="form-select form-select-mg mb-2 mt-0"
+                                    aria-describedby="selector de la Instalación"></select>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button"
-                            class="btn bg-color-marron border-color-black border-1 text-white closeModal px-3"
-                            data-bs-dismiss="modal" id="idBackNewLocation">atrás
-                    </button>
-                    <button type="button"
-                            class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
-                            id="newLocation">insertar
-                    </button>
+                <div class="modal-footer justify-content-start px-0">
+                    <div class="row m-0 p-0 w-100">
+                        <div class="col-4 p-0">
+                            <button type="button"
+                                    data-bs-dismiss="modal" id="idDeleteNewLocation"
+                                    class="btn bg-color-red text-white border-1 border-color-black" disabled>Eliminar
+                            </button>
+                        </div>
+                        <div class="col-8 p-0 text-end">
+                            <button type="button"
+                                    id="idNewLocation"
+                                    class="btn bg-color-green text-white border-1 border-color-black">Aceptar
+                            </button>
+                            <button type="reset"
+                                    class="btn bg-color-blue border-color-black border-1 text-white"
+                                    id="resetNewLocation">Borrar
+                            </button>
+                            <button type="button" id="backNewLocation"
+                                    data-bs-dismiss="modal"
+                                    class="btn bg-color-marron text-white border-1 border-color-black">Atrás
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

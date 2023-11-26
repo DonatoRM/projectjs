@@ -12424,6 +12424,9 @@ textarea.form-control-lg {
   --bs-font-sans-serif: "Poppins", sans-serif;
 }
 
+body {
+  min-width: 800px;
+}
 body main #spinnerOperator {
   display: block;
 }
@@ -12447,12 +12450,26 @@ body main .searchContainer .icon {
 }
 body .modal-clients {
   width: fit-content;
+  min-width: 788px;
+}
+body .modal-installations {
+  width: fit-content;
+  min-width: 788px;
+}
+body .modal-locations {
+  width: fit-content;
+  min-width: 788px;
 }
 body .modal-message {
   width: fit-content;
 }
 body .modal-message .icon {
   width: 2.5rem;
+}
+@media screen and (max-width: 800px) {
+  body {
+    width: 100%;
+  }
 }
 
 .btn:focus {

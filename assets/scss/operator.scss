@@ -3,7 +3,13 @@
 :root {
   --bs-font-sans-serif: 'Poppins', sans-serif;
 }
+@mixin tablet {
+  @media screen and (max-width: 800px) {
+    @content;
+  }
+}
 body {
+  min-width: 800px;
   main {
     #spinnerOperator {
       display: block;
@@ -31,6 +37,15 @@ body {
   }
   .modal-clients {
     width: fit-content;
+    min-width: 788px;
+  }
+  .modal-installations {
+    width: fit-content;
+    min-width: 788px;
+  }
+  .modal-locations {
+    width: fit-content;
+    min-width: 788px;
   }
   .modal-message {
     width: fit-content;
@@ -38,6 +53,9 @@ body {
     .icon {
       width: 2.5rem;
     }
+  }
+  @include tablet {
+    width: 100%;
   }
 }
 
