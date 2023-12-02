@@ -947,9 +947,16 @@ const handleNewPositionModal = async (event) => {
   const modalNewPosition = document.getElementById('modalPositions');
   const spinnerButton = document.getElementById('spinnerPositionsButton');
   const totalPositions = document.querySelector('#modalPositions #totalPositions');
+  const spinnerTotalPositions = document.querySelector('#modalPositions #spinnerTotalPositions');
   const nameNewPosition = document.querySelector('#modalPositions #nameNewPosition');
+  const clientPositionsSelected = document.querySelector('#modalPositions #clientPositionsSelected');
+  const spinnerClientPositionsSelected = document.querySelector('#modalPositions #spinnerClientPositionsSelected');
+  const installationPositionsSelected = document.querySelector('#modalPositions #installationPositionsSelected');
+  const spinnerInstallationPositionsSelected = document.querySelector('#modalPositions #spinnerInstallationPositionsSelected');
   const elementSelect = document.querySelector('#modalPositions #elementSelected');
+  const spinnerElementSelect = document.querySelector('#modalPositions #spinnerElementSelected');
   const locationSelect = document.querySelector('#modalPositions #locationSelected');
+  const spinnerLocationSelected = document.querySelector('#modalPositions #spinnerLocationSelected');
   const iePosition = document.querySelector('#modalPositions #IEPosition');
   const tensionPosition = document.querySelector('#modalPositions #tensionPosition');
   const pointPosition = document.querySelector('#modalPositions #pointPosition');
@@ -968,9 +975,14 @@ const handleNewPositionModal = async (event) => {
       totalPositions.removeChild(totalPositions.firstChild);
     }
   }
-  if (elementSelect.firstChild) {
-    while (elementSelect.firstChild) {
-      elementSelect.removeChild(elementSelect.firstChild);
+  if (clientPositionsSelected.firstChild) {
+    while (clientPositionsSelected.firstChild) {
+      clientPositionsSelected.removeChild(clientPositionsSelected.firstChild);
+    }
+  }
+  if (installationPositionsSelected.firstChild) {
+    while (installationPositionsSelected.firstChild) {
+      installationPositionsSelected.removeChild(installationPositionsSelected.firstChild);
     }
   }
   if (locationSelect.firstChild) {
@@ -978,17 +990,40 @@ const handleNewPositionModal = async (event) => {
       locationSelect.removeChild(locationSelect.firstChild);
     }
   }
-
-  let url = 'http://192.168.0.2:81/positions';
+  if (elementSelect.firstChild) {
+    while (elementSelect.firstChild) {
+      elementSelect.removeChild(elementSelect.firstChild);
+    }
+  }
+  // Carga de Modal
   let method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
-  const objTotalPositions = await fetchData(url, authorization, method);
-  if (objTotalPositions.error) throw new error('Error al buscar las posiciones');
-  objTotalPositions.data.data.map(position => {
+  let url = 'http://192.168.0.2:81/clients';
+  const objClientsPositions = await fetchData(url, authorization, method);
+  if (objClientsPositions.error) throw new error('Error al buscar los clientes');
+  objClientsPositions.data.data.map(client => {
     const option = document.createElement('option');
-    option.value = position.id;
-    option.text = position.name;
-    totalPositions.appendChild(option);
+    option.value = client.id;
+    option.text = client.name;
+    clientPositionsSelected.appendChild(option);
+  });
+  url = `http://192.168.0.2:81/installations?client=${parseInt(clientPositionsSelected.options[clientPositionsSelected.selectedIndex].value)}`;
+  const objInstallationsPositions = await fetchData(url, authorization, method);
+  if (objInstallationsPositions.error) throw new error('Error al buscar las instalaciones');
+  objInstallationsPositions.data.data.map(installation => {
+    const option = document.createElement('option');
+    option.value = installation.id;
+    option.text = installation.name;
+    installationPositionsSelected.appendChild(option);
+  });
+  url = `http://192.168.0.2:81/locations?installation=${parseInt(installationPositionsSelected.options[installationPositionsSelected.selectedIndex].value)}`;
+  const objLocationsPositions = await fetchData(url, authorization, method);
+  if (objLocationsPositions.error) throw new error('Error al buscar las localizaciones');
+  objLocationsPositions.data.data.map(location => {
+    const option = document.createElement('option');
+    option.value = location.id;
+    option.text = location.name;
+    locationSelect.appendChild(option);
   });
   url = 'http://192.168.0.2:81/elements';
   const objElementSelected = await fetchData(url, authorization, method);
@@ -999,15 +1034,192 @@ const handleNewPositionModal = async (event) => {
     option.text = element.name;
     elementSelect.appendChild(option);
   });
-  url = 'http://192.168.0.2:81/locations';
-  const objLocationSelected = await fetchData(url, authorization, method);
-  if (objLocationSelected.error) throw new error('Error al buscar las localizaciones');
-  objLocationSelected.data.data.map(location => {
+  url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
+  const objPositionsSelected = await fetchData(url, authorization, method);
+  if (objPositionsSelected.error) throw new error('Error al buscar las posiciones');
+  objPositionsSelected.data.data.map(position => {
     const option = document.createElement('option');
-    option.value = location.id;
-    option.text = location.name;
-    locationSelect.appendChild(option);
+    option.value = position.id;
+    option.text = position.name;
+    totalPositions.appendChild(option);
   });
+  nameNewPosition.value = '';
+  iePosition.value = '';
+  tensionPosition.value = '';
+  pointPosition.value = '';
+  fasePosition.value = '';
+  // Inicia la carga de eventos
+  clientPositionsSelected.addEventListener('change', async event => {
+    spinnerTotalPositions.classList.remove('d-none');
+    spinnerTotalPositions.classList.add('d-inline-block');
+    spinnerClientPositionsSelected.classList.remove('d-none');
+    spinnerClientPositionsSelected.classList.add('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.remove('d-none');
+    spinnerInstallationPositionsSelected.classList.add('d-inline-block');
+    spinnerLocationSelected.classList.remove('d-none');
+    spinnerLocationSelected.classList.add('d-inline-block');
+    totalPositions.disabled = true;
+    clientPositionsSelected.disabled = true;
+    installationPositionsSelected.disabled = true;
+    locationSelect.disabled = true;
+
+
+    if (totalPositions.firstChild) {
+      while (totalPositions.firstChild) {
+        totalPositions.removeChild(totalPositions.firstChild);
+      }
+    }
+    if (installationPositionsSelected.firstChild) {
+      while (installationPositionsSelected.firstChild) {
+        installationPositionsSelected.removeChild(installationPositionsSelected.firstChild);
+      }
+    }
+    if (locationSelect.firstChild) {
+      while (locationSelect.firstChild) {
+        locationSelect.removeChild(locationSelect.firstChild);
+      }
+    }
+    url = `http://192.168.0.2:81/installations?client=${parseInt(clientPositionsSelected.options[clientPositionsSelected.selectedIndex].value)}`;
+    const objInstallationsPositionsSelected = await fetchData(url, authorization, method);
+    if (objInstallationsPositionsSelected.error) throw new error('Error al buscar las instalaciones');
+    objInstallationsPositionsSelected.data.data.map(installation => {
+      const option = document.createElement('option');
+      option.value = installation.id;
+      option.text = installation.name;
+      installationPositionsSelected.appendChild(option);
+    });
+    url = `http://192.168.0.2:81/locations?installation=${parseInt(installationPositionsSelected.options[installationPositionsSelected.selectedIndex].value)}`;
+    const objLocationsPositionsSelected = await fetchData(url, authorization, method);
+    if (objLocationsPositionsSelected.error) throw new error('Error al buscar las localizaciones');
+    objLocationsPositionsSelected.data.data.map(location => {
+      const option = document.createElement('option');
+      option.value = location.id;
+      option.text = location.name;
+      locationSelect.appendChild(option);
+    });
+    url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
+    const objPositionsPositionsSelected = await fetchData(url, authorization, method);
+    if (objPositionsPositionsSelected.error) throw new error('Error al buscar las posiciones');
+    objPositionsPositionsSelected.data.data.map(position => {
+      const option = document.createElement('option');
+      option.value = position.id;
+      option.text = position.name;
+      totalPositions.appendChild(option);
+    });
+    clientPositionsSelected.disabled = false;
+    installationPositionsSelected.disabled = false;
+    locationSelect.disabled = false;
+    totalPositions.disabled = false;
+    spinnerTotalPositions.classList.remove('d-inline-block');
+    spinnerTotalPositions.classList.add('d-none');
+    spinnerClientPositionsSelected.classList.remove('d-inline-block');
+    spinnerClientPositionsSelected.classList.add('d-none');
+    spinnerInstallationPositionsSelected.classList.remove('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.add('d-none');
+    spinnerLocationSelected.classList.remove('d-inline-block');
+    spinnerLocationSelected.classList.add('d-none');
+  }, false);
+  installationPositionsSelected.addEventListener('change', async event => {
+    spinnerTotalPositions.classList.remove('d-none');
+    spinnerTotalPositions.classList.add('d-inline-block');
+    spinnerClientPositionsSelected.classList.remove('d-none');
+    spinnerClientPositionsSelected.classList.add('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.remove('d-none');
+    spinnerInstallationPositionsSelected.classList.add('d-inline-block');
+    spinnerLocationSelected.classList.remove('d-none');
+    spinnerLocationSelected.classList.add('d-inline-block');
+    totalPositions.disabled = true;
+    clientPositionsSelected.disabled = true;
+    installationPositionsSelected.disabled = true;
+    locationSelect.disabled = true;
+    if (totalPositions.firstChild) {
+      while (totalPositions.firstChild) {
+        totalPositions.removeChild(totalPositions.firstChild);
+      }
+    }
+    if (locationSelect.firstChild) {
+      while (locationSelect.firstChild) {
+        locationSelect.removeChild(locationSelect.firstChild);
+      }
+    }
+    url = `http://192.168.0.2:81/locations?installation=${parseInt(installationPositionsSelected.options[installationPositionsSelected.selectedIndex].value)}`;
+    const objLocationsPositionsSelected = await fetchData(url, authorization, method);
+    if (objLocationsPositionsSelected.error) throw new error('Error al buscar las localizaciones');
+    objLocationsPositionsSelected.data.data.map(location => {
+      const option = document.createElement('option');
+      option.value = location.id;
+      option.text = location.name;
+      locationSelect.appendChild(option);
+    });
+    url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
+    const objPositionsPositionsSelected = await fetchData(url, authorization, method);
+    if (objPositionsPositionsSelected.error) throw new error('Error al buscar las posiciones');
+    objPositionsPositionsSelected.data.data.map(position => {
+      const option = document.createElement('option');
+      option.value = position.id;
+      option.text = position.name;
+      totalPositions.appendChild(option);
+    });
+    clientPositionsSelected.disabled = false;
+    installationPositionsSelected.disabled = false;
+    locationSelect.disabled = false;
+    totalPositions.disabled = false;
+    spinnerTotalPositions.classList.remove('d-inline-block');
+    spinnerTotalPositions.classList.add('d-none');
+    spinnerClientPositionsSelected.classList.remove('d-inline-block');
+    spinnerClientPositionsSelected.classList.add('d-none');
+    spinnerInstallationPositionsSelected.classList.remove('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.add('d-none');
+    spinnerLocationSelected.classList.remove('d-inline-block');
+    spinnerLocationSelected.classList.add('d-none');
+  }, false);
+// TODO
+
+
+
+  locationSelect.addEventListener('change', async event => {
+    spinnerTotalPositions.classList.remove('d-none');
+    spinnerTotalPositions.classList.add('d-inline-block');
+    spinnerClientPositionsSelected.classList.remove('d-none');
+    spinnerClientPositionsSelected.classList.add('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.remove('d-none');
+    spinnerInstallationPositionsSelected.classList.add('d-inline-block');
+    spinnerLocationSelected.classList.remove('d-none');
+    spinnerLocationSelected.classList.add('d-inline-block');
+    totalPositions.disabled = true;
+    clientPositionsSelected.disabled = true;
+    installationPositionsSelected.disabled = true;
+    locationSelect.disabled = true;
+    if (totalPositions.firstChild) {
+      while (totalPositions.firstChild) {
+        totalPositions.removeChild(totalPositions.firstChild);
+      }
+    }
+    url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
+    const objPositionsPositionsSelected = await fetchData(url, authorization, method);
+    if (objPositionsPositionsSelected.error) throw new error('Error al buscar las posiciones');
+    objPositionsPositionsSelected.data.data.map(position => {
+      const option = document.createElement('option');
+      option.value = position.id;
+      option.text = position.name;
+      totalPositions.appendChild(option);
+    });
+    clientPositionsSelected.disabled = false;
+    installationPositionsSelected.disabled = false;
+    locationSelect.disabled = false;
+    totalPositions.disabled = false;
+    spinnerTotalPositions.classList.remove('d-inline-block');
+    spinnerTotalPositions.classList.add('d-none');
+    spinnerClientPositionsSelected.classList.remove('d-inline-block');
+    spinnerClientPositionsSelected.classList.add('d-none');
+    spinnerInstallationPositionsSelected.classList.remove('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.add('d-none');
+    spinnerLocationSelected.classList.remove('d-inline-block');
+    spinnerLocationSelected.classList.add('d-none');
+  }, false);
+
+
+
   totalPositions.addEventListener('change', async event => {
     idDeleteNewPosition.disabled = false;
     idNewPosition.textContent = 'Actualizar';

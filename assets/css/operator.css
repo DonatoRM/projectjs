@@ -12466,6 +12466,9 @@ body .modal-message {
 body .modal-message .icon {
   width: 2.5rem;
 }
+body .modal-positions textarea {
+  resize: none;
+}
 @media screen and (max-width: 800px) {
   body {
     width: 100%;

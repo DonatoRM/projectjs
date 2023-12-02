@@ -4,24 +4,30 @@
 :root {
   --bs-font-sans-serif: 'Poppins', sans-serif;
 }
+
 @mixin tablet {
   @media screen and (max-width: 800px) {
     @content;
   }
 }
+
 body {
   min-width: 800px;
+
   main {
     #spinnerOperator {
       display: block;
+
       .spinner-border {
         width: 5rem;
         height: 5rem;
       }
     }
+
     #operator {
       display: none;
     }
+
     .searchContainer {
       position: relative;
 
@@ -36,18 +42,22 @@ body {
       }
     }
   }
+
   .modal-clients {
     width: fit-content;
     min-width: 788px;
   }
+
   .modal-installations {
     width: fit-content;
     min-width: 788px;
   }
+
   .modal-locations {
     width: fit-content;
     min-width: 788px;
   }
+
   .modal-message {
     width: fit-content;
 
@@ -55,6 +65,13 @@ body {
       width: 2.5rem;
     }
   }
+
+  .modal-positions {
+    textarea {
+      resize: none;
+    }
+  }
+
   @include tablet {
     width: 100%;
   }

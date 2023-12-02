@@ -442,7 +442,9 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col p-0 m-0">
-                            <label for="totalPositions" class="form-label fw-bold mb-0 fs-labels">Posiciones</label>
+                            <label for="totalPositions" class="form-label fw-bold mb-0 fs-labels">Posiciones
+                                <span id="spinnerTotalPositions" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                            </label>
                             <select id="totalPositions" class="form-select form-select-mg mb-2 mt-0" size="3"
                                     aria-describedby="selector de posiciones"></select>
                             <input type="hidden" id="idPosition" name="idPosition" value="0"/>
@@ -455,18 +457,39 @@
                                    aria-describedby="Nombre de la posición" placeholder="Posición..."/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-3 p-0 mt-2">
-                            <label for="elementSelected" class="form-label fw-bold mb-0 fs-labels">Elemento</label>
-                            <select id="elementSelected" class="form-select form-select-mg mb-2 mt-0"
-                                    aria-describedby="selector de elemento"></select>
+                    <div class="row mt-2">
+                        <div class="col-6 p-0 m-0 pe-1">
+                            <label for="clientPositionsSelected" class="form-label fw-bold mb-0 fs-labels">Cliente
+                                <span id="spinnerClientPositionsSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                            </label>
+                            <select id="clientPositionsSelected" class="form-select form-select-mg mb-2 mt-0"
+                                    aria-describedby="selector de la Localización"></select>
+
                         </div>
-                        <div class="col-6 p-0 mt-2 px-2">
-                            <label for="locationSelected" class="form-label fw-bold mb-0 fs-labels">Localización</label>
+                        <div class="col-6 p-0 m-0 ps-1">
+                            <label for="installationPositionsSelected" class="form-label fw-bold mb-0 fs-labels">Instalación
+                                <span id="spinnerInstallationPositionsSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                            </label>
+                            <select id="installationPositionsSelected" class="form-select form-select-mg mb-2 mt-0"
+                                    aria-describedby="selector de la Localización"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 p-0 mt-2 pe-1">
+                            <label for="locationSelected" class="form-label fw-bold mb-0 fs-labels">Localización
+                                <span id="spinnerLocationSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                            </label>
                             <select id="locationSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de la Localización"></select>
                         </div>
-                        <div class="col-1 p-0 m-0">
+                        <div class="col-3 p-0 mt-2 px-1">
+                            <label for="elementSelected" class="form-label fw-bold mb-0 fs-labels">Elemento
+                                <span id="spinnerElementSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                            </label>
+                            <select id="elementSelected" class="form-select form-select-mg mb-2 mt-0"
+                                    aria-describedby="selector de elemento"></select>
+                        </div>
+                        <div class="col-1 p-0 m-0 px-1">
                             <label for="IEPosition" class="form-label fw-bold mt-2 mb-0 fs-labels">I/E</label>
                             <input type="text" id="IEPosition" class="form-control valid"
                                    aria-describedby="Tipo de posición"/>
