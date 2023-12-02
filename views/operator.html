@@ -15,7 +15,7 @@
     <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js" defer></script>
     <script type="module" src="../assets/js/operator.js" defer></script>
 </head>
-<body>
+<body class="bg-color-marron">
 <main>
     <div id="spinnerOperator"
          class="vw-100 vh-100 d-flex justify-content-center align-items-center bg-color-background">
@@ -24,31 +24,44 @@
         </div>
         <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
     </div>
-    <div id="operator" class="container-fluid d-none flex-column h-100 bg-color-background">
+    <div id="operator" class="container-fluid container-xxl d-none flex-column h-100 bg-color-background">
+        <div class="row d-block d-md-none">
+            <div class="col-12 col-xxl-2">
+                <button type="button" name="exit"
+                        class="w-100 btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar sesión
+                </button>
+            </div>
+        </div>
         <div class="row my-1">
-            <div class="col d-flex flex-row justify-content-evenly bg-color-background pt-2 pb-2">
-                <button id="client" name="client" class="btn bg-color-black text-white px-5 position-relative"
+            <div class="col-12 col-md-3 col-xl-2 col-xxl-2 mb-1 mb-md-0">
+                <button id="client" name="client" class="w-100 btn bg-color-black text-white position-relative"
                         data-bs-toggle="modal"
                         data-bs-target="#modalClients">Cliente
                     <span id="spinnerClientsButton"
                           class="spinner-grow spinner-grow-sm d-none position-absolute top-50 start-0 translate-middle ms-3"
                           role="status" aria-hidden="true"></span>
                 </button>
+            </div>
+            <div class="col-12 col-md-3 col-xl-2 col-xxl-2 mb-1 mb-md-0">
                 <button id="installation" name="installation"
-                        class="btn bg-color-black text-white px-5 position-relative"
+                        class="w-100 btn bg-color-black text-white position-relative"
                         data-bs-toggle="modal" data-bs-target="#modalInstallations">Instalación
                     <span id="spinnerInstallationsButton"
                           class="spinner-grow spinner-grow-sm d-none position-absolute top-50 start-0 translate-middle ms-3"
                           role="status" aria-hidden="true"></span>
                 </button>
-                <button id="location" name="location" class="btn bg-color-black text-white px-5 position-relative"
+            </div>
+            <div class="col-12 col-md-3 col-xl-2 col-xxl-2 mb-1 mb-md-0">
+                <button id="location" name="location" class="w-100 btn bg-color-black text-white position-relative pe-2"
                         data-bs-toggle="modal"
                         data-bs-target="#modalLocations">Localización
                     <span id="spinnerLocationsButton"
                           class="spinner-grow spinner-grow-sm d-none position-absolute top-50 start-0 translate-middle ms-3"
                           role="status" aria-hidden="true"></span>
                 </button>
-                <button id="position" name="position" class="btn bg-color-black text-white px-5 position-relative"
+            </div>
+            <div class="col-12 col-md-3 col-xl-2 col-xxl-2 mb-1 mb-md-0">
+                <button id="position" name="position" class="w-100 btn bg-color-black text-white position-relative"
                         data-bs-toggle="modal"
                         data-bs-target="#modalPositions">Posición
                     <span id="spinnerPositionsButton"
@@ -57,9 +70,25 @@
 
                 </button>
             </div>
+            <div class="col-12 col-md-3 col-xl-2 col-xxl-2 mb-1 mb-md-0 d-none d-xl-block">
+                <button id="user" name="user" class="w-100 btn bg-color-black text-white position-relative"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalUsers">Usuarios
+                    <span id="spinnerUsersButton"
+                          class="spinner-grow spinner-grow-sm d-none position-absolute top-50 start-0 translate-middle ms-3"
+                          role="status" aria-hidden="true"></span>
+
+                </button>
+            </div>
+            <div class="d-none d-xxl-block col-xxl-2">
+                <button type="button" name="exit"
+                        class="w-100 btn bg-color-green text-white btn-lg px-6 border-color-black mx-0 exit ">Cerrar sesión
+                </button>
+            </div>
+
         </div>
         <div class="row bg-color-blue px-1 py-2 mb-2 mx-1 rounded">
-            <div class="col clients">
+            <div class="col-12 col-md 4 clients">
                 <label for="clients" class="form-label mb-0 text-white">Cliente
                     <span id="spinnerClientSelect"
                           class="spinner-grow spinner-grow-sm d-none"
@@ -67,7 +96,7 @@
                 </label>
                 <select id="clients" class="form-select form-select-mg mb-2 mt-0"></select>
             </div>
-            <div class="col installations">
+            <div class="col-12 col-md 4 installations">
                 <label for="installations" class="form-label mb-0 text-white">Instalaciones
                     <span id="spinnerInstallationSelect"
                           class="spinner-grow spinner-grow-sm d-none"
@@ -75,7 +104,7 @@
                 </label>
                 <select id="installations" class="form-select form-select-mg mb-2 mt-0"></select>
             </div>
-            <div class="col locations">
+            <div class="col-12 col-md 4 locations">
                 <label for="locations" class="form-label mb-0 text-white">Localizaciones
                     <span id="spinnerLocationSelect"
                           class="spinner-grow spinner-grow-sm d-none"
@@ -85,14 +114,14 @@
             </div>
         </div>
         <div class="row my-2 mx-1 d-flex align-items-center">
-            <div class="searchContainer col-8 p-3 bg-color-blue rounded">
+            <div class="searchContainer col-12 col-md-8 col-xxl-12 p-3 bg-color-blue rounded">
                 <label for="search" class="d-none"></label>
                 <input type="search" id="search" name="search" placeholder="Buscar..." class="form-control search"/>
                 <span class="icon"><i class="fa-solid fa-magnifying-glass text-secondary"></i></span>
             </div>
-            <div class="col-4 d-flex justify-content-end align-items-center px-0">
-                <button type="button" name="exit" id="exit"
-                        class="btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar sesión
+            <div class=" col-0 col-md-4 d-none d-md-flex d-xxl-none justify-content-end align-items-center px-0">
+                <button type="button" name="exit"
+                        class="exit btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar sesión
                 </button>
             </div>
         </div>
@@ -166,7 +195,7 @@
 </div>
 <!--Modal Nuevos Clientes-->
 <div class="modal" id="modalClients" tabindex="-1" aria-labelledby="Modal de Clientes" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-message modal-clients">
+    <div class="modal-dialog modal-dialog-centered modal-message modal-clients">
         <div class="modal-content bg-color-background">
             <form class="p-2">
                 <div class="modal-header bg-color-background border-0 p-0">
@@ -282,7 +311,7 @@
 <!--Modal Nuevas Instalaciones-->
 <div class="modal d-none" id="modalInstallations" tabindex="-1" aria-labelledby="Modal de Instalaciones"
      aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-message modal-installations">
+    <div class="modal-dialog modal-dialog-centered modal-message modal-installations">
         <div class="modal-content bg-color-background">
             <form class="p-2">
                 <div class="modal-header bg-color-background border-0 p-0">
@@ -351,7 +380,7 @@
 <!--Modal Nuevas Localizaciones-->
 <div class="modal d-none" id="modalLocations" tabindex="-1" aria-labelledby="Modal de Localizaciones"
      aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-message modal-locations">
+    <div class="modal-dialog modal-dialog-centered modal-message modal-locations">
         <div class="modal-content bg-color-background">
             <form class="p-2">
                 <div class="modal-header bg-color-background border-0 p-0">
@@ -425,7 +454,7 @@
 </div>
 <!--Modal Nuevas Posiciones-->
 <div class="modal d-none" id="modalPositions" tabindex="-1" aria-labelledby="Modal de Posiciones" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-message modal-positions">
+    <div class="modal-dialog modal-dialog-centered modal-message modal-positions">
         <div class="modal-content bg-color-background">
             <form class="p-2">
                 <div class="modal-header bg-color-background border-0 p-0">

@@ -12424,9 +12424,6 @@ textarea.form-control-lg {
   --bs-font-sans-serif: "Poppins", sans-serif;
 }
 
-body {
-  min-width: 800px;
-}
 body main #spinnerOperator {
   display: block;
 }
@@ -12469,12 +12466,6 @@ body .modal-message .icon {
 body .modal-positions textarea {
   resize: none;
 }
-@media screen and (max-width: 800px) {
-  body {
-    width: 100%;
-  }
-}
-
 .btn:focus {
   box-shadow: 0 0 10px #59A63B;
 }

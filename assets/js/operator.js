@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectLocations = document.getElementById('locations');
   const searchContainer = document.getElementById('search');
   const table = document.getElementById('table');
-  const buttonExit = document.getElementById('exit');
+  const buttonExit = document.getElementsByClassName('exit');
   const buttonsBack = document.getElementsByClassName('close');
   const buttonSession = document.getElementById('exitSession');
   const popupExit = document.getElementById('popupExit');
@@ -170,7 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
   selectInstallations.addEventListener('change', changeInstallations, false);
   selectLocations.addEventListener('change', changeLocations, false);
   searchContainer.addEventListener('input', changeSearch, false);
-  buttonExit.addEventListener('click', exitSession, false);
+  for(let i=0;i<buttonExit.length;i++) {
+    buttonExit[i].addEventListener('click',exitSession,false);
+  }
   buttonNewClient.addEventListener('click', handleNewClientModal, false);
   buttonNewInstallation.addEventListener('click', handleNewInstallationModal, false);
   buttonNewLocation.addEventListener('click', handleNewLocationModal, false);
@@ -1476,7 +1478,7 @@ const getNewPositions = (table, positions, searchText) => {
     tdFase.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdFase);
     const tdTrash = document.createElement('td');
-    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white rounded-circle' data='position.id'><i class=\"fa-solid fa-trash\"></i></button>";
+    tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white' data='position.id'><i class=\"fa-solid fa-trash\"></i></button>";
     tdTrash.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdTrash);
     const tdType = document.createElement('td');

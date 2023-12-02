@@ -4,23 +4,31 @@
 :root {
   --bs-font-sans-serif: 'Poppins', sans-serif;
 }
-
+@mixin desktop {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
 @mixin tablet {
   @media screen and (max-width: 800px) {
     @content;
   }
 }
 
-body {
-  min-width: 800px;
+@mixin mobile {
+  @media screen and (max-width: 576px) {
+    @content;
+  }
+}
 
+body {
   main {
     #spinnerOperator {
       display: block;
 
       .spinner-border {
-        width: 5rem;
-        height: 5rem;
+        //width: 5rem;
+        //height: 5rem;
       }
     }
 
@@ -42,22 +50,6 @@ body {
       }
     }
   }
-
-  .modal-clients {
-    width: fit-content;
-    min-width: 788px;
-  }
-
-  .modal-installations {
-    width: fit-content;
-    min-width: 788px;
-  }
-
-  .modal-locations {
-    width: fit-content;
-    min-width: 788px;
-  }
-
   .modal-message {
     width: fit-content;
 
@@ -71,9 +63,15 @@ body {
       resize: none;
     }
   }
+  @include desktop {
+  }
 
   @include tablet {
-    width: 100%;
+
+    // Aquí
+  }
+  @include mobile {
+    // Aquí
   }
 }
 
