@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonNewClient = document.getElementById('client');
   const buttonNewInstallation = document.getElementById('installation');
   const buttonNewLocation = document.getElementById('location');
+  const buttonNewPosition = document.getElementById('position');
   const buttonDeleteClient = document.querySelector('#modalClients #idDeleteNewClient');
 
   let selectClientValue = 1;
@@ -35,8 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
     selectLocationValue = parseInt(window.localStorage.getItem('selectLocation'));
   }
 
-
   const changeClients = async (event) => {
+    const clients = document.getElementById('clients');
+    const installations = document.getElementById('installations');
+    const locations = document.getElementById('locations');
+    const spinnerClientSelect = document.getElementById('spinnerClientSelect');
+    const spinnerInstallationSelect = document.getElementById('spinnerInstallationSelect');
+    const spinnerLocationSelect = document.getElementById('spinnerLocationSelect');
+    spinnerClientSelect.classList.remove('d-none');
+    spinnerClientSelect.classList.add('d-inline-block');
+    spinnerInstallationSelect.classList.remove('d-none');
+    spinnerInstallationSelect.classList.add('d-inline-block');
+    spinnerLocationSelect.classList.remove('d-none');
+    spinnerLocationSelect.classList.add('d-inline-block');
+    clients.disabled = true;
+    installations.disabled = true;
+    locations.disabled = true;
     const method = 'GET';
     const authToken = window.localStorage.getItem('AUTH_CLIENT');
     const authorization = 'Bearer ' + authToken;
@@ -49,8 +64,31 @@ document.addEventListener('DOMContentLoaded', () => {
     window.localStorage.setItem('selectLocation', selectLocationsValue);
     url = 'http://192.168.0.2:81/positions?location=' + selectLocationsValue;
     await getPositions(url, authorization, method, table);
+    spinnerClientSelect.classList.remove('d-inline-block');
+    spinnerClientSelect.classList.add('d-none');
+    spinnerInstallationSelect.classList.remove('d-inline-block');
+    spinnerInstallationSelect.classList.add('d-none');
+    spinnerLocationSelect.classList.remove('d-inline-block');
+    spinnerLocationSelect.classList.add('d-none');
+    clients.disabled = false;
+    installations.disabled = false;
+    locations.disabled = false;
   }
   const changeInstallations = async (event) => {
+    const clients = document.getElementById('clients');
+    const locations = document.getElementById('locations');
+    const spinnerClientSelect = document.getElementById('spinnerClientSelect');
+    const spinnerInstallationSelect = document.getElementById('spinnerInstallationSelect');
+    const spinnerLocationSelect = document.getElementById('spinnerLocationSelect');
+    spinnerClientSelect.classList.remove('d-none');
+    spinnerClientSelect.classList.add('d-inline-block');
+    spinnerInstallationSelect.classList.remove('d-none');
+    spinnerInstallationSelect.classList.add('d-inline-block');
+    spinnerLocationSelect.classList.remove('d-none');
+    spinnerLocationSelect.classList.add('d-inline-block');
+    clients.disabled = true;
+    event.target.disabled = true;
+    locations.disabled = true;
     const method = 'GET';
     const authToken = window.localStorage.getItem('AUTH_CLIENT');
     const authorization = 'Bearer ' + authToken;
@@ -60,8 +98,31 @@ document.addEventListener('DOMContentLoaded', () => {
     window.localStorage.setItem('selectLocation', selectLocationsValue);
     url = 'http://192.168.0.2:81/positions?location=' + selectLocationsValue;
     await getPositions(url, authorization, method, table);
+    spinnerClientSelect.classList.remove('d-inline-block');
+    spinnerClientSelect.classList.add('d-none');
+    spinnerInstallationSelect.classList.remove('d-inline-block');
+    spinnerInstallationSelect.classList.add('d-none');
+    spinnerLocationSelect.classList.remove('d-inline-block');
+    spinnerLocationSelect.classList.add('d-none');
+    clients.disabled = false;
+    event.target.disabled = false;
+    locations.disabled = false;
   }
   const changeLocations = async (event) => {
+    const clients = document.getElementById('clients');
+    const installations = document.getElementById('installations');
+    const spinnerClientSelect = document.getElementById('spinnerClientSelect');
+    const spinnerInstallationSelect = document.getElementById('spinnerInstallationSelect');
+    const spinnerLocationSelect = document.getElementById('spinnerLocationSelect');
+    spinnerClientSelect.classList.remove('d-none');
+    spinnerClientSelect.classList.add('d-inline-block');
+    spinnerInstallationSelect.classList.remove('d-none');
+    spinnerInstallationSelect.classList.add('d-inline-block');
+    spinnerLocationSelect.classList.remove('d-none');
+    spinnerLocationSelect.classList.add('d-inline-block');
+    clients.disabled = true;
+    installations.disabled = true;
+    event.target.disabled = true;
     const method = 'GET';
     const authToken = window.localStorage.getItem('AUTH_CLIENT');
     const authorization = 'Bearer ' + authToken;
@@ -69,6 +130,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let url = 'http://192.168.0.2:81/positions?location=' + event.target.value;
     const selectPositionsValue = await getPositions(url, authorization, method, table);
     window.localStorage.setItem('selectPosition', selectPositionsValue);
+    spinnerClientSelect.classList.remove('d-inline-block');
+    spinnerClientSelect.classList.add('d-none');
+    spinnerInstallationSelect.classList.remove('d-inline-block');
+    spinnerInstallationSelect.classList.add('d-none');
+    spinnerLocationSelect.classList.remove('d-inline-block');
+    spinnerLocationSelect.classList.add('d-none');
+    clients.disabled = false;
+    installations.disabled = false;
+    event.target.disabled = false;
   }
   const changeSearch = (event) => {
     const searchText = event.target.value;
@@ -104,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buttonNewClient.addEventListener('click', handleNewClientModal, false);
   buttonNewInstallation.addEventListener('click', handleNewInstallationModal, false);
   buttonNewLocation.addEventListener('click', handleNewLocationModal, false);
+  buttonNewPosition.addEventListener('click', handleNewPositionModal, false);
   for (let i = 0; i < buttonsBack.length; i++) {
     buttonsBack[i].addEventListener('click', backPopup, false);
   }
@@ -162,7 +233,7 @@ const handleBackDeleteClient = event => {
 };
 const handleDeleteOldClient = async event => {
   const inputsModal = document.querySelector('#modalClients input[type="hidden"]');
-  const url = `http://localhost:81/clients`;
+  const url = `http://192.168.0.2:81/clients`;
   const method = 'DELETE';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objData = {
@@ -198,7 +269,7 @@ const handleActionIdNewClient = async event => {
     if (sessionStorage.getItem('updateClient')) {
       update = sessionStorage.getItem('updateClient');
     }
-    const url = `http://localhost:81/clients`;
+    const url = `http://192.168.0.2:81/clients`;
     const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
     const inputsClients = document.querySelectorAll('#modalClients input');
     const selectsClients = document.querySelectorAll('#modalClients select');
@@ -235,10 +306,13 @@ const handleActionIdNewClient = async event => {
         email: inputsClients.item(5).value
       }
       const objResultUpdateClient = await fetchData(url, authorization, method, objData);
-      if (objResultUpdateClient.error) throw new error('Error al insertar el nuevo cliente')
+      if (objResultUpdateClient.error) throw new error('Error al insertar el nuevo cliente');
     }
+    const modalClientes = document.getElementById('modalClients');
+    modalClientes.classList.remove('show');
+    modalClientes.style.display = 'none';
+    window.location.href = '../../views/operator.html';
   }
-  // window.location.href = '../../views/operator.html';
 };
 const handleTotalClientsNewClientes = async event => {
   console.log(event.target);
@@ -255,7 +329,7 @@ const handleTotalClientsNewClientes = async event => {
   sessionStorage.setItem('updateClient', JSON.stringify(true));
   document.getElementById('idNewClient').textContent = 'Actualizar';
   const clientSelectedForUpdate = event.target.options[event.target.selectedIndex].value;
-  let url = `http://localhost:81/clients?id=${clientSelectedForUpdate}`;
+  let url = `http://192.168.0.2:81/clients?id=${clientSelectedForUpdate}`;
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objClients = await fetchData(url, authorization, method);
@@ -264,7 +338,7 @@ const handleTotalClientsNewClientes = async event => {
   document.getElementById('nameNewClient').value = objClients.data.data[0].name;
   document.getElementById('zipCodeNewClient').value = objClients.data.data[0].cp;
   //
-  url = 'http://localhost:81/countries';
+  url = 'http://192.168.0.2:81/countries';
   const objCountries = await fetchData(url, authorization, method);
   if (objCountries.error) new error('Error al solicitar los clientes');
   const selectCountriesClients = document.querySelector('#modalClients #countryNewClient');
@@ -279,7 +353,7 @@ const handleTotalClientsNewClientes = async event => {
     selectCountriesClients.appendChild(option);
   });
   //
-  url = `http://localhost:81/provinces?country=${selectCountriesClients.options[selectCountriesClients.selectedIndex].value}`;
+  url = `http://192.168.0.2:81/provinces?country=${selectCountriesClients.options[selectCountriesClients.selectedIndex].value}`;
   const objProvinces = await fetchData(url, authorization, method);
   if (objProvinces.error) new error('Error al solicitar las provincias');
   const selectProvincesClients = document.querySelector('#modalClients #provinceNewClient');
@@ -294,7 +368,7 @@ const handleTotalClientsNewClientes = async event => {
     selectProvincesClients.appendChild(option);
   });
   //
-  url = `http://localhost:81/municipalities?province=${selectProvincesClients.options[selectProvincesClients.selectedIndex].value}`;
+  url = `http://192.168.0.2:81/municipalities?province=${selectProvincesClients.options[selectProvincesClients.selectedIndex].value}`;
   const objMunicipalities = await fetchData(url, authorization, method);
   if (objMunicipalities.error) new error('Error al solicitar los Municipios');
   const selectMunicipalitiesClients = document.querySelector('#modalClients #municipalityNewClient');
@@ -348,7 +422,7 @@ const handleButtonDeleteNewClients = async event => {
   }
   const selectNewCountry = document.getElementById('countryNewClient');
   const valueNewCountry = parseInt(selectNewCountry.options[selectNewCountry.selectedIndex].value);
-  let url = `http://localhost:81/provinces?country=${valueNewCountry}`;
+  let url = `http://192.168.0.2:81/provinces?country=${valueNewCountry}`;
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objProvinces = await fetchData(url, authorization, method);
@@ -359,7 +433,7 @@ const handleButtonDeleteNewClients = async event => {
     option.text = province.name;
     provinceNewClient.appendChild(option);
   });
-  url = `http://localhost:81/municipalities?province=${objProvinces.data.data[0].id}`;
+  url = `http://192.168.0.2:81/municipalities?province=${objProvinces.data.data[0].id}`;
   const objMunicipalities = await fetchData(url, authorization, method);
   if (objMunicipalities.error) throw new error('Error al solicitar los municipios');
   objMunicipalities.data.data.map(municipality => {
@@ -371,13 +445,26 @@ const handleButtonDeleteNewClients = async event => {
   document.querySelector('#modalClients #idDeleteNewClient').disabled = true;
 };
 const handleChangeNewProvince = async event => {
+  const countryNewClient = document.getElementById('countryNewClient');
   const municipalityNewClient = document.getElementById('municipalityNewClient');
+  const spinnerCountrySelect = document.getElementById('spinnerCountrySelect');
+  const spinnerProvinceSelect = document.getElementById('spinnerProvinceSelect');
+  const spinnerMunicipalitySelect = document.getElementById('spinnerMunicipalitySelect');
+  spinnerCountrySelect.classList.remove('d-none');
+  spinnerCountrySelect.classList.add('d-inline-block');
+  spinnerProvinceSelect.classList.remove('d-none');
+  spinnerProvinceSelect.classList.add('d-inline-block');
+  spinnerMunicipalitySelect.classList.remove('d-none');
+  spinnerMunicipalitySelect.classList.add('d-inline-block');
+  countryNewClient.disabled = true;
+  event.target.disabled = true;
+  municipalityNewClient.disabled = true;
   for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
     municipalityNewClient.options[i] = null;
   }
   const selectNewProvince = event.target;
   const valueNewProvince = parseInt(selectNewProvince.options[selectNewProvince.selectedIndex].value);
-  let url = `http://localhost:81/municipalities?province=${valueNewProvince}`;
+  let url = `http://192.168.0.2:81/municipalities?province=${valueNewProvince}`;
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objMunicipalities = await fetchData(url, authorization, method);
@@ -388,20 +475,40 @@ const handleChangeNewProvince = async event => {
     option.text = municipality.name;
     municipalityNewClient.appendChild(option);
   });
-
+  spinnerCountrySelect.classList.remove('d-inline-block');
+  spinnerCountrySelect.classList.add('d-none');
+  spinnerProvinceSelect.classList.remove('d-inline-block');
+  spinnerProvinceSelect.classList.add('d-none');
+  spinnerMunicipalitySelect.classList.remove('d-inline-block');
+  spinnerMunicipalitySelect.classList.add('d-none');
+  countryNewClient.disabled = false;
+  event.target.disabled = false;
+  municipalityNewClient.disabled = false;
 };
 const handleChangeNewCountry = async event => {
   const provinceNewClient = document.getElementById('provinceNewClient');
+  const municipalityNewClient = document.getElementById('municipalityNewClient');
+  const spinnerCountrySelect = document.getElementById('spinnerCountrySelect');
+  const spinnerProvinceSelect = document.getElementById('spinnerProvinceSelect');
+  const spinnerMunicipalitySelect = document.getElementById('spinnerMunicipalitySelect');
+  spinnerCountrySelect.classList.remove('d-none');
+  spinnerCountrySelect.classList.add('d-inline-block');
+  spinnerProvinceSelect.classList.remove('d-none');
+  spinnerProvinceSelect.classList.add('d-inline-block');
+  spinnerMunicipalitySelect.classList.remove('d-none');
+  spinnerMunicipalitySelect.classList.add('d-inline-block');
+  event.target.disabled = true;
+  provinceNewClient.disabled = true;
+  municipalityNewClient.disabled = true;
   for (let i = provinceNewClient.length - 1; i >= 0; i--) {
     provinceNewClient.options[i] = null;
   }
-  const municipalityNewClient = document.getElementById('municipalityNewClient');
   for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
     municipalityNewClient.options[i] = null;
   }
   const selectNewCountry = event.target;
   const valueNewCountry = parseInt(selectNewCountry.options[selectNewCountry.selectedIndex].value);
-  let url = `http://localhost:81/provinces?country=${valueNewCountry}`;
+  let url = `http://192.168.0.2:81/provinces?country=${valueNewCountry}`;
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objProvinces = await fetchData(url, authorization, method);
@@ -412,7 +519,7 @@ const handleChangeNewCountry = async event => {
     option.text = province.name;
     provinceNewClient.appendChild(option);
   });
-  url = `http://localhost:81/municipalities?province=${objProvinces.data.data[0].id}`;
+  url = `http://192.168.0.2:81/municipalities?province=${objProvinces.data.data[0].id}`;
   const objMunicipalities = await fetchData(url, authorization, method);
   if (objMunicipalities.error) throw new error('Error al solicitar los municipios');
   objMunicipalities.data.data.map(municipality => {
@@ -421,9 +528,18 @@ const handleChangeNewCountry = async event => {
     option.text = municipality.name;
     municipalityNewClient.appendChild(option);
   });
-
+  spinnerCountrySelect.classList.remove('d-inline-block');
+  spinnerCountrySelect.classList.add('d-none');
+  spinnerProvinceSelect.classList.remove('d-inline-block');
+  spinnerProvinceSelect.classList.add('d-none');
+  spinnerMunicipalitySelect.classList.remove('d-inline-block');
+  spinnerMunicipalitySelect.classList.add('d-none');
+  event.target.disabled = false;
+  provinceNewClient.disabled = false;
+  municipalityNewClient.disabled = false;
 };
 const handleNewInstallationModal = async (event) => {
+  event.target.disabled = true;
   let objNewInstallation = null;
   if (sessionStorage.getItem('objNewInstallation')) {
     objNewInstallation = JSON.parse(sessionStorage.getItem('objNewInstallation'));
@@ -433,7 +549,7 @@ const handleNewInstallationModal = async (event) => {
   const clientSelect = document.getElementById('clientSelected');
   clientSelect.addEventListener('change', async event => {
     const clientValueSelected = parseInt(event.target.options[event.target.selectedIndex].value);
-    const url = `http://localhost:81/installations?client=${clientValueSelected}`;
+    const url = `http://192.168.0.2:81/installations?client=${clientValueSelected}`;
     const method = 'GET';
     const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
     await getInstallations(url, authorization, method, totalInstallations);
@@ -452,7 +568,7 @@ const handleNewInstallationModal = async (event) => {
     while (totalInstallations.firstChild) {
       totalInstallations.removeChild(totalInstallations.firstChild);
     }
-    let url = 'http://localhost:81/installations?client=1';
+    let url = 'http://192.168.0.2:81/installations?client=1';
     let method = 'GET';
     const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
     await getInstallations(url, authorization, method, totalInstallations);
@@ -473,7 +589,7 @@ const handleNewInstallationModal = async (event) => {
       document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
     } else {
       const clientSelected = document.querySelector('#modalInstallations #clientSelected');
-      url = 'http://localhost:81/installations';
+      url = 'http://192.168.0.2:81/installations';
       const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
       if (sessionStorage.getItem('updateInstallation')) {
         sessionStorage.removeItem('updateInstallation');
@@ -512,12 +628,12 @@ const handleNewInstallationModal = async (event) => {
     buttonBack.addEventListener('click', event => {
       const modalDanger = document.getElementById('modalDanger');
       modalDanger.classList.remove('show');
-      modalDanger.style.display='none';
+      modalDanger.style.display = 'none';
     }, false);
     const buttonDelete = document.querySelector('#modalDanger #borrar');
     buttonDelete.addEventListener('click', async event => {
       // donde se borra
-      url = 'http://localhost:81/installations';
+      url = 'http://192.168.0.2:81/installations';
       if (sessionStorage.getItem('updateInstallation')) {
         sessionStorage.removeItem('updateInstallation');
         const idInstallation = parseInt(document.querySelector('#modalInstallations #idInstallation').value);
@@ -528,10 +644,10 @@ const handleNewInstallationModal = async (event) => {
         method = 'DELETE';
         const objUpdateInstallation = await fetchData(url, authorization, method, objData);
         if (objUpdateInstallation.error) throw new error('Error al actualizar la instalación');
-        const modalInstallations=document.querySelector('#modalInstallations');
+        const modalInstallations = document.querySelector('#modalInstallations');
         modalInstallations.classList.remove('show');
-        modalInstallations.style.display='none';
-        window.location.href='../../views/operator.html';
+        modalInstallations.style.display = 'none';
+        window.location.href = '../../views/operator.html';
       }
     }, false);
     modalDanger.classList.add('show');
@@ -548,12 +664,12 @@ const handleNewInstallationModal = async (event) => {
   spinnerButton.classList.remove('d-none');
   spinnerButton.classList.add('d-block');
   const idInitialClient = (objNewInstallation && parseInt(objNewInstallation.id) !== 0) ? parseInt(objNewInstallation.id) : 1;
-  let url = 'http://localhost:81/clients';
+  let url = 'http://192.168.0.2:81/clients';
   let method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   await getClients(url, authorization, method, clientSelect, idInitialClient);
   const idClientSelected = parseInt(clientSelect.options[clientSelect.selectedIndex].value);
-  url = `http://localhost:81/installations?client=${idClientSelected}`;
+  url = `http://192.168.0.2:81/installations?client=${idClientSelected}`;
   await getInstallations(url, authorization, method, totalInstallations);
   spinnerButton.classList.remove('d-block');
   spinnerButton.classList.add('d-none');
@@ -561,6 +677,7 @@ const handleNewInstallationModal = async (event) => {
   modalNewInstallation.classList.add('show');
   modalNewInstallation.style.display = 'block';
   sessionStorage.removeItem('objNewInstallation');
+  event.target.disabled = false;
 }
 const handleNewLocationModal = async (event) => {
   let objNewLocation = null;
@@ -569,36 +686,82 @@ const handleNewLocationModal = async (event) => {
   }
   const modalNewLocation = document.getElementById('modalLocations');
   const spinnerButton = document.getElementById('spinnerLocationsButton');
+  const clientSelect = document.querySelector('#modalLocations #clientsSelected');
   const installationSelect = document.querySelector('#modalLocations #installationSelected');
-  installationSelect.addEventListener('change', async event => {
-    const installationValueSelected = parseInt(event.target.options[event.target.selectedIndex].value);
-    const url = `http://localhost:81/locations?installation=${installationValueSelected}`;
-    const method = 'GET';
-    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
-    await getLocations(url, authorization, method, totalLocations);
-  }, false);
-  const totalLocations = document.getElementById('totalLocations');
-  totalLocations.addEventListener('change', event => {
-    sessionStorage.setItem('updateLocation', JSON.stringify(true));
-    document.querySelector('#modalLocations #idNewLocation').textContent = 'Actualizar';
-    document.querySelector('#modalLocations #nameNewLocation').value = event.target.options[event.target.selectedIndex].textContent;
-    document.querySelector('#modalLocations #idDeleteNewLocation').disabled = false;
-    document.querySelector('#modalLocations #idLocation').value = event.target.options[event.target.selectedIndex].value;
-  }, false);
+  const totalLocationsSelect = document.querySelector('#modalLocations #totalLocations');
+  const nameNewLocation = document.querySelector('#modalLocations #nameNewLocation');
+  const modalLocations = document.querySelector('#modalLocations');
+  modalLocations.classList.remove('show');
+  modalLocations.classList.add('hide');
+  modalLocations.classList.add('d-none');
+  spinnerButton.classList.remove('d-none');
+  spinnerButton.classList.add('d-inline-block');
+  for (let i = clientSelect.options.length - 1; i >= 0; i--) {
+    clientSelect.options[i].remove();
+  }
+  for (let i = installationSelect.options.length - 1; i >= 0; i--) {
+    installationSelect.options[i].remove();
+  }
+  for (let i = totalLocationsSelect.options.length - 1; i >= 0; i--) {
+    totalLocationsSelect.options[i].remove();
+  }
+  nameNewLocation.value = '';
+  let url = `http://192.168.0.2:81/clients`;
+  const method = 'GET';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  await getClients(url, authorization, method, clientSelect);
+  url = `http://192.168.0.2:81/installations?client=${parseInt(clientSelect.options[clientSelect.selectedIndex].value)}`;
+  await getInstallations(url, authorization, method, installationSelect);
+  url = `http://192.168.0.2:81/locations?installation=${parseInt(installationSelect.options[installationSelect.selectedIndex].value)}`;
+  await getLocations(url, authorization, method, totalLocations);
+  spinnerButton.classList.remove('d-inline-block');
+  spinnerButton.classList.add('d-none');
+  modalNewLocation.classList.remove('d-none');
+  modalNewLocation.classList.remove('hide');
+  modalNewLocation.classList.add('show');
+  sessionStorage.removeItem('objNewLocation');
   const resetNewLocationButton = document.querySelector('#modalLocations #resetNewLocation');
   resetNewLocationButton.addEventListener('click', async event => {
-    const totalLocations = document.getElementById('totalLocations');
-    while (totalLocations.firstChild) {
-      totalLocations.removeChild(totalLocations.firstChild);
-    }
-    let url = 'http://localhost:81/locations?installation=1';
-    let method = 'GET';
-    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
-    await getLocations(url, authorization, method, totalLocations);
-    document.querySelector('#modalLocations #idNewLocations').textContent = 'aceptar';
+    const clientSelect = document.querySelector('#modalLocations #clientsSelected');
+    const installationSelect = document.querySelector('#modalLocations #installationSelected');
+    const totalLocations = document.querySelector('#modalLocations #totalLocations');
+    const spinnerClientsLocations = document.querySelector('#modalLocations #spinnerClientsSelected');
+    const spinnerInstallationsLocations = document.querySelector('#modalLocations #spinnerInstallationsSelected');
+    const spinnerTotalLocations = document.querySelector('#modalLocations #spinnerTotalLocations');
+    spinnerClientsLocations.classList.remove('d-none');
+    spinnerInstallationsLocations.classList.remove('d-none');
+    spinnerTotalLocations.classList.remove('d-none');
+    spinnerClientsLocations.classList.add('d-inline-block');
+    spinnerInstallationsLocations.classList.add('d-inline-block');
+    spinnerTotalLocations.classList.add('d-inline-block');
+    clientSelect.disabled = false;
+    installationSelect.disabled = false;
+    totalLocations.disabled = false;
     document.querySelector('#modalLocations #idDeleteNewLocation').disabled = true;
+    for (let i = totalLocations.options.length - 1; i >= 0; i--) {
+      totalLocations.options[i].remove();
+    }
+    nameNewLocation.value = '';
+    clientSelect.options[clientSelect.selectedIndex].setAttribute('defaultSelected', 'false');
+    clientSelect.options[0].setAttribute('defaultSelected', 'true');
+    let method = 'GET';
+    url = 'http://192.168.0.2:81/installations?client=1';
+    await getInstallations(url, authorization, method, installationSelect, null, 1);
+    url = 'http://192.168.0.2:81/locations?installation=1';
+    await getLocations(url, authorization, method, totalLocations);
+    document.querySelector('#modalLocations #idNewLocation').textContent = 'aceptar';
     sessionStorage.removeItem('updateLocation');
     document.querySelector('#modalLocations #idLocation').value = 0;
+
+    spinnerClientsLocations.classList.remove('d-inline-block');
+    spinnerInstallationsLocations.classList.remove('d-inline-block');
+    spinnerTotalLocations.classList.remove('d-inline-block');
+    spinnerClientsLocations.classList.add('d-none');
+    spinnerInstallationsLocations.classList.add('d-none');
+    spinnerTotalLocations.classList.add('d-none');
+    clientSelect.disabled = false;
+    installationSelect.disabled = false;
+    totalLocations.disabled = false;
   }, false);
   const idNewLocation = document.querySelector('#modalLocations #idNewLocation');
   idNewLocation.addEventListener('click', async event => {
@@ -612,7 +775,7 @@ const handleNewLocationModal = async (event) => {
       document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
     } else {
       const installationSelected = document.querySelector('#modalLocations #installationSelected');
-      url = 'http://localhost:81/locations';
+      url = 'http://192.168.0.2:81/locations';
       const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
       if (sessionStorage.getItem('updateLocation')) {
         sessionStorage.removeItem('updateLocation');
@@ -624,7 +787,7 @@ const handleNewLocationModal = async (event) => {
           columns: '',
           installation: parseInt(installationSelected.options[installationSelected.selectedIndex].value)
         }
-        method = 'PUT';
+        const method = 'PUT';
         const objUpdateLocation = await fetchData(url, authorization, method, objData);
         if (objUpdateLocation.error) throw new error('Error al actualizar la localización');
       } else {
@@ -634,7 +797,7 @@ const handleNewLocationModal = async (event) => {
           installation: parseInt(installationSelected.options[installationSelected.selectedIndex].value)
         }
         //
-        method = 'POST';
+        const method = 'POST';
         const objInsertLocation = await fetchData(url, authorization, method, objData);
         if (objInsertLocation.error) throw new error('Error al insertar la localización');
 
@@ -651,12 +814,12 @@ const handleNewLocationModal = async (event) => {
     buttonBack.addEventListener('click', event => {
       const modalDanger = document.getElementById('modalDanger');
       modalDanger.classList.remove('show');
-      modalDanger.style.display='none';
+      modalDanger.style.display = 'none';
     }, false);
     const buttonDelete = document.querySelector('#modalDanger #borrar');
     buttonDelete.addEventListener('click', async event => {
       // donde se borra
-      url = 'http://localhost:81/locations';
+      url = 'http://192.168.0.2:81/locations';
       if (sessionStorage.getItem('updateLocation')) {
         sessionStorage.removeItem('updateLocation');
         const idLocation = parseInt(document.querySelector('#modalLocations #idLocation').value);
@@ -664,47 +827,290 @@ const handleNewLocationModal = async (event) => {
         const objData = {
           id: idLocation
         }
-        method = 'DELETE';
+        const method = 'DELETE';
         const objUpdateLocation = await fetchData(url, authorization, method, objData);
         if (objUpdateLocation.error) throw new error('Error al borrar la localización');
-        const modalLocations=document.querySelector('#modalLocations');
+        const modalLocations = document.querySelector('#modalLocations');
         modalLocations.classList.remove('show');
-        modalLocations.style.display='none';
-        window.location.href='../../views/operator.html';
+        modalLocations.style.display = 'none';
+        window.location.href = '../../views/operator.html';
       }
     }, false);
     modalDanger.classList.add('show');
     modalDanger.style.display = 'block';
   }, false);
-  const idLocationSelected = document.querySelector('#modalLocations #idLocation').value;
-  for (let i = installationSelect.options.length - 1; i >= 0; i--) {
-    installationSelect[i].options.value = null;
+  clientSelect.addEventListener('change', async event => {
+    const clientSelect = document.querySelector('#modalLocations #clientsSelected');
+    const installationSelect = document.querySelector('#modalLocations #installationSelected');
+    const totalLocationsSelected = document.querySelector('#modalLocations #totalLocations');
+    const spinnerClientsSelected = document.querySelector('#modalLocations #spinnerClientsSelected');
+    const spinnerInstallationsSelected = document.querySelector('#modalLocations #spinnerInstallationsSelected');
+    const spinnerTotalLocationsSelected = document.querySelector('#modalLocations #spinnerTotalLocations');
+    event.target.disabled = true;
+    installationSelect.disabled = true;
+    totalLocationsSelected.disabled = true;
+    for (let i = installationSelect.options.length - 1; i >= 0; i--) {
+      installationSelect.options[i].remove();
+    }
+    for (let i = totalLocationsSelect.options.length - 1; i >= 0; i--) {
+      totalLocationsSelect.options[i].remove();
+    }
+    spinnerClientsSelected.classList.remove('d-none');
+    spinnerInstallationsSelected.classList.remove('d-none');
+    spinnerTotalLocationsSelected.classList.remove('d-none');
+    spinnerClientsSelected.classList.add('d-inline-block');
+    spinnerInstallationsSelected.classList.add('d-inline-block');
+    spinnerTotalLocationsSelected.classList.add('d-inline-block');
+    url = `http://192.168.0.2:81/installations?client=${parseInt(clientSelect.options[clientSelect.selectedIndex].value)}`;
+    const objInstallationsSelect = await fetchData(url, authorization, method);
+    if (objInstallationsSelect.error) throw new error('Error al buscar las instalaciones');
+    objInstallationsSelect.data.data.map(installation => {
+      const option = document.createElement('option');
+      option.value = installation.id;
+      option.text = installation.name;
+      installationSelect.appendChild(option);
+    });
+
+    url = `http://192.168.0.2:81/locations?installation=${parseInt(installationSelect.options[installationSelect.selectedIndex].value)}`;
+    const objLocationsSelect = await fetchData(url, authorization, method);
+    if (objLocationsSelect.error) throw new error('Error al buscar las localizaciones');
+    objLocationsSelect.data.data.map(location => {
+      const option = document.createElement('option');
+      option.value = location.id;
+      option.text = location.name;
+      totalLocationsSelect.appendChild(option);
+    });
+    spinnerClientsSelected.classList.remove('d-d-inline-block');
+    spinnerInstallationsSelected.classList.remove('d-inline-block');
+    spinnerTotalLocationsSelected.classList.remove('d-inline-block');
+    spinnerClientsSelected.classList.add('d-none');
+    spinnerInstallationsSelected.classList.add('d-none');
+    spinnerTotalLocationsSelected.classList.add('d-none');
+    event.target.disabled = false;
+    installationSelect.disabled = false;
+    totalLocationsSelect.disabled = false;
+  }, false);
+
+  installationSelect.addEventListener('change', async event => {
+    const spinnerClientsSelected = document.querySelector('#modalLocations #spinnerClientsSelected');
+    const spinnerInstallationsSelected = document.querySelector('#modalLocations #spinnerInstallationsSelected');
+    const spinnerTotalLocationsSelected = document.querySelector('#modalLocations #spinnerTotalLocations');
+    clientSelect.disabled = true;
+    event.target.disabled = true;
+    totalLocationsSelect.disabled = true;
+    for (let i = totalLocationsSelect.options.length - 1; i >= 0; i--) {
+      totalLocationsSelect.options[i].remove();
+    }
+    spinnerClientsSelected.classList.remove('d-none');
+    spinnerInstallationsSelected.classList.remove('d-none');
+    spinnerTotalLocationsSelected.classList.remove('d-none');
+    spinnerClientsSelected.classList.add('d-inline-block');
+    spinnerInstallationsSelected.classList.add('d-inline-block');
+    spinnerTotalLocationsSelected.classList.add('d-inline-block');
+    url = `http://192.168.0.2:81/locations?installation=${parseInt(installationSelect.options[installationSelect.selectedIndex].value)}`;
+    const objLocationsSelect = await fetchData(url, authorization, method);
+    if (objLocationsSelect.error) throw new error('Error al buscar las localizaciones');
+    objLocationsSelect.data.data.map(location => {
+      const option = document.createElement('option');
+      option.value = location.id;
+      option.text = location.name;
+      totalLocationsSelect.appendChild(option);
+    });
+    spinnerClientsSelected.classList.remove('d-d-inline-block');
+    spinnerInstallationsSelected.classList.remove('d-inline-block');
+    spinnerTotalLocationsSelected.classList.remove('d-inline-block');
+    spinnerClientsSelected.classList.add('d-none');
+    spinnerInstallationsSelected.classList.add('d-none');
+    spinnerTotalLocationsSelected.classList.add('d-none');
+    clientSelect.disabled = false;
+    event.target.disabled = false;
+    totalLocationsSelect.disabled = false;
+  }, false);
+  totalLocationsSelect.addEventListener('change', async event => {
+    const idLocation = document.querySelector('#modalLocations #idLocation');
+    const idDeleteNewLocation = document.querySelector('#modalLocations #idDeleteNewLocation');
+    const idNewLocation = document.querySelector('#modalLocations #idNewLocation');
+    const nameNewLocation = document.querySelector('#modalLocations #nameNewLocation');
+    idLocation.value = parseInt(event.target.options[event.target.selectedIndex].value);
+    idDeleteNewLocation.disabled = false;
+    idNewLocation.textContent = 'Actualizar';
+    nameNewLocation.value = event.target.options[event.target.selectedIndex].textContent;
+    sessionStorage.setItem('updateLocation', JSON.stringify(true));
+  }, false);
+}
+const handleNewPositionModal = async (event) => {
+  event.target.disabled = true;
+  let objNewPosition = null;
+  if (sessionStorage.getItem('objNewPosition')) {
+    objNewPosition = JSON.parse(sessionStorage.getItem('objNewPosition'));
   }
-  for (let i = totalLocations.options.length - 1; i >= 0; i--) {
-    totalLocations[i].options.value = null;
-  }
+  const modalNewPosition = document.getElementById('modalPositions');
+  const spinnerButton = document.getElementById('spinnerPositionsButton');
+  const totalPositions = document.querySelector('#modalPositions #totalPositions');
+  const nameNewPosition = document.querySelector('#modalPositions #nameNewPosition');
+  const elementSelect = document.querySelector('#modalPositions #elementSelected');
+  const locationSelect = document.querySelector('#modalPositions #locationSelected');
+  const iePosition = document.querySelector('#modalPositions #IEPosition');
+  const tensionPosition = document.querySelector('#modalPositions #tensionPosition');
+  const pointPosition = document.querySelector('#modalPositions #pointPosition');
+  const fasePosition = document.querySelector('#modalPositions #fasePosition');
+  const idDeleteNewPosition = document.querySelector('#modalPositions #idDeleteNewPosition');
+  const idNewPosition = document.querySelector('#modalPositions #idNewPosition');
+  const resetNewPosition = document.querySelector('#modalPositions #resetNewPosition');
+  const backNewPosition = document.querySelector('#modalPositions #backNewPosition');
+  const spinnerUpdatePosition = document.querySelector('#modalPositions #spinnerUpdatePosition');
+  const idPosition = document.querySelector('#modalPositions #idPosition');
   spinnerButton.classList.remove('d-none');
   spinnerButton.classList.add('d-block');
-  const idInitialInstallation = (objNewLocation && parseInt(objNewLocation.id) !== 0) ? parseInt(objNewLocation.id) : 1;
-  let url = 'http://localhost:81/installations';
+  modalNewPosition.classList.add('d-none');
+  if (totalPositions.firstChild) {
+    while (totalPositions.firstChild) {
+      totalPositions.removeChild(totalPositions.firstChild);
+    }
+  }
+  if (elementSelect.firstChild) {
+    while (elementSelect.firstChild) {
+      elementSelect.removeChild(elementSelect.firstChild);
+    }
+  }
+  if (locationSelect.firstChild) {
+    while (locationSelect.firstChild) {
+      locationSelect.removeChild(locationSelect.firstChild);
+    }
+  }
+
+  let url = 'http://192.168.0.2:81/positions';
   let method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
-  await getClients(url, authorization, method, installationSelect, idInitialInstallation);
-  const idInstallationSelected = parseInt(installationSelect.options[installationSelect.selectedIndex].value);
-  url = `http://localhost:81/locations?installation=${idInstallationSelected}`;
-  await getLocations(url, authorization, method, totalLocations);
+  const objTotalPositions = await fetchData(url, authorization, method);
+  if (objTotalPositions.error) throw new error('Error al buscar las posiciones');
+  objTotalPositions.data.data.map(position => {
+    const option = document.createElement('option');
+    option.value = position.id;
+    option.text = position.name;
+    totalPositions.appendChild(option);
+  });
+  url = 'http://192.168.0.2:81/elements';
+  const objElementSelected = await fetchData(url, authorization, method);
+  if (objElementSelected.error) throw new error('Error el buscar los elementos');
+  objElementSelected.data.data.map(element => {
+    const option = document.createElement('option');
+    option.value = element.id;
+    option.text = element.name;
+    elementSelect.appendChild(option);
+  });
+  url = 'http://192.168.0.2:81/locations';
+  const objLocationSelected = await fetchData(url, authorization, method);
+  if (objLocationSelected.error) throw new error('Error al buscar las localizaciones');
+  objLocationSelected.data.data.map(location => {
+    const option = document.createElement('option');
+    option.value = location.id;
+    option.text = location.name;
+    locationSelect.appendChild(option);
+  });
+  totalPositions.addEventListener('change', async event => {
+    idDeleteNewPosition.disabled = false;
+    idNewPosition.textContent = 'Actualizar';
+    const idTotalPositionsSelected = parseInt(event.target.options[event.target.selectedIndex].value);
+    url = `http://192.168.0.2:81/positions?id=${idTotalPositionsSelected}`;
+    const objTotalPositions = await fetchData(url, authorization, method);
+    if (objTotalPositions.error) throw new error('Error al buscar la posición');
+    idPosition.value = parseInt(objTotalPositions.data.data[0].id);
+    nameNewPosition.value = objTotalPositions.data.data[0].name;
+    for (let i = 0; i < elementSelect.options.length; i++) {
+      if (elementSelect.options[i].value.toLowerCase() === objTotalPositions.data.data[0].element.toLowerCase()) {
+        elementSelect.options[i].setAttribute('selected', 'true');
+        break;
+      }
+    }
+    for (let i = 0; i < locationSelect.options.length; i++) {
+      if (parseInt(locationSelect.options[i].value) === parseInt(objTotalPositions.data.data[0].location)) {
+        locationSelect.options[i].setAttribute('selected', 'true');
+        break;
+      }
+    }
+    iePosition.value = objTotalPositions.data.data[0].type;
+    tensionPosition.value = parseFloat(objTotalPositions.data.data[0].voltage);
+    pointPosition.value = objTotalPositions.data.data[0].point;
+    fasePosition.value = objTotalPositions.data.data[0].fase;
+    sessionStorage.setItem('updatePosition', JSON.stringify(true));
+  }, false);
+  resetNewPosition.addEventListener('click', event => {
+    idNewPosition.textContent = 'Aceptar';
+    idDeleteNewPosition.disabled = true;
+    sessionStorage.removeItem('updatePosition');
+    idPosition.value = 0;
+  }, false);
+  idNewPosition.addEventListener('click', async event => {
+    let update = false;
+    if (sessionStorage.getItem('updatePosition')) {
+      update = Boolean(JSON.parse(sessionStorage.getItem('updatePosition')));
+      sessionStorage.removeItem('updatePosition');
+    }
+    url = `http://192.168.0.2:81/positions`;
+    if (update === true) {
+      const id = idPosition.value;
+      idPosition.value = 0;
+      const objData = {
+        id: parseInt(id),
+        name: nameNewPosition.value,
+        element: elementSelect.options[elementSelect.selectedIndex].value,
+        point: pointPosition.value,
+        type: iePosition.value,
+        fase: fasePosition.value,
+        voltage: parseFloat(tensionPosition.value),
+        location: parseInt(locationSelect.options[locationSelect.selectedIndex].value)
+      }
+      // Actualización
+      method = 'PUT';
+      const objUpdatePosition = await fetchData(url, authorization, method, objData);
+      if (objUpdatePosition.error) throw new error('Error al actualizar la posición');
+      sessionStorage.removeItem('updatePosition');
+    } else {
+      const objData = {
+        name: nameNewPosition.value,
+        element: elementSelect.options[elementSelect.selectedIndex].value,
+        point: pointPosition.value,
+        type: iePosition.value,
+        fase: fasePosition.value,
+        voltage: parseFloat(tensionPosition.value),
+        location: parseInt(locationSelect.options[locationSelect.selectedIndex].value)
+      }
+      // Inserción
+      method = 'POST';
+      const objInsertPosition = await fetchData(url, authorization, method, objData);
+      if (objInsertPosition.error) throw new error('Error al insertar la posición');
+
+    }
+    modalNewPosition.classList.remove('show');
+    modalNewPosition.style.display = 'none';
+    window.location.href = '../../views/operator.html';
+  }, false);
+  idDeleteNewPosition.addEventListener('click', async event => {
+    url = 'http://192.168.0.2:81/positions';
+    method = 'DELETE';
+    const objData = {
+      id: parseInt(idPosition.value)
+    }
+    const objIdDeleteNewPosition = await fetchData(url, authorization, method, objData);
+    if (objIdDeleteNewPosition.error) throw new error('Error al borrar la posición');
+    modalNewPosition.classList.remove('show');
+    modalNewPosition.style.display = 'none';
+    sessionStorage.removeItem('updatePosition');
+    window.location.href = '../../views/operator.html';
+  }, false);
   spinnerButton.classList.remove('d-block');
   spinnerButton.classList.add('d-none');
-  modalNewLocation.classList.remove('d-none');
-  modalNewLocation.classList.add('show');
-  modalNewLocation.style.display = 'block';
-  sessionStorage.removeItem('objNewLocation');
+  modalNewPosition.classList.remove('d-none');
+  modalNewPosition.classList.add('show');
+  modalNewPosition.style.display = 'block';
+  sessionStorage.removeItem('objNewPosition');
+  event.target.disabled = false;
 }
 
 
-
-
 const handleNewClientModal = async (event) => {
+  event.target.disabled = true;
   const modalNewClient = document.getElementById('modalClients');
   const spinnerButton = document.getElementById('spinnerClientsButton');
   spinnerButton.classList.remove('d-none');
@@ -727,7 +1133,7 @@ const handleNewClientModal = async (event) => {
   for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
     municipalityNewClient.options[i] = null;
   }
-  let url = 'http://localhost:81/countries';
+  let url = 'http://192.168.0.2:81/countries';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const method = 'GET';
   const objCountries = await fetchData(url, authorization, method);
@@ -741,7 +1147,7 @@ const handleNewClientModal = async (event) => {
     }
     countryNewClient.appendChild(option);
   });
-  url = 'http://localhost:81/provinces?country=' + countryNewClient.options[countryNewClient.selectedIndex].value;
+  url = 'http://192.168.0.2:81/provinces?country=' + countryNewClient.options[countryNewClient.selectedIndex].value;
   const objProvinces = await fetchData(url, authorization, method);
   if (objProvinces.error) throw new error('Error al solicitar las provincias');
   objProvinces.data.data.map(province => {
@@ -753,7 +1159,7 @@ const handleNewClientModal = async (event) => {
     }
     provinceNewClient.appendChild(option);
   });
-  url = 'http://localhost:81/municipalities?province=' + provinceNewClient.options[provinceNewClient.selectedIndex].value;
+  url = 'http://192.168.0.2:81/municipalities?province=' + provinceNewClient.options[provinceNewClient.selectedIndex].value;
   const objMunicipality = await fetchData(url, authorization, method);
   if (objMunicipality.error) throw new error('Error al solicitar los municipios');
   objMunicipality.data.data.map(province => {
@@ -776,6 +1182,7 @@ const handleNewClientModal = async (event) => {
   spinnerButton.classList.remove('d-block');
   spinnerButton.classList.add('d-none');
   modalNewClient.style.display = 'block';
+  event.target.disabled = false;
 };
 const getClients = async (url, authorization, method, selectClients, selectClientValue) => {
   const {data, error} = await fetchData(url, authorization, method);
@@ -983,7 +1390,7 @@ const initialStateComponents = async (selectClients, selectInstallations, select
   const arrayClientes = await getClients(url, authorization, method, selectClients, selectClientValue);
   url = `http://192.168.0.2:81/installations?client=${selectClientValue}`;
   await getInstallations(url, authorization, method, selectInstallations, selectLocations, selectInstallationValue);
-  url = 'http://192.168.0.2:81/locations?installation=' + selectLocationValue;
+  url = 'http://192.168.0.2:81/locations?installation=' + selectInstallationValue;
   await getLocations(url, authorization, method, selectLocations, selectLocationValue);
   url = 'http://192.168.0.2:81/positions?location=' + selectLocationValue;
   await getPositions(url, authorization, method, table);
