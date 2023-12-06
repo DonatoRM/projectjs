@@ -405,7 +405,7 @@ const getDefects = async (id, table) => {
     const tdThermogram = document.createElement('td');
     tdThermogram.textContent = point.thermogram;
     tdThermogram.setAttribute('class', 'text-center d-none d-xl-table-cell');
-    tdThermogramA.setAttribute('style','max-width: 150px');
+    tdThermogram.setAttribute('style','max-width: 150px');
     row.appendChild(tdThermogram);
     const tdPhoto = document.createElement('td');
     tdPhoto.textContent = point.photo;
