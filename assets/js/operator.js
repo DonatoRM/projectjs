@@ -496,13 +496,12 @@ const handleModalUser = async event => {
     idNewUser.textContent = 'Actualizar';
   }, false);
   clientsUserSelected.addEventListener('change', async event => {
-    //
     clientsUserSelected.disabled = true;
     installationsUserSelected.disabled = true;
-    spinnerClientsUserSelected.classList.remove('d-inline-block');
-    spinnerClientsUserSelected.classList.add('d-none');
-    spinnerInstallationsUserSelected.classList.remove('d-inline-block');
-    spinnerInstallationsUserSelected.classList.add('d-none');
+    spinnerClientsUserSelected.classList.add('d-inline-block');
+    spinnerClientsUserSelected.classList.remove('d-none');
+    spinnerInstallationsUserSelected.classList.add('d-inline-block');
+    spinnerInstallationsUserSelected.classList.remove('d-none');
     if (installationsUserSelected.firstChild) {
       while (installationsUserSelected.firstChild) {
         installationsUserSelected.removeChild(installationsUserSelected.firstChild);
