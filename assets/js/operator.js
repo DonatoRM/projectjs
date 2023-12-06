@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const positions = JSON.parse(sessionStorage.getItem('positions'));
     getNewPositions(table, positions, searchText);
   };
-  const exitSession = (event) => {
+  const exitSession = () => {
 
     popupExit.classList.add('show');
     popupExit.style.display = 'block';
@@ -602,7 +602,7 @@ const handleModalUser = async event => {
         }
         idUser.value = 0;
         sessionStorage.removeItem('updateUser');
-        window.location.href='../../views/operator.html';
+        window.location.href = '../../views/operator.html';
       } else {
         // Caso de inserción de datos
         const name = nameNewUser.value;
@@ -640,6 +640,45 @@ const handleModalUser = async event => {
   }, false);
   idDeleteNewUser.addEventListener('click', async event => {
     // TODO: Borra usuario
+    const modalUsers = document.querySelector('#modalUsers');
+    const modalDanger = document.querySelector('#modalDanger');
+    const buttonBackModalDanger = document.querySelector('#modalDanger #back');
+    const buttonDeleteModalDanger = document.querySelector('#modalDanger #borrar');
+    modalUsers.classList.remove('show');
+    modalUsers.classList.add('d-none');
+    modalDanger.classList.remove('d-none');
+    modalDanger.classList.add('show');
+    modalDanger.style.display = 'block';
+    if (parseInt(roleUserSelected.value) === 2) sessionStorage.setItem('customer', JSON.stringify(true));
+    buttonBackModalDanger.addEventListener('click', event => {
+      idUser.value = 0;
+      sessionStorage.removeItem('updateUser');
+      window.location.href = '../../views/operator.html';
+    }, false);
+    buttonDeleteModalDanger.addEventListener('click', async event => {
+      const id = idUser.value;
+      const idInstallation = parseInt(installationsUserSelected.options[installationsUserSelected.selectedIndex].value);
+      const role = parseInt(roleUserSelected.options[roleUserSelected.selectedIndex].value);
+      if(role===2) {
+        url = 'http://192.168.0.2:81/users_installations';
+        method = 'DELETE';
+        const objData = {
+          idInstallation,
+          username: id
+        }
+        const objDeleteLinkUser = await fetchData(url, authorization, method, objData);
+        if (objDeleteLinkUser.error) throw new error('Error al borrar el usuario');
+      }
+      url='http://192.168.0.2:81/users';
+      method='DELETE';
+      const objData={
+        username:id
+      }
+      const objIdDeleteNewUser = await fetchData(url, authorization, method, objData);
+      if (objIdDeleteNewUser.error) throw new error('Error al borrar la posición');
+      sessionStorage.removeItem('updateUser');
+      window.location.href = '../../views/operator.html';
+    }, false);
   }, false);
 };
 const handleDeleteClient = event => {
