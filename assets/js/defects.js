@@ -1,6 +1,6 @@
 import {fetchData} from './services.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const role = parseInt(window.localStorage.getItem('role'));
   if (role === 2) {
     window.location.href = '../../index.html';
@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputsDefectsModal = document.getElementsByTagName('input');
   const modalInfoButton = document.getElementById('modalInfo');
   const deleteButtonModal = document.getElementById('borrar');
+  const spinnerDefects = document.getElementById('spinnerDefects');
+  const defects = document.getElementById('defects');
 
   sessionStorage.setItem('position', JSON.stringify(objPosition.id));
   document.getElementById('position').value = objPosition.position;
@@ -35,7 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
   modalInfoButton.addEventListener('click', handleBackInfo, false);
   deleteButtonModal.addEventListener('click', handlerDeleteRow, false);
 
-  void getDefects(objPosition.id, table);
+  const ok=await getDefects(objPosition.id, table);
+  if(ok) {
+    spinnerDefects.classList.add('d-none');
+    defects.classList.remove('d-none');
+  }
 
 }, false);
 const handlerDeleteRow = async (event) => {
@@ -396,6 +402,21 @@ const getDefects = async (id, table) => {
     tdCurrent.textContent = parseFloat(point.current);
     tdCurrent.setAttribute('class', 'text-center');
     row.appendChild(tdCurrent);
+    const tdThermogram = document.createElement('td');
+    tdThermogram.textContent = point.thermogram;
+    tdThermogram.setAttribute('class', 'text-center d-none d-xl-table-cell');
+    tdThermogramA.setAttribute('style','max-width: 150px');
+    row.appendChild(tdThermogram);
+    const tdPhoto = document.createElement('td');
+    tdPhoto.textContent = point.photo;
+    tdPhoto.setAttribute('class', 'text-center d-none d-xl-table-cell');
+    tdPhoto.setAttribute('style','max-width: 150px');
+    row.appendChild(tdPhoto);
+    const tdFeedback = document.createElement('td');
+    tdFeedback.textContent = point.feedback;
+    tdFeedback.setAttribute('class', 'text-center d-none d-xl-table-cell');
+    tdFeedback.setAttribute('style','max-width: 150px');
+    row.appendChild(tdFeedback);
     const tdIcons = document.createElement('td');
     const buttonUpdate = document.createElement('button');
     buttonUpdate.setAttribute('class', 'btn bg-color-green text-white rounded-circle me-2 update');
@@ -411,4 +432,5 @@ const getDefects = async (id, table) => {
     row.appendChild(tdIcons);
     table.appendChild(row);
   });
+  return true;
 };

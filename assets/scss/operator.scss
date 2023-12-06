@@ -4,11 +4,13 @@
 :root {
   --bs-font-sans-serif: 'Poppins', sans-serif;
 }
+
 @mixin desktop {
   @media screen and (max-width: 1200px) {
     @content;
   }
 }
+
 @mixin tablet {
   @media screen and (max-width: 800px) {
     @content;
@@ -34,6 +36,14 @@ body {
 
     #operator {
       display: none;
+
+      tbody tr:hover {
+        cursor: pointer;
+      }
+
+      select:hover {
+        cursor: pointer;
+      }
     }
 
     .searchContainer {
@@ -50,6 +60,7 @@ body {
       }
     }
   }
+
   .modal-message {
     width: fit-content;
 
@@ -63,6 +74,7 @@ body {
       resize: none;
     }
   }
+
   @include desktop {
   }
 

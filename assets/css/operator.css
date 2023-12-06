@@ -12427,12 +12427,14 @@ textarea.form-control-lg {
 body main #spinnerOperator {
   display: block;
 }
-body main #spinnerOperator .spinner-border {
-  width: 5rem;
-  height: 5rem;
-}
 body main #operator {
   display: none;
+}
+body main #operator tbody tr:hover {
+  cursor: pointer;
+}
+body main #operator select:hover {
+  cursor: pointer;
 }
 body main .searchContainer {
   position: relative;
@@ -12444,18 +12446,6 @@ body main .searchContainer .icon {
   position: absolute;
   top: 1.35rem;
   left: 1.5rem;
-}
-body .modal-clients {
-  width: fit-content;
-  min-width: 788px;
-}
-body .modal-installations {
-  width: fit-content;
-  min-width: 788px;
-}
-body .modal-locations {
-  width: fit-content;
-  min-width: 788px;
 }
 body .modal-message {
   width: fit-content;

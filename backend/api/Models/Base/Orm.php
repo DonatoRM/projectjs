@@ -14,6 +14,7 @@ class Orm extends Connection
     private int $role;
     private array $params;
     private array $attributes;
+
     /**
      * Constructor de la clase
      * @param string $table
@@ -29,6 +30,7 @@ class Orm extends Connection
         $this->params = $params;
         $this->attributes = $attributes;
     }
+
     /**
      * Método que compara la constante superglobal $_GET con el array params
      * y si existe algún parámetro que no esté contemplado, corta la ejecución del
@@ -49,6 +51,7 @@ class Orm extends Connection
             Services::servicesMethod();
         }
     }
+
     /**
      * Método que devuelve los registros de una tabla según los parámetros pasados por GET
      * @return array|bool
@@ -128,6 +131,7 @@ class Orm extends Connection
             die("Failed to search database. Message: " . $ex->getMessage());
         }
     }
+
     /**
      * Método que comprueba que todos los atributos pasamos por parámetro se corresponderían con todos los
      * campos que posee la tabla menos si ID
@@ -148,6 +152,7 @@ class Orm extends Connection
         }
         return $dataObject;
     }
+
     /**
      * Método que devuelve el Hash de una Cadena de caracteres
      * @param string $pass
@@ -157,6 +162,7 @@ class Orm extends Connection
     {
         return hash('sha256', $pass);
     }
+
     /**
      * Método que inserta dentro de cada una de las tablas, un objeto JSON pasado por POST
      * @return void
@@ -207,6 +213,7 @@ class Orm extends Connection
             }
         }
     }
+
     /**
      * Método que verifica que los atributos son válidos para realizar una actualización de datos
      * @param $dataObject
@@ -231,6 +238,7 @@ class Orm extends Connection
         }
         return $dataObject;
     }
+
     /**
      * Método que actualiza un registro pasado en formato JSON por el método PUT
      * @return void
@@ -278,6 +286,7 @@ class Orm extends Connection
             }
         }
     }
+
     /**
      * Método que elimina el registro correspondiente al ID de una tabla
      * @param string $id Identificador del registro
@@ -296,9 +305,9 @@ class Orm extends Connection
                         'municipalities' || $this->table === 'elements') Services::actionMethod();
                     $JSONData = file_get_contents("php://input");
                     $dataObject = json_decode($JSONData);
-                    if (count(get_object_vars($dataObject)) !== 1) {
-                        Services::servicesMethod();
-                    }
+//                    if (count(get_object_vars($dataObject)) !== 1) {
+//                        Services::servicesMethod();
+//                    }
                     if (!$this->checkIfIdExists($dataObject)) Services::servicesMethod();
                     $param = '';
                     $value = '';
@@ -307,7 +316,13 @@ class Orm extends Connection
                         $query = "DELETE FROM $this->table WHERE username=:username";
                         $param = ':username';
                         $value = $dataObject->username;
-                    } else if ($this->table !== 'users') {
+                    } else if ($this->table === 'users_installations') {
+                        $query = "DELETE FROM $this->table WHERE idInstallation=:idInstallation AND username=:username";
+                        $param = ':idInstallation';
+                        $param2 = ':username';
+                        $value = $dataObject->idInstallation;
+                        $value2 = $dataObject->username;
+                    } else if ($this->table !== 'users' && $this->table !== 'users-installations') {
                         $query = "DELETE FROM $this->table WHERE id=:id";
                         $param = ':id';
                         $value = $dataObject->id;
@@ -317,7 +332,11 @@ class Orm extends Connection
                     }
                     $stmt = $this->connection->prepare($query);
 
-                    $stmt->bindValue("$param", $value, PDO::PARAM_STR);
+                    $stmt->bindValue("$param", $value, PDO::PARAM_STR|PDO::PARAM_INT);
+                    if(isset($value2)) {
+                        $stmt->bindValue("$param2", $value2, PDO::PARAM_STR|PDO::PARAM_INT);
+                    }
+//                    $stmt->bindValue("$param", $value, PDO::PARAM_STR);
                     $stmt->execute();
                     $this->connection->commit();
                     Services::insertionOK();
@@ -329,6 +348,7 @@ class Orm extends Connection
             }
         }
     }
+
     /**
      * Método que se usa para realizar la autenticación
      * @param string $user
@@ -353,6 +373,7 @@ class Orm extends Connection
             die('The database query failed. Message: ' . $ex->getMessage());
         }
     }
+
     /**
      * Método que revisa si existe o no un Id
      * @param object $dataObject
@@ -367,6 +388,10 @@ class Orm extends Connection
         if ($this->table === 'users') {
             $query .= " WHERE username=:username";
             $value = $dataObject->username;
+        } else if ($this->table === 'users_installations') {
+            $query .= " WHERE idInstallation=:idInstallation AND username=:username";
+            $value = $dataObject->idInstallation;
+            $value1 = $dataObject->username;
         } else {
             $query .= " WHERE " . $this->table . ".id=:id";
             $value = $dataObject->id;
@@ -375,6 +400,9 @@ class Orm extends Connection
             $stmt = $this->connection->prepare($query);
             if ($this->table === 'users') {
                 $stmt->bindValue(":username", $value, PDO::PARAM_STR);
+            } else if ($this->table === 'users_installations') {
+                $stmt->bindValue(":idInstallation", $value, PDO::PARAM_INT);
+                $stmt->bindValue(":username", $value1, PDO::PARAM_STR);
             } else {
                 $stmt->bindValue(":id", $value, PDO::PARAM_INT | PDO::PARAM_STR);
             }

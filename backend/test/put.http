@@ -142,13 +142,13 @@ Authorization: Basic client client
 }
 
 ###
-PUT http://localhost:80/users
+PUT http://localhost:81/users
 Content-Type: application/json
 Authorization: Basic boss boss
 
 {
-  "username": "donato",
-  "password": "donatorm"
+  "username": "donatorm",
+  "password": "donato"
 }
 
 ###

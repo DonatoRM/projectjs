@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonNewLocation = document.getElementById('location');
   const buttonNewPosition = document.getElementById('position');
   const buttonDeleteClient = document.querySelector('#modalClients #idDeleteNewClient');
+  const userButton = document.getElementById('user');
+  if (role === 3) {
+    userButton.classList.remove('d-none');
+  }
 
   let selectClientValue = 1;
   let selectInstallationValue = 1;
@@ -170,8 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
   selectInstallations.addEventListener('change', changeInstallations, false);
   selectLocations.addEventListener('change', changeLocations, false);
   searchContainer.addEventListener('input', changeSearch, false);
-  for(let i=0;i<buttonExit.length;i++) {
-    buttonExit[i].addEventListener('click',exitSession,false);
+  for (let i = 0; i < buttonExit.length; i++) {
+    buttonExit[i].addEventListener('click', exitSession, false);
   }
   buttonNewClient.addEventListener('click', handleNewClientModal, false);
   buttonNewInstallation.addEventListener('click', handleNewInstallationModal, false);
@@ -201,8 +205,444 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buttonDeleteClient.addEventListener('click', handleDeleteClient, false);
 
+  userButton.addEventListener('click', handleModalUser, false);
+
   void initialStateComponents(selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue);
 }, false);
+const handleModalUser = async event => {
+  const modalUsers = document.querySelector('#modalUsers');
+  const modalUserTitle = document.querySelector('#modalUsers #modalUserTitle');
+  const spinnerUpdateUser = document.querySelector('#modalUsers #spinnerUpdateUser');
+  const totalUsers = document.querySelector('#modalUsers #totalUsers');
+  const spinnerTotalUsers = document.querySelector('#modalUsers #spinnerTotalUsers');
+  const idUser = document.querySelector('#modalUsers #idUser');
+  const nameNewUser = document.querySelector('#modalUsers #nameNewUser');
+  const passwordNewUser = document.querySelector('#modalUsers #passwordNewUser');
+  const roleUserSelected = document.querySelector('#modalUsers #roleUsersSelected');
+  const spinnerRoleUserSelected = document.querySelector('#modalUsers #spinnerRoleUsersSelected');
+  const clientsUserSelected = document.querySelector('#modalUsers #clientsUserSelected');
+  const spinnerClientsUserSelected = document.querySelector('#modalUsers #spinnerClientsUserSelected');
+  const installationsUserSelected = document.querySelector('#modalUsers #installationsUserSelected');
+  const spinnerInstallationsUserSelected = document.querySelector('#modalUsers #spinnerInstallationsUserSelected');
+  const idDeleteNewUser = document.querySelector('#modalUsers #idDeleteNewUser');
+  const idNewUser = document.querySelector('#modalUsers #idNewUser');
+  const resetNewUser = document.querySelector('#modalUsers #resetNewUser');
+  const backNewUser = document.querySelector('#modalUsers #backNewUser');
+  const spinnerButton = document.querySelector('#spinnerUsersButton');
+  sessionStorage.removeItem('updateUser');
+  idNewUser.textContent = 'Aceptar';
+  idUser.value = 0;
+  idDeleteNewUser.disabled = true;
+  spinnerButton.classList.remove('d-none');
+  spinnerButton.classList.add('d-inline-block');
+  modalUsers.classList.add('d-none');
+  if (totalUsers.firstChild) {
+    while (totalUsers.firstChild) {
+      totalUsers.removeChild(totalUsers.firstChild);
+    }
+  }
+  if (roleUserSelected.firstChild) {
+    while (roleUserSelected.firstChild) {
+      roleUserSelected.removeChild(roleUserSelected.firstChild);
+    }
+  }
+  if (clientsUserSelected.firstChild) {
+    while (clientsUserSelected.firstChild) {
+      clientsUserSelected.removeChild(clientsUserSelected.firstChild);
+    }
+  }
+  if (installationsUserSelected.firstChild) {
+    while (installationsUserSelected.firstChild) {
+      installationsUserSelected.removeChild(installationsUserSelected.firstChild);
+    }
+  }
+  nameNewUser.value = '';
+  passwordNewUser.value = '';
+  // Carga de datos
+  let url = 'http://192.168.0.2:81/users';
+  const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+  let method = 'GET';
+  const objTotalUsers = await fetchData(url, authorization, method);
+  if (objTotalUsers.error) throw new error('Error al buscar los usuarios');
+  objTotalUsers.data.data.map(user => {
+    const option = document.createElement('option');
+    option.value = user.username;
+    option.text = user.username;
+    totalUsers.appendChild(option);
+  });
+  url = 'http://192.168.0.2:81/roles';
+  const objRoleUserSelected = await fetchData(url, authorization, method);
+  if (objRoleUserSelected.error) throw new error('Error al buscar los roles');
+  objRoleUserSelected.data.data.map(role => {
+    const option = document.createElement('option');
+    option.value = role.id;
+    option.text = role.rol;
+    roleUserSelected.appendChild(option);
+  });
+  url = 'http://192.168.0.2:81/clients';
+  const objClientsUserSelected = await fetchData(url, authorization, method);
+  if (objClientsUserSelected.error) throw new error('Error al buscar los clientes');
+  objClientsUserSelected.data.data.map(client => {
+    const option = document.createElement('option');
+    option.value = client.id;
+    option.text = client.name;
+    clientsUserSelected.appendChild(option);
+  });
+  url = `http://192.168.0.2:81/installations?client=${parseInt(clientsUserSelected.options[clientsUserSelected.selectedIndex].value)}`;
+  const objInstallationsUserSelected = await fetchData(url, authorization, method);
+  if (objInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+  objInstallationsUserSelected.data.data.map(installation => {
+    const option = document.createElement('option');
+    option.value = installation.id;
+    option.text = installation.name;
+    installationsUserSelected.appendChild(option);
+  });
+  spinnerButton.classList.remove('d-inline-block');
+  spinnerButton.classList.add('d-none');
+  modalUsers.classList.remove('d-none');
+  modalUsers.classList.add('show');
+  modalUsers.style.display = 'block';
+  event.target.disabled = false;
+  // Fin de la carga de datos
+  // Evento del botón borrar
+  resetNewUser.addEventListener('click', async event => {
+    totalUsers.disabled = true;
+    roleUserSelected.disabled = true;
+    clientsUserSelected.disabled = true;
+    installationsUserSelected.disabled = true;
+    spinnerTotalUsers.classList.remove('d-none');
+    spinnerTotalUsers.classList.add('d-inline-block');
+    spinnerRoleUserSelected.classList.remove('d-none');
+    spinnerRoleUserSelected.classList.add('d-inline-block');
+    spinnerClientsUserSelected.classList.remove('d-none');
+    spinnerClientsUserSelected.classList.add('d-inline-block');
+    spinnerInstallationsUserSelected.classList.remove('d-none');
+    spinnerInstallationsUserSelected.classList.add('d-inline-block');
+    idUser.value = 0;
+    idDeleteNewUser.disabled = true;
+    idNewUser.textContent = 'Aceptar';
+    if (totalUsers.firstChild) {
+      while (totalUsers.firstChild) {
+        totalUsers.removeChild(totalUsers.firstChild);
+      }
+    }
+    if (roleUserSelected.firstChild) {
+      while (roleUserSelected.firstChild) {
+        roleUserSelected.removeChild(roleUserSelected.firstChild);
+      }
+    }
+    if (clientsUserSelected.firstChild) {
+      while (clientsUserSelected.firstChild) {
+        clientsUserSelected.removeChild(clientsUserSelected.firstChild);
+      }
+    }
+    if (installationsUserSelected.firstChild) {
+      while (installationsUserSelected.firstChild) {
+        installationsUserSelected.removeChild(installationsUserSelected.firstChild);
+      }
+    }
+    nameNewUser.value = '';
+    passwordNewUser.value = '';
+    let url = 'http://192.168.0.2:81/users';
+    const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
+    let method = 'GET';
+    const objTotalUsers = await fetchData(url, authorization, method);
+    if (objTotalUsers.error) throw new error('Error al buscar los usuarios');
+    objTotalUsers.data.data.map(user => {
+      const option = document.createElement('option');
+      option.value = user.username;
+      option.text = user.username;
+      totalUsers.appendChild(option);
+    });
+    url = 'http://192.168.0.2:81/roles';
+    const objRoleUserSelected = await fetchData(url, authorization, method);
+    if (objRoleUserSelected.error) throw new error('Error al buscar los roles');
+    objRoleUserSelected.data.data.map(role => {
+      const option = document.createElement('option');
+      option.value = role.id;
+      option.text = role.rol;
+      roleUserSelected.appendChild(option);
+    });
+    url = 'http://192.168.0.2:81/clients';
+    const objClientsUserSelected = await fetchData(url, authorization, method);
+    if (objClientsUserSelected.error) throw new error('Error al buscar los clientes');
+    objClientsUserSelected.data.data.map(client => {
+      const option = document.createElement('option');
+      option.value = client.id;
+      option.text = client.name;
+      clientsUserSelected.appendChild(option);
+    });
+    url = `http://192.168.0.2:81/installations?client=${parseInt(clientsUserSelected.options[clientsUserSelected.selectedIndex].value)}`;
+    const objInstallationsUserSelected = await fetchData(url, authorization, method);
+    if (objInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+    objInstallationsUserSelected.data.data.map(installation => {
+      const option = document.createElement('option');
+      option.value = installation.id;
+      option.text = installation.name;
+      installationsUserSelected.appendChild(option);
+    });
+    totalUsers.disabled = false;
+    roleUserSelected.disabled = false;
+    clientsUserSelected.disabled = false;
+    installationsUserSelected.disabled = false;
+    spinnerTotalUsers.classList.remove('d-inline-block');
+    spinnerTotalUsers.classList.add('d-none');
+    spinnerRoleUserSelected.classList.remove('d-inline-block');
+    spinnerRoleUserSelected.classList.add('d-none');
+    spinnerClientsUserSelected.classList.remove('d-inline-block');
+    spinnerClientsUserSelected.classList.add('d-none');
+    spinnerInstallationsUserSelected.classList.remove('d-inline-block');
+    spinnerInstallationsUserSelected.classList.add('d-none');
+    sessionStorage.removeItem('updateUser');
+  }, false);
+  // Fin de evento del botón borrar
+  totalUsers.addEventListener('change', async event => {
+    // Poner spinners
+    totalUsers.disabled = true;
+    nameNewUser.disabled = true;
+    passwordNewUser.disabled = true;
+    roleUserSelected.disabled = true;
+    clientsUserSelected.disabled = true;
+    installationsUserSelected.disabled = true;
+    spinnerTotalUsers.classList.remove('d-none');
+    spinnerTotalUsers.classList.add('d-inline-block');
+    spinnerRoleUserSelected.classList.remove('d-none');
+    spinnerRoleUserSelected.classList.add('d-inline-block');
+    spinnerClientsUserSelected.classList.remove('d-none');
+    spinnerClientsUserSelected.classList.add('d-inline-block');
+    spinnerInstallationsUserSelected.classList.remove('d-none');
+    spinnerInstallationsUserSelected.classList.add('d-inline-block');
+    const username = event.target.options[event.target.selectedIndex].value;
+    idUser.value = username;
+    url = `http://192.168.0.2:81/users?username=${username}`;
+    const objTotalUsers = await fetchData(url, authorization, method);
+    if (objTotalUsers.error) throw new error('Error al buscar el usuario');
+    const role = parseInt(objTotalUsers.data.data[0].rol);
+    let installation = 1;
+    let client = 1;
+    if (role === 2) {
+      url = `http://192.168.0.2:81/users_installations?username=${username}`;
+      const objUsersInstallations = await fetchData(url, authorization, method);
+      if (objUsersInstallations.error) throw new error('Error al buscar la instalación que controla el usuario');
+      installation = parseInt(objUsersInstallations.data.data[0].idInstallation);
+      url = `http://192.168.0.2:81/installations?id=${installation}`;
+      const objInstallation = await fetchData(url, authorization, method);
+      if (objInstallation.error) throw new error('Error al buscar la instalación');
+      client = parseInt(objInstallation.data.data[0].client);
+      nameNewUser.value = username;
+      idUser.value = username;
+      passwordNewUser.value = '';
+      if (roleUserSelected.firstChild) {
+        for (let i = 0; i < roleUserSelected.options.length; i++) {
+          if (parseInt(roleUserSelected.options[i].value) === role) roleUserSelected.options[i].setAttribute('selected', true);
+          else roleUserSelected.options[i].removeAttribute('selected');
+        }
+      }
+      if (clientsUserSelected.firstChild) {
+        for (let i = 0; i < clientsUserSelected.options.length; i++) {
+          for (let i = 0; i < clientsUserSelected.options.length; i++) {
+            if (parseInt(clientsUserSelected.options[i].value) === client) clientsUserSelected.options[i].setAttribute('selected', true);
+            else clientsUserSelected.options[i].removeAttribute('selected');
+          }
+        }
+      }
+      if (installationsUserSelected.firstChild) {
+        while (installationsUserSelected.firstChild) {
+          installationsUserSelected.removeChild(installationsUserSelected.firstChild);
+        }
+      }
+      url = `http://192.168.0.2:81/installations?client=${client}`;
+      method = 'GET';
+      const objNewInstallationsUserSelected = await fetchData(url, authorization, method);
+      if (objNewInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+      objNewInstallationsUserSelected.data.data.map(installation => {
+        const option = document.createElement('option');
+        option.value = installation.id;
+        option.text = installation.name;
+        installationsUserSelected.appendChild(option);
+      });
+      if (installationsUserSelected.firstChild) {
+        for (let i = 0; i < installationsUserSelected.options.length; i++) {
+          if (parseInt(installationsUserSelected.options[i].value) === installation) installationsUserSelected.options[i].setAttribute('selected', true);
+          else installationsUserSelected.options[i].removeAttribute('selected');
+        }
+      }
+    } else {
+      nameNewUser.value = username;
+      passwordNewUser.value = '';
+      if (roleUserSelected.firstChild) {
+        for (let i = 0; i < roleUserSelected.options.length; i++) {
+          if (parseInt(roleUserSelected.options[i].value) === role) roleUserSelected.options[i].setAttribute('selected', true);
+          else roleUserSelected.options[i].removeAttribute('selected');
+        }
+      }
+    }
+    sessionStorage.setItem('updateUser', JSON.stringify(true));
+    spinnerTotalUsers.classList.remove('d-inline-block');
+    spinnerTotalUsers.classList.add('d-none');
+    spinnerRoleUserSelected.classList.remove('d-inline-block');
+    spinnerRoleUserSelected.classList.add('d-none');
+    spinnerClientsUserSelected.classList.remove('d-inline-block');
+    spinnerClientsUserSelected.classList.add('d-none');
+    spinnerInstallationsUserSelected.classList.remove('d-inline-block');
+    spinnerInstallationsUserSelected.classList.add('d-none');
+    totalUsers.disabled = false;
+    nameNewUser.disabled = false;
+    passwordNewUser.disabled = false;
+    roleUserSelected.disabled = false;
+    clientsUserSelected.disabled = false;
+    installationsUserSelected.disabled = false;
+    idDeleteNewUser.disabled = false;
+    idNewUser.textContent = 'Actualizar';
+  }, false);
+  clientsUserSelected.addEventListener('change', async event => {
+    //
+    clientsUserSelected.disabled = true;
+    installationsUserSelected.disabled = true;
+    spinnerClientsUserSelected.classList.remove('d-inline-block');
+    spinnerClientsUserSelected.classList.add('d-none');
+    spinnerInstallationsUserSelected.classList.remove('d-inline-block');
+    spinnerInstallationsUserSelected.classList.add('d-none');
+    if (installationsUserSelected.firstChild) {
+      while (installationsUserSelected.firstChild) {
+        installationsUserSelected.removeChild(installationsUserSelected.firstChild);
+      }
+    }
+    url = `http://192.168.0.2:81/installations?client=${parseInt(event.target.options[event.target.selectedIndex].value)}`;
+    const objInstallationsUserSelected = await fetchData(url, authorization, method);
+    if (objInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+    objInstallationsUserSelected.data.data.map(installation => {
+      const option = document.createElement('option');
+      option.value = installation.id;
+      option.text = installation.name;
+      installationsUserSelected.appendChild(option);
+    });
+    spinnerClientsUserSelected.classList.remove('d-inline-block');
+    spinnerClientsUserSelected.classList.add('d-none');
+    spinnerInstallationsUserSelected.classList.remove('d-inline-block');
+    spinnerInstallationsUserSelected.classList.add('d-none');
+    clientsUserSelected.disabled = false;
+    installationsUserSelected.disabled = false;
+  }, false);
+  idNewUser.addEventListener('click', async event => {
+    let updateUser = false;
+    if (nameNewUser.value !== '' && passwordNewUser.value !== '') {
+      if (sessionStorage.getItem('updateUser')) {
+        updateUser = true;
+      }
+      if (updateUser) {
+        const id = idUser.value;
+        const name = nameNewUser.value;
+        const password = passwordNewUser.value;
+        const role = parseInt(roleUserSelected.options[roleUserSelected.selectedIndex].value);
+        const installation = parseInt(installationsUserSelected.options[installationsUserSelected.selectedIndex].value);
+        url = 'http://192.168.0.2:81/users';
+        method = 'PUT';
+        const objData = {
+          username: name,
+          password,
+          rol: role
+        };
+        const objUserUpdateSelected = await fetchData(url, authorization, method, objData);
+        if (objUserUpdateSelected.error) throw new error('Error al actualizar el usuario');
+        if (role === 2) {
+          // Caso de actualización de datos para un customer
+          // Controlar si el usuario lo cambiamos a cliente, no existe en la tabla usersInstallations
+
+          url = `http://192.168.0.2:81/users_installations?username=${name}`;
+          method = 'GET';
+          const objUsersInstallationsSearchSelected = await fetchData(url, authorization, method);
+          if (objUsersInstallationsSearchSelected.error) throw new error('Error al buscar la instalación');
+          if (objUsersInstallationsSearchSelected.data.data.length !== 0) {
+            const oldIdInstallation = parseInt(objUsersInstallationsSearchSelected.data.data[0].idInstallation);
+            url = `http://192.168.0.2:81/users_installations`;
+            method = 'DELETE';
+            let objData = {
+              idInstallation: oldIdInstallation,
+              username: name
+            };
+            const objUsersInstallationsDeleteSelected = await fetchData(url, authorization, method, objData);
+            if (objUsersInstallationsDeleteSelected.error) throw new error('Error al eliminar el usuario');
+          }
+          url = `http://192.168.0.2:81/users_installations`;
+          method = 'POST';
+          const objDataNew = {
+            idInstallation: installation,
+            username: name
+          };
+          const objUsersInstallationsInsertSelected = await fetchData(url, authorization, method, objDataNew);
+          if (objUsersInstallationsInsertSelected.error) throw new error('Error al insertar el usuario');
+          window.location.href = '../../views/operator.html';
+        } else {
+          // Chequear si el usuario existe en la tabla users_installation, y si existe borrarlo. Luego actualizar la tabla users
+          url = `http://192.168.0.2:81/users_installations?username=${name}`;
+          method = 'GET';
+          const objSearchUser = await fetchData(url, authorization, method);
+          if (objSearchUser.error) throw new error('Error al buscar el usuario');
+          if (objSearchUser.data.data.length !== 0) {
+            const oldIdInstallation = parseInt(objSearchUser.data.data[0].idInstallation);
+            url = `http://192.168.0.2:81/users_installations`;
+            method = 'DELETE';
+            let objData = {
+              idInstallation: oldIdInstallation,
+              username: name
+            };
+            const objUsersInstallationsDeleteSelected = await fetchData(url, authorization, method, objData);
+            if (objUsersInstallationsDeleteSelected.error) throw new error('Error al eliminar el usuario');
+            url = 'http://192.168.0.2:81/users';
+            method = 'PUT';
+            const objDataNew = {
+              username: name,
+              password,
+              rol: role
+            };
+            const objUserUpdateSelected = await fetchData(url, authorization, method, objDataNew);
+            if (objUserUpdateSelected.error) throw new error('Error al insertar el usuario');
+            window.location.href = '../../views/operator.html';
+          }
+        }
+        idUser.value = 0;
+        sessionStorage.removeItem('updateUser');
+        window.location.href='../../views/operator.html';
+      } else {
+        // Caso de inserción de datos
+        const name = nameNewUser.value;
+        const password = passwordNewUser.value;
+        const role = parseInt(roleUserSelected.options[roleUserSelected.selectedIndex].value);
+        url = 'http://192.168.0.2:81/users';
+        method = 'POST';
+        const objData = {
+          username: name,
+          password,
+          rol: role
+        };
+        const objUserUpdateSelected = await fetchData(url, authorization, method, objData);
+        if (objUserUpdateSelected.error) throw new error('Error al insertar el usuario');
+        if (role === 2) {
+          url = 'http://192.168.0.2:81/users_installations';
+          method = 'POST';
+          const objData = {
+            idInstallation: parseInt(installationsUserSelected.options[installationsUserSelected.selectedIndex].value),
+            username: name
+          };
+          const objInsertNewClientUser = await fetchData(url, authorization, method, objData);
+          if (objInsertNewClientUser.error) throw new error('Error al insertar el nuevo cliente');
+        }
+        window.location.href = '../../views/operator.html';
+      }
+    } else {
+      // Se abre el modal de info diciendo que faltan campos por cubrir
+      const modalInfo = document.getElementById('modalInfo');
+      modalInfo.classList.add('show');
+      modalInfo.style.display = 'block';
+      document.querySelector('#modalInfo #idTitleModalInfo').textContent = 'Operación incompleta';
+      document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
+    }
+  }, false);
+  idDeleteNewUser.addEventListener('click', async event => {
+    // TODO: Borra usuario
+  }, false);
+};
 const handleDeleteClient = event => {
   const inputsModal = document.querySelectorAll('#modalClients input:not([type="hidden"])');
   const selectsModal = document.querySelectorAll('#modalClients select');
@@ -1175,8 +1615,6 @@ const handleNewPositionModal = async (event) => {
     spinnerLocationSelected.classList.remove('d-inline-block');
     spinnerLocationSelected.classList.add('d-none');
   }, false);
-// TODO
-
 
 
   locationSelect.addEventListener('change', async event => {
@@ -1219,7 +1657,6 @@ const handleNewPositionModal = async (event) => {
     spinnerLocationSelected.classList.remove('d-inline-block');
     spinnerLocationSelected.classList.add('d-none');
   }, false);
-
 
 
   totalPositions.addEventListener('change', async event => {
