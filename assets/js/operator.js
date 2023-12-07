@@ -211,8 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
 }, false);
 const handleModalUser = async event => {
   const modalUsers = document.querySelector('#modalUsers');
-  const modalUserTitle = document.querySelector('#modalUsers #modalUserTitle');
-  const spinnerUpdateUser = document.querySelector('#modalUsers #spinnerUpdateUser');
   const totalUsers = document.querySelector('#modalUsers #totalUsers');
   const spinnerTotalUsers = document.querySelector('#modalUsers #spinnerTotalUsers');
   const idUser = document.querySelector('#modalUsers #idUser');
@@ -227,7 +225,6 @@ const handleModalUser = async event => {
   const idDeleteNewUser = document.querySelector('#modalUsers #idDeleteNewUser');
   const idNewUser = document.querySelector('#modalUsers #idNewUser');
   const resetNewUser = document.querySelector('#modalUsers #resetNewUser');
-  const backNewUser = document.querySelector('#modalUsers #backNewUser');
   const spinnerButton = document.querySelector('#spinnerUsersButton');
   sessionStorage.removeItem('updateUser');
   idNewUser.textContent = 'Aceptar';
@@ -263,7 +260,7 @@ const handleModalUser = async event => {
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   let method = 'GET';
   const objTotalUsers = await fetchData(url, authorization, method);
-  if (objTotalUsers.error) throw new error('Error al buscar los usuarios');
+  if (objTotalUsers.error) throw 'Error al buscar los usuarios';
   objTotalUsers.data.data.map(user => {
     const option = document.createElement('option');
     option.value = user.username;
@@ -272,7 +269,7 @@ const handleModalUser = async event => {
   });
   url = 'http://192.168.0.2:81/roles';
   const objRoleUserSelected = await fetchData(url, authorization, method);
-  if (objRoleUserSelected.error) throw new error('Error al buscar los roles');
+  if (objRoleUserSelected.error) throw 'Error al buscar los roles';
   objRoleUserSelected.data.data.map(role => {
     const option = document.createElement('option');
     option.value = role.id;
@@ -281,7 +278,7 @@ const handleModalUser = async event => {
   });
   url = 'http://192.168.0.2:81/clients';
   const objClientsUserSelected = await fetchData(url, authorization, method);
-  if (objClientsUserSelected.error) throw new error('Error al buscar los clientes');
+  if (objClientsUserSelected.error) throw 'Error al buscar los clientes';
   objClientsUserSelected.data.data.map(client => {
     const option = document.createElement('option');
     option.value = client.id;
@@ -290,7 +287,7 @@ const handleModalUser = async event => {
   });
   url = `http://192.168.0.2:81/installations?client=${parseInt(clientsUserSelected.options[clientsUserSelected.selectedIndex].value)}`;
   const objInstallationsUserSelected = await fetchData(url, authorization, method);
-  if (objInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+  if (objInstallationsUserSelected.error) throw 'Error al buscar las instalaciones';
   objInstallationsUserSelected.data.data.map(installation => {
     const option = document.createElement('option');
     option.value = installation.id;
@@ -305,7 +302,7 @@ const handleModalUser = async event => {
   event.target.disabled = false;
   // Fin de la carga de datos
   // Evento del botón borrar
-  resetNewUser.addEventListener('click', async event => {
+  resetNewUser.addEventListener('click', async () => {
     totalUsers.disabled = true;
     roleUserSelected.disabled = true;
     clientsUserSelected.disabled = true;
@@ -347,7 +344,7 @@ const handleModalUser = async event => {
     const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
     let method = 'GET';
     const objTotalUsers = await fetchData(url, authorization, method);
-    if (objTotalUsers.error) throw new error('Error al buscar los usuarios');
+    if (objTotalUsers.error) throw 'Error al buscar los usuarios';
     objTotalUsers.data.data.map(user => {
       const option = document.createElement('option');
       option.value = user.username;
@@ -356,7 +353,7 @@ const handleModalUser = async event => {
     });
     url = 'http://192.168.0.2:81/roles';
     const objRoleUserSelected = await fetchData(url, authorization, method);
-    if (objRoleUserSelected.error) throw new error('Error al buscar los roles');
+    if (objRoleUserSelected.error) throw 'Error al buscar los roles';
     objRoleUserSelected.data.data.map(role => {
       const option = document.createElement('option');
       option.value = role.id;
@@ -365,7 +362,7 @@ const handleModalUser = async event => {
     });
     url = 'http://192.168.0.2:81/clients';
     const objClientsUserSelected = await fetchData(url, authorization, method);
-    if (objClientsUserSelected.error) throw new error('Error al buscar los clientes');
+    if (objClientsUserSelected.error) throw 'Error al buscar los clientes';
     objClientsUserSelected.data.data.map(client => {
       const option = document.createElement('option');
       option.value = client.id;
@@ -374,7 +371,7 @@ const handleModalUser = async event => {
     });
     url = `http://192.168.0.2:81/installations?client=${parseInt(clientsUserSelected.options[clientsUserSelected.selectedIndex].value)}`;
     const objInstallationsUserSelected = await fetchData(url, authorization, method);
-    if (objInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+    if (objInstallationsUserSelected.error) throw 'Error al buscar las instalaciones';
     objInstallationsUserSelected.data.data.map(installation => {
       const option = document.createElement('option');
       option.value = installation.id;
@@ -416,18 +413,18 @@ const handleModalUser = async event => {
     idUser.value = username;
     url = `http://192.168.0.2:81/users?username=${username}`;
     const objTotalUsers = await fetchData(url, authorization, method);
-    if (objTotalUsers.error) throw new error('Error al buscar el usuario');
+    if (objTotalUsers.error) throw 'Error al buscar el usuario';
     const role = parseInt(objTotalUsers.data.data[0].rol);
     let installation = 1;
     let client = 1;
     if (role === 2) {
       url = `http://192.168.0.2:81/users_installations?username=${username}`;
       const objUsersInstallations = await fetchData(url, authorization, method);
-      if (objUsersInstallations.error) throw new error('Error al buscar la instalación que controla el usuario');
+      if (objUsersInstallations.error) throw 'Error al buscar la instalación que controla el usuario';
       installation = parseInt(objUsersInstallations.data.data[0].idInstallation);
       url = `http://192.168.0.2:81/installations?id=${installation}`;
       const objInstallation = await fetchData(url, authorization, method);
-      if (objInstallation.error) throw new error('Error al buscar la instalación');
+      if (objInstallation.error) throw 'Error al buscar la instalación';
       client = parseInt(objInstallation.data.data[0].client);
       nameNewUser.value = username;
       idUser.value = username;
@@ -454,7 +451,7 @@ const handleModalUser = async event => {
       url = `http://192.168.0.2:81/installations?client=${client}`;
       method = 'GET';
       const objNewInstallationsUserSelected = await fetchData(url, authorization, method);
-      if (objNewInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+      if (objNewInstallationsUserSelected.error) throw 'Error al buscar las instalaciones';
       objNewInstallationsUserSelected.data.data.map(installation => {
         const option = document.createElement('option');
         option.value = installation.id;
@@ -509,7 +506,7 @@ const handleModalUser = async event => {
     }
     url = `http://192.168.0.2:81/installations?client=${parseInt(event.target.options[event.target.selectedIndex].value)}`;
     const objInstallationsUserSelected = await fetchData(url, authorization, method);
-    if (objInstallationsUserSelected.error) throw new error('Error al buscar las instalaciones');
+    if (objInstallationsUserSelected.error) throw 'Error al buscar las instalaciones';
     objInstallationsUserSelected.data.data.map(installation => {
       const option = document.createElement('option');
       option.value = installation.id;
@@ -523,14 +520,13 @@ const handleModalUser = async event => {
     clientsUserSelected.disabled = false;
     installationsUserSelected.disabled = false;
   }, false);
-  idNewUser.addEventListener('click', async event => {
+  idNewUser.addEventListener('click', async () => {
     let updateUser = false;
     if (nameNewUser.value !== '' && passwordNewUser.value !== '') {
       if (sessionStorage.getItem('updateUser')) {
         updateUser = true;
       }
       if (updateUser) {
-        const id = idUser.value;
         const name = nameNewUser.value;
         const password = passwordNewUser.value;
         const role = parseInt(roleUserSelected.options[roleUserSelected.selectedIndex].value);
@@ -543,7 +539,7 @@ const handleModalUser = async event => {
           rol: role
         };
         const objUserUpdateSelected = await fetchData(url, authorization, method, objData);
-        if (objUserUpdateSelected.error) throw new error('Error al actualizar el usuario');
+        if (objUserUpdateSelected.error) throw 'Error al actualizar el usuario';
         if (role === 2) {
           // Caso de actualización de datos para un customer
           // Controlar si el usuario lo cambiamos a cliente, no existe en la tabla usersInstallations
@@ -551,7 +547,7 @@ const handleModalUser = async event => {
           url = `http://192.168.0.2:81/users_installations?username=${name}`;
           method = 'GET';
           const objUsersInstallationsSearchSelected = await fetchData(url, authorization, method);
-          if (objUsersInstallationsSearchSelected.error) throw new error('Error al buscar la instalación');
+          if (objUsersInstallationsSearchSelected.error) throw 'Error al buscar la instalación';
           if (objUsersInstallationsSearchSelected.data.data.length !== 0) {
             const oldIdInstallation = parseInt(objUsersInstallationsSearchSelected.data.data[0].idInstallation);
             url = `http://192.168.0.2:81/users_installations`;
@@ -561,7 +557,7 @@ const handleModalUser = async event => {
               username: name
             };
             const objUsersInstallationsDeleteSelected = await fetchData(url, authorization, method, objData);
-            if (objUsersInstallationsDeleteSelected.error) throw new error('Error al eliminar el usuario');
+            if (objUsersInstallationsDeleteSelected.error) throw 'Error al eliminar el usuario';
           }
           url = `http://192.168.0.2:81/users_installations`;
           method = 'POST';
@@ -570,14 +566,14 @@ const handleModalUser = async event => {
             username: name
           };
           const objUsersInstallationsInsertSelected = await fetchData(url, authorization, method, objDataNew);
-          if (objUsersInstallationsInsertSelected.error) throw new error('Error al insertar el usuario');
+          if (objUsersInstallationsInsertSelected.error) throw 'Error al insertar el usuario';
           window.location.href = '../../views/operator.html';
         } else {
           // Chequear si el usuario existe en la tabla users_installation, y si existe borrarlo. Luego actualizar la tabla users
           url = `http://192.168.0.2:81/users_installations?username=${name}`;
           method = 'GET';
           const objSearchUser = await fetchData(url, authorization, method);
-          if (objSearchUser.error) throw new error('Error al buscar el usuario');
+          if (objSearchUser.error) throw 'Error al buscar el usuario';
           if (objSearchUser.data.data.length !== 0) {
             const oldIdInstallation = parseInt(objSearchUser.data.data[0].idInstallation);
             url = `http://192.168.0.2:81/users_installations`;
@@ -587,7 +583,7 @@ const handleModalUser = async event => {
               username: name
             };
             const objUsersInstallationsDeleteSelected = await fetchData(url, authorization, method, objData);
-            if (objUsersInstallationsDeleteSelected.error) throw new error('Error al eliminar el usuario');
+            if (objUsersInstallationsDeleteSelected.error) throw 'Error al eliminar el usuario';
             url = 'http://192.168.0.2:81/users';
             method = 'PUT';
             const objDataNew = {
@@ -596,7 +592,7 @@ const handleModalUser = async event => {
               rol: role
             };
             const objUserUpdateSelected = await fetchData(url, authorization, method, objDataNew);
-            if (objUserUpdateSelected.error) throw new error('Error al insertar el usuario');
+            if (objUserUpdateSelected.error) throw 'Error al insertar el usuario';
             window.location.href = '../../views/operator.html';
           }
         }
@@ -616,7 +612,7 @@ const handleModalUser = async event => {
           rol: role
         };
         const objUserUpdateSelected = await fetchData(url, authorization, method, objData);
-        if (objUserUpdateSelected.error) throw new error('Error al insertar el usuario');
+        if (objUserUpdateSelected.error) throw 'Error al insertar el usuario';
         if (role === 2) {
           url = 'http://192.168.0.2:81/users_installations';
           method = 'POST';
@@ -625,7 +621,7 @@ const handleModalUser = async event => {
             username: name
           };
           const objInsertNewClientUser = await fetchData(url, authorization, method, objData);
-          if (objInsertNewClientUser.error) throw new error('Error al insertar el nuevo cliente');
+          if (objInsertNewClientUser.error) throw 'Error al insertar el nuevo cliente';
         }
         window.location.href = '../../views/operator.html';
       }
@@ -638,7 +634,7 @@ const handleModalUser = async event => {
       document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
     }
   }, false);
-  idDeleteNewUser.addEventListener('click', async event => {
+  idDeleteNewUser.addEventListener('click', async () => {
     // TODO: Borra usuario
     const modalUsers = document.querySelector('#modalUsers');
     const modalDanger = document.querySelector('#modalDanger');
@@ -650,16 +646,16 @@ const handleModalUser = async event => {
     modalDanger.classList.add('show');
     modalDanger.style.display = 'block';
     if (parseInt(roleUserSelected.value) === 2) sessionStorage.setItem('customer', JSON.stringify(true));
-    buttonBackModalDanger.addEventListener('click', event => {
+    buttonBackModalDanger.addEventListener('click', () => {
       idUser.value = 0;
       sessionStorage.removeItem('updateUser');
       window.location.href = '../../views/operator.html';
     }, false);
-    buttonDeleteModalDanger.addEventListener('click', async event => {
+    buttonDeleteModalDanger.addEventListener('click', async () => {
       const id = idUser.value;
       const idInstallation = parseInt(installationsUserSelected.options[installationsUserSelected.selectedIndex].value);
       const role = parseInt(roleUserSelected.options[roleUserSelected.selectedIndex].value);
-      if(role===2) {
+      if (role === 2) {
         url = 'http://192.168.0.2:81/users_installations';
         method = 'DELETE';
         const objData = {
@@ -667,21 +663,21 @@ const handleModalUser = async event => {
           username: id
         }
         const objDeleteLinkUser = await fetchData(url, authorization, method, objData);
-        if (objDeleteLinkUser.error) throw new error('Error al borrar el usuario');
+        if (objDeleteLinkUser.error) throw 'Error al borrar el usuario';
       }
-      url='http://192.168.0.2:81/users';
-      method='DELETE';
-      const objData={
-        username:id
+      url = 'http://192.168.0.2:81/users';
+      method = 'DELETE';
+      const objData = {
+        username: id
       }
       const objIdDeleteNewUser = await fetchData(url, authorization, method, objData);
-      if (objIdDeleteNewUser.error) throw new error('Error al borrar la posición');
+      if (objIdDeleteNewUser.error) throw 'Error al borrar la posición';
       sessionStorage.removeItem('updateUser');
       window.location.href = '../../views/operator.html';
     }, false);
   }, false);
 };
-const handleDeleteClient = event => {
+const handleDeleteClient = () => {
   const inputsModal = document.querySelectorAll('#modalClients input:not([type="hidden"])');
   const selectsModal = document.querySelectorAll('#modalClients select');
   for (let i = 0; i < selectsModal.length; i++) {
@@ -695,7 +691,6 @@ const handleDeleteClient = event => {
     }
   }
   const dangerModal = document.getElementById('modalDanger');
-  const idClient = document.querySelector('#modalClients #idClient').value;
   const buttonBack = document.querySelector('#modalDanger #back');
   const buttonDelete = document.querySelector('#modalDanger #borrar');
   buttonBack.addEventListener('click', handleBackDeleteClient, false);
@@ -705,13 +700,13 @@ const handleDeleteClient = event => {
   dangerModal.style.display = 'block';
   sessionStorage.removeItem('objNewClient');
 };
-const handleBackDeleteClient = event => {
+const handleBackDeleteClient = () => {
   const dangerModal = document.getElementById('modalDanger');
   dangerModal.classList.remove('show');
   dangerModal.style.display = 'none';
   window.location.href = '../../views/operator.html';
 };
-const handleDeleteOldClient = async event => {
+const handleDeleteOldClient = async () => {
   const inputsModal = document.querySelector('#modalClients input[type="hidden"]');
   const url = `http://192.168.0.2:81/clients`;
   const method = 'DELETE';
@@ -720,13 +715,13 @@ const handleDeleteOldClient = async event => {
     id: inputsModal.value
   }
   const objDeleteClient = await fetchData(url, authorization, method, objData);
-  if (objDeleteClient.error) throw new error('Error al borrar el cliente');
+  if (objDeleteClient.error) throw 'Error al borrar el cliente';
   localStorage.removeItem('selectClient');
   localStorage.removeItem('selectInstallation');
   localStorage.removeItem('selectLocation');
   window.location.href = '../../views/operator.html';
 };
-const handleBackInfo = event => {
+const handleBackInfo = () => {
   const modalInfo = document.getElementById('modalInfo');
   modalInfo.classList.remove('show');
   modalInfo.style.display = 'none';
@@ -768,7 +763,7 @@ const handleActionIdNewClient = async event => {
         email: inputsClients.item(5).value
       }
       const objResultInsertNewClient = await fetchData(url, authorization, method, objData);
-      if (objResultInsertNewClient.error) throw new error('Error al insertar el nuevo cliente')
+      if (objResultInsertNewClient.error) throw 'Error al insertar el nuevo cliente';
     } else {
       sessionStorage.removeItem('updateClient');
       // Es una actualización
@@ -786,7 +781,7 @@ const handleActionIdNewClient = async event => {
         email: inputsClients.item(5).value
       }
       const objResultUpdateClient = await fetchData(url, authorization, method, objData);
-      if (objResultUpdateClient.error) throw new error('Error al insertar el nuevo cliente');
+      if (objResultUpdateClient.error) throw 'Error al insertar el nuevo cliente';
     }
     const modalClientes = document.getElementById('modalClients');
     modalClientes.classList.remove('show');
@@ -795,16 +790,51 @@ const handleActionIdNewClient = async event => {
   }
 };
 const handleTotalClientsNewClientes = async event => {
-  console.log(event.target);
-  const totalClientsHeader = document.querySelector('#modalClients .modal-header');
-  const totalClientsBody = document.querySelector('#modalClients .modal-body');
-  const totalClientsFooter = document.querySelector('#modalClients .modal-footer');
-  const spinnerUpdateClient = document.getElementById('spinnerUpdateClient');
-  totalClientsHeader.style.display = 'none';
-  totalClientsBody.style.display = 'none';
-  totalClientsFooter.style.display = 'none';
-  spinnerUpdateClient.classList.remove('d-none');
-  spinnerUpdateClient.classList.add('d-block');
+  const spinnerTotalClientsSelect = document.querySelector('#modalClients #spinnerTotalClientsSelect');
+  const spinnerNameNewClient = document.querySelector('#modalClients #spinnerNameNewClient');
+  const spinnerZipCodeNewClient = document.querySelector('#modalClients #spinnerZipCodeNewClient');
+  const spinnerCountrySelect = document.querySelector('#modalClients #spinnerCountrySelect');
+  const spinnerProvinceSelect = document.querySelector('#modalClients #spinnerProvinceSelect');
+  const spinnerMunicipalitySelect = document.querySelector('#modalClients #spinnerMunicipalitySelect');
+  const spinnerAddressNewClient = document.querySelector('#modalClients #spinnerAddressNewClient');
+  const spinnerPhoneNewClient = document.querySelector('#modalClients #spinnerPhoneNewClient');
+  const spinnerEmailNewClient = document.querySelector('#modalClients #spinnerEmailNewClient');
+  const totalClients = document.querySelector('#modalClients #totalClients');
+  const nameNewClient = document.querySelector('#modalClients #nameNewClient');
+  const zipCodeNewClient = document.querySelector('#modalClients #zipCodeNewClient');
+  const countryNewClient = document.querySelector('#modalClients #countryNewClient');
+  const provinceNewClient = document.querySelector('#modalClients #provinceNewClient');
+  const municipalityNewClient = document.querySelector('#modalClients #municipalityNewClient');
+  const addressNewClient = document.querySelector('#modalClients #addressNewClient');
+  const phoneNewClient = document.querySelector('#modalClients #phoneNewClient');
+  const emailNewClient = document.querySelector('#modalClients #emailNewClient');
+  totalClients.disabled = true;
+  nameNewClient.disabled = true;
+  zipCodeNewClient.disabled = true;
+  countryNewClient.disabled = true;
+  provinceNewClient.disabled = true;
+  municipalityNewClient.disabled = true;
+  addressNewClient.disabled = true;
+  phoneNewClient.disabled = true;
+  emailNewClient.disabled = true;
+  spinnerTotalClientsSelect.classList.remove('d-none');
+  spinnerTotalClientsSelect.classList.add('d-inline-block');
+  spinnerNameNewClient.classList.remove('d-none');
+  spinnerNameNewClient.classList.add('d-inline-block');
+  spinnerZipCodeNewClient.classList.remove('d-none');
+  spinnerZipCodeNewClient.classList.add('d-inline-block');
+  spinnerCountrySelect.classList.remove('d-none');
+  spinnerCountrySelect.classList.add('d-inline-block');
+  spinnerProvinceSelect.classList.remove('d-none');
+  spinnerProvinceSelect.classList.add('d-inline-block');
+  spinnerMunicipalitySelect.classList.remove('d-none');
+  spinnerMunicipalitySelect.classList.add('d-inline-block');
+  spinnerAddressNewClient.classList.remove('d-none');
+  spinnerAddressNewClient.classList.add('d-inline-block');
+  spinnerPhoneNewClient.classList.remove('d-none');
+  spinnerPhoneNewClient.classList.add('d-inline-block');
+  spinnerEmailNewClient.classList.remove('d-none');
+  spinnerEmailNewClient.classList.add('d-inline-block');
 
   sessionStorage.setItem('updateClient', JSON.stringify(true));
   document.getElementById('idNewClient').textContent = 'Actualizar';
@@ -813,14 +843,14 @@ const handleTotalClientsNewClientes = async event => {
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objClients = await fetchData(url, authorization, method);
-  if (objClients.error) throw new error('Error al buscar el cliente');
+  if (objClients.error) throw 'Error al buscar el cliente';
   document.getElementById('idClient').value = objClients.data.data[0].id;
   document.getElementById('nameNewClient').value = objClients.data.data[0].name;
   document.getElementById('zipCodeNewClient').value = objClients.data.data[0].cp;
   //
   url = 'http://192.168.0.2:81/countries';
   const objCountries = await fetchData(url, authorization, method);
-  if (objCountries.error) new error('Error al solicitar los clientes');
+  if (objCountries.error) throw 'Error al solicitar los clientes';
   const selectCountriesClients = document.querySelector('#modalClients #countryNewClient');
   for (let i = selectCountriesClients.length - 1; i >= 0; i--) {
     selectCountriesClients.options[i] = null;
@@ -835,7 +865,7 @@ const handleTotalClientsNewClientes = async event => {
   //
   url = `http://192.168.0.2:81/provinces?country=${selectCountriesClients.options[selectCountriesClients.selectedIndex].value}`;
   const objProvinces = await fetchData(url, authorization, method);
-  if (objProvinces.error) new error('Error al solicitar las provincias');
+  if (objProvinces.error) throw 'Error al solicitar las provincias';
   const selectProvincesClients = document.querySelector('#modalClients #provinceNewClient');
   for (let i = selectProvincesClients.length - 1; i >= 0; i--) {
     selectProvincesClients.options[i] = null;
@@ -850,7 +880,7 @@ const handleTotalClientsNewClientes = async event => {
   //
   url = `http://192.168.0.2:81/municipalities?province=${selectProvincesClients.options[selectProvincesClients.selectedIndex].value}`;
   const objMunicipalities = await fetchData(url, authorization, method);
-  if (objMunicipalities.error) new error('Error al solicitar los Municipios');
+  if (objMunicipalities.error) throw 'Error al solicitar los Municipios';
   const selectMunicipalitiesClients = document.querySelector('#modalClients #municipalityNewClient');
   for (let i = selectMunicipalitiesClients.length - 1; i >= 0; i--) {
     selectMunicipalitiesClients.options[i] = null;
@@ -866,17 +896,39 @@ const handleTotalClientsNewClientes = async event => {
   document.getElementById('phoneNewClient').value = objClients.data.data[0].phone;
   document.getElementById('emailNewClient').value = objClients.data.data[0].email;
 
-  totalClientsHeader.style.display = 'block';
-  totalClientsBody.style.display = 'block';
-  totalClientsFooter.style.display = 'block';
-  spinnerUpdateClient.classList.remove('d-block');
-  spinnerUpdateClient.classList.add('d-none');
   const buttonDeleteClient = document.querySelector('#modalClients #idDeleteNewClient');
   buttonDeleteClient.disabled = false;
 
+  spinnerTotalClientsSelect.classList.add('d-none');
+  spinnerTotalClientsSelect.classList.remove('d-inline-block');
+  spinnerNameNewClient.classList.add('d-none');
+  spinnerNameNewClient.classList.remove('d-inline-block');
+  spinnerZipCodeNewClient.classList.add('d-none');
+  spinnerZipCodeNewClient.classList.remove('d-inline-block');
+  spinnerCountrySelect.classList.add('d-none');
+  spinnerCountrySelect.classList.remove('d-inline-block');
+  spinnerProvinceSelect.classList.add('d-none');
+  spinnerProvinceSelect.classList.remove('d-inline-block');
+  spinnerMunicipalitySelect.classList.add('d-none');
+  spinnerMunicipalitySelect.classList.remove('d-inline-block');
+  spinnerAddressNewClient.classList.add('d-none');
+  spinnerAddressNewClient.classList.remove('d-inline-block');
+  spinnerPhoneNewClient.classList.add('d-none');
+  spinnerPhoneNewClient.classList.remove('d-inline-block');
+  spinnerEmailNewClient.classList.add('d-none');
+  spinnerEmailNewClient.classList.remove('d-inline-block');
+  totalClients.disabled = false;
+  nameNewClient.disabled = false;
+  zipCodeNewClient.disabled = false;
+  countryNewClient.disabled = false;
+  provinceNewClient.disabled = false;
+  municipalityNewClient.disabled = false;
+  addressNewClient.disabled = false;
+  phoneNewClient.disabled = false;
+  emailNewClient.disabled = false;
+
 };
-const handleButtonBackNewClients = event => {
-  const modal = event.target;
+const handleButtonBackNewClients = () => {
   const objNewClient = {
     name: document.querySelector('#modalClients #nameNewClient').value,
     cp: document.querySelector('#modalClients #zipCodeNewClient').value,
@@ -889,14 +941,58 @@ const handleButtonBackNewClients = event => {
   }
   sessionStorage.setItem('objNewClient', JSON.stringify(objNewClient));
 };
-const handleButtonDeleteNewClients = async event => {
+const handleButtonDeleteNewClients = async () => {
+  const spinnerTotalClientsSelect = document.querySelector('#modalClients #spinnerTotalClientsSelect');
+  const spinnerNameNewClient = document.querySelector('#modalClients #spinnerNameNewClient');
+  const spinnerZipCodeNewClient = document.querySelector('#modalClients #spinnerZipCodeNewClient');
+  const spinnerCountrySelect = document.querySelector('#modalClients #spinnerCountrySelect');
+  const spinnerProvinceSelect = document.querySelector('#modalClients #spinnerProvinceSelect');
+  const spinnerMunicipalitySelect = document.querySelector('#modalClients #spinnerMunicipalitySelect');
+  const spinnerAddressNewClient = document.querySelector('#modalClients #spinnerAddressNewClient');
+  const spinnerPhoneNewClient = document.querySelector('#modalClients #spinnerPhoneNewClient');
+  const spinnerEmailNewClient = document.querySelector('#modalClients #spinnerEmailNewClient');
+  const totalClients = document.querySelector('#modalClients #totalClients');
+  const nameNewClient = document.querySelector('#modalClients #nameNewClient');
+  const zipCodeNewClient = document.querySelector('#modalClients #zipCodeNewClient');
+  const countryNewClient = document.querySelector('#modalClients #countryNewClient');
+  const provinceNewClient = document.querySelector('#modalClients #provinceNewClient');
+  const municipalityNewClient = document.querySelector('#modalClients #municipalityNewClient');
+  const addressNewClient = document.querySelector('#modalClients #addressNewClient');
+  const phoneNewClient = document.querySelector('#modalClients #phoneNewClient');
+  const emailNewClient = document.querySelector('#modalClients #emailNewClient');
+  totalClients.disabled = true;
+  nameNewClient.disabled = true;
+  zipCodeNewClient.disabled = true;
+  countryNewClient.disabled = true;
+  provinceNewClient.disabled = true;
+  municipalityNewClient.disabled = true;
+  addressNewClient.disabled = true;
+  phoneNewClient.disabled = true;
+  emailNewClient.disabled = true;
+  spinnerTotalClientsSelect.classList.remove('d-none');
+  spinnerTotalClientsSelect.classList.add('d-inline-block');
+  spinnerNameNewClient.classList.remove('d-none');
+  spinnerNameNewClient.classList.add('d-inline-block');
+  spinnerZipCodeNewClient.classList.remove('d-none');
+  spinnerZipCodeNewClient.classList.add('d-inline-block');
+  spinnerCountrySelect.classList.remove('d-none');
+  spinnerCountrySelect.classList.add('d-inline-block');
+  spinnerProvinceSelect.classList.remove('d-none');
+  spinnerProvinceSelect.classList.add('d-inline-block');
+  spinnerMunicipalitySelect.classList.remove('d-none');
+  spinnerMunicipalitySelect.classList.add('d-inline-block');
+  spinnerAddressNewClient.classList.remove('d-none');
+  spinnerAddressNewClient.classList.add('d-inline-block');
+  spinnerPhoneNewClient.classList.remove('d-none');
+  spinnerPhoneNewClient.classList.add('d-inline-block');
+  spinnerEmailNewClient.classList.remove('d-none');
+  spinnerEmailNewClient.classList.add('d-inline-block');
+
   sessionStorage.removeItem('updateClient');
   document.querySelector('#modalClients #idNewClient').textContent = 'Aceptar';
-  const provinceNewClient = document.getElementById('provinceNewClient');
   for (let i = provinceNewClient.length - 1; i >= 0; i--) {
     provinceNewClient.options[i] = null;
   }
-  const municipalityNewClient = document.getElementById('municipalityNewClient');
   for (let i = municipalityNewClient.length - 1; i >= 0; i--) {
     municipalityNewClient.options[i] = null;
   }
@@ -906,7 +1002,7 @@ const handleButtonDeleteNewClients = async event => {
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objProvinces = await fetchData(url, authorization, method);
-  if (objProvinces.error) throw new error('Error al solicitar las provincias');
+  if (objProvinces.error) throw 'Error al solicitar las provincias';
   objProvinces.data.data.map(province => {
     const option = document.createElement('option');
     option.value = province.id;
@@ -915,7 +1011,7 @@ const handleButtonDeleteNewClients = async event => {
   });
   url = `http://192.168.0.2:81/municipalities?province=${objProvinces.data.data[0].id}`;
   const objMunicipalities = await fetchData(url, authorization, method);
-  if (objMunicipalities.error) throw new error('Error al solicitar los municipios');
+  if (objMunicipalities.error) throw 'Error al solicitar los municipios';
   objMunicipalities.data.data.map(municipality => {
     const option = document.createElement('option');
     option.value = municipality.id;
@@ -923,6 +1019,33 @@ const handleButtonDeleteNewClients = async event => {
     municipalityNewClient.appendChild(option);
   });
   document.querySelector('#modalClients #idDeleteNewClient').disabled = true;
+  spinnerTotalClientsSelect.classList.add('d-none');
+  spinnerTotalClientsSelect.classList.remove('d-inline-block');
+  spinnerNameNewClient.classList.add('d-none');
+  spinnerNameNewClient.classList.remove('d-inline-block');
+  spinnerZipCodeNewClient.classList.add('d-none');
+  spinnerZipCodeNewClient.classList.remove('d-inline-block');
+  spinnerCountrySelect.classList.add('d-none');
+  spinnerCountrySelect.classList.remove('d-inline-block');
+  spinnerProvinceSelect.classList.add('d-none');
+  spinnerProvinceSelect.classList.remove('d-inline-block');
+  spinnerMunicipalitySelect.classList.add('d-none');
+  spinnerMunicipalitySelect.classList.remove('d-inline-block');
+  spinnerAddressNewClient.classList.add('d-none');
+  spinnerAddressNewClient.classList.remove('d-inline-block');
+  spinnerPhoneNewClient.classList.add('d-none');
+  spinnerPhoneNewClient.classList.remove('d-inline-block');
+  spinnerEmailNewClient.classList.add('d-none');
+  spinnerEmailNewClient.classList.remove('d-inline-block');
+  totalClients.disabled = false;
+  nameNewClient.disabled = false;
+  zipCodeNewClient.disabled = false;
+  countryNewClient.disabled = false;
+  provinceNewClient.disabled = false;
+  municipalityNewClient.disabled = false;
+  addressNewClient.disabled = false;
+  phoneNewClient.disabled = false;
+  emailNewClient.disabled = false;
 };
 const handleChangeNewProvince = async event => {
   const countryNewClient = document.getElementById('countryNewClient');
@@ -948,7 +1071,7 @@ const handleChangeNewProvince = async event => {
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objMunicipalities = await fetchData(url, authorization, method);
-  if (objMunicipalities.error) throw new error('Error al solicitar las provincias');
+  if (objMunicipalities.error) throw 'Error al solicitar las provincias';
   objMunicipalities.data.data.map(municipality => {
     const option = document.createElement('option');
     option.value = municipality.id;
@@ -992,7 +1115,7 @@ const handleChangeNewCountry = async event => {
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const objProvinces = await fetchData(url, authorization, method);
-  if (objProvinces.error) throw new error('Error al solicitar las provincias');
+  if (objProvinces.error) throw 'Error al solicitar las provincias';
   objProvinces.data.data.map(province => {
     const option = document.createElement('option');
     option.value = province.id;
@@ -1001,7 +1124,7 @@ const handleChangeNewCountry = async event => {
   });
   url = `http://192.168.0.2:81/municipalities?province=${objProvinces.data.data[0].id}`;
   const objMunicipalities = await fetchData(url, authorization, method);
-  if (objMunicipalities.error) throw new error('Error al solicitar los municipios');
+  if (objMunicipalities.error) throw 'Error al solicitar los municipios';
   objMunicipalities.data.data.map(municipality => {
     const option = document.createElement('option');
     option.value = municipality.id;
@@ -1019,32 +1142,71 @@ const handleChangeNewCountry = async event => {
   municipalityNewClient.disabled = false;
 };
 const handleNewInstallationModal = async (event) => {
-  event.target.disabled = true;
+  const modalNewInstallation = document.querySelector('#modalInstallations');
+  const totalInstallations = document.querySelector('#modalInstallations #totalInstallations');
+  const nameNewInstallation = document.querySelector('#modalInstallations #nameNewInstallation');
+  const clientSelect = document.querySelector('#modalInstallations #clientSelected');
+  const spinnerTotalInstallations = document.querySelector('#modalInstallations #spinnerTotalInstallations');
+  const spinnerNameNewInstallation = document.querySelector('#modalInstallations #spinnerNameNewInstallation');
+  const spinnerClientSelected = document.querySelector('#modalInstallations #spinnerClientSelected');
+  event.target.disabled = false;
   let objNewInstallation = null;
   if (sessionStorage.getItem('objNewInstallation')) {
     objNewInstallation = JSON.parse(sessionStorage.getItem('objNewInstallation'));
   }
-  const modalNewInstallation = document.getElementById('modalInstallations');
   const spinnerButton = document.getElementById('spinnerInstallationsButton');
-  const clientSelect = document.getElementById('clientSelected');
   clientSelect.addEventListener('change', async event => {
+    spinnerClientSelected.classList.remove('d-none');
+    spinnerClientSelected.classList.add('d-inline-block');
+    spinnerTotalInstallations.classList.remove('d-none');
+    spinnerTotalInstallations.classList.add('d-inline-block');
+    totalInstallations.disabled = true;
+    nameNewInstallation.disabled = true;
+    clientSelect.disabled = true;
     const clientValueSelected = parseInt(event.target.options[event.target.selectedIndex].value);
     const url = `http://192.168.0.2:81/installations?client=${clientValueSelected}`;
     const method = 'GET';
     const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
     await getInstallations(url, authorization, method, totalInstallations);
+    totalInstallations.disabled = false;
+    nameNewInstallation.disabled = false;
+    clientSelect.disabled = false;
+    spinnerClientSelected.classList.add('d-none');
+    spinnerClientSelected.classList.remove('d-inline-block');
+    spinnerTotalInstallations.classList.add('d-none');
+    spinnerTotalInstallations.classList.remove('d-inline-block');
   }, false);
-  const totalInstallations = document.getElementById('totalInstallations');
   totalInstallations.addEventListener('change', event => {
+    spinnerClientSelected.classList.remove('d-none');
+    spinnerClientSelected.classList.add('d-inline-block');
+    spinnerTotalInstallations.classList.remove('d-none');
+    spinnerTotalInstallations.classList.add('d-inline-block');
+    totalInstallations.disabled = true;
+    nameNewInstallation.disabled = true;
+    clientSelect.disabled = true;
     sessionStorage.setItem('updateInstallation', JSON.stringify(true));
     document.querySelector('#modalInstallations #idNewInstallation').textContent = 'Actualizar';
     document.querySelector('#modalInstallations #nameNewInstallation').value = event.target.options[event.target.selectedIndex].textContent;
     document.querySelector('#modalInstallations #idDeleteNewInstallation').disabled = false;
     document.querySelector('#modalInstallations #idInstallation').value = event.target.options[event.target.selectedIndex].value;
+    totalInstallations.disabled = false;
+    nameNewInstallation.disabled = false;
+    clientSelect.disabled = false;
+    spinnerClientSelected.classList.add('d-none');
+    spinnerClientSelected.classList.remove('d-inline-block');
+    spinnerTotalInstallations.classList.add('d-none');
+    spinnerTotalInstallations.classList.remove('d-inline-block');
   }, false);
   const resetNewInstallationButton = document.querySelector('#modalInstallations #resetNewInstallation');
-  resetNewInstallationButton.addEventListener('click', async event => {
-    const totalInstallations = document.getElementById('totalInstallations');
+  resetNewInstallationButton.addEventListener('click', async () => {
+    spinnerClientSelected.classList.remove('d-none');
+    spinnerClientSelected.classList.add('d-inline-block');
+    spinnerTotalInstallations.classList.remove('d-none');
+    spinnerTotalInstallations.classList.add('d-inline-block');
+    totalInstallations.disabled = true;
+    nameNewInstallation.disabled = true;
+    clientSelect.disabled = true;
+    nameNewInstallation.value = '';
     while (totalInstallations.firstChild) {
       totalInstallations.removeChild(totalInstallations.firstChild);
     }
@@ -1056,9 +1218,16 @@ const handleNewInstallationModal = async (event) => {
     document.querySelector('#modalInstallations #idDeleteNewInstallation').disabled = true;
     sessionStorage.removeItem('updateInstallation');
     document.querySelector('#modalInstallations #idInstallation').value = 0;
+    totalInstallations.disabled = false;
+    nameNewInstallation.disabled = false;
+    clientSelect.disabled = false;
+    spinnerClientSelected.classList.add('d-none');
+    spinnerClientSelected.classList.remove('d-inline-block');
+    spinnerTotalInstallations.classList.add('d-none');
+    spinnerTotalInstallations.classList.remove('d-inline-block');
   }, false);
   const idNewInstallation = document.querySelector('#modalInstallations #idNewInstallation');
-  idNewInstallation.addEventListener('click', async event => {
+  idNewInstallation.addEventListener('click', async () => {
     const inputModalInstallations = document.querySelector('#modalInstallations #nameNewInstallation');
     let operationOk = inputModalInstallations.value !== '';
     if (!operationOk) {
@@ -1082,7 +1251,7 @@ const handleNewInstallationModal = async (event) => {
         }
         method = 'PUT';
         const objUpdateInstallation = await fetchData(url, authorization, method, objData);
-        if (objUpdateInstallation.error) throw new error('Error al actualizar la instalación');
+        if (objUpdateInstallation.error) throw 'Error al actualizar la instalación';
       } else {
         const objData = {
           name: document.querySelector('#modalInstallations #nameNewInstallation').value,
@@ -1091,7 +1260,7 @@ const handleNewInstallationModal = async (event) => {
         //
         method = 'POST';
         const objInsertInstallation = await fetchData(url, authorization, method, objData);
-        if (objInsertInstallation.error) throw new error('Error al insertar la instalación');
+        if (objInsertInstallation.error) throw 'Error al insertar la instalación';
 
       }
       modalNewInstallation.classList.remove('show');
@@ -1100,18 +1269,18 @@ const handleNewInstallationModal = async (event) => {
     }
   }, false);
   const idDeleteNewInstallation = document.querySelector('#modalInstallations #idDeleteNewInstallation');
-  idDeleteNewInstallation.addEventListener('click', async event => {
+  idDeleteNewInstallation.addEventListener('click', async () => {
     // Lanzamos el modal de peligro
     // Luego definimos los eventos del modal y en los eventos del modal indicamos lo de abajo
     const modalDanger = document.getElementById('modalDanger');
     const buttonBack = document.querySelector('#modalDanger #back');
-    buttonBack.addEventListener('click', event => {
+    buttonBack.addEventListener('click', () => {
       const modalDanger = document.getElementById('modalDanger');
       modalDanger.classList.remove('show');
       modalDanger.style.display = 'none';
     }, false);
     const buttonDelete = document.querySelector('#modalDanger #borrar');
-    buttonDelete.addEventListener('click', async event => {
+    buttonDelete.addEventListener('click', async () => {
       // donde se borra
       url = 'http://192.168.0.2:81/installations';
       if (sessionStorage.getItem('updateInstallation')) {
@@ -1123,7 +1292,7 @@ const handleNewInstallationModal = async (event) => {
         }
         method = 'DELETE';
         const objUpdateInstallation = await fetchData(url, authorization, method, objData);
-        if (objUpdateInstallation.error) throw new error('Error al actualizar la instalación');
+        if (objUpdateInstallation.error) throw 'Error al actualizar la instalación';
         const modalInstallations = document.querySelector('#modalInstallations');
         modalInstallations.classList.remove('show');
         modalInstallations.style.display = 'none';
@@ -1134,7 +1303,6 @@ const handleNewInstallationModal = async (event) => {
     modalDanger.style.display = 'block';
     // Hasta aquí
   }, false);
-  const idInstallationSelected = document.querySelector('#modalInstallations #idInstallation').value;
   for (let i = clientSelect.options.length - 1; i >= 0; i--) {
     clientSelect[i].options.value = null;
   }
@@ -1159,7 +1327,7 @@ const handleNewInstallationModal = async (event) => {
   sessionStorage.removeItem('objNewInstallation');
   event.target.disabled = false;
 }
-const handleNewLocationModal = async (event) => {
+const handleNewLocationModal = async () => {
   let objNewLocation = null;
   if (sessionStorage.getItem('objNewLocation')) {
     objNewLocation = JSON.parse(sessionStorage.getItem('objNewLocation'));
@@ -1201,7 +1369,7 @@ const handleNewLocationModal = async (event) => {
   modalNewLocation.classList.add('show');
   sessionStorage.removeItem('objNewLocation');
   const resetNewLocationButton = document.querySelector('#modalLocations #resetNewLocation');
-  resetNewLocationButton.addEventListener('click', async event => {
+  resetNewLocationButton.addEventListener('click', async () => {
     const clientSelect = document.querySelector('#modalLocations #clientsSelected');
     const installationSelect = document.querySelector('#modalLocations #installationSelected');
     const totalLocations = document.querySelector('#modalLocations #totalLocations');
@@ -1217,6 +1385,7 @@ const handleNewLocationModal = async (event) => {
     clientSelect.disabled = false;
     installationSelect.disabled = false;
     totalLocations.disabled = false;
+    nameNewLocation.disabled = false;
     document.querySelector('#modalLocations #idDeleteNewLocation').disabled = true;
     for (let i = totalLocations.options.length - 1; i >= 0; i--) {
       totalLocations.options[i].remove();
@@ -1242,9 +1411,10 @@ const handleNewLocationModal = async (event) => {
     clientSelect.disabled = false;
     installationSelect.disabled = false;
     totalLocations.disabled = false;
+    nameNewLocation.disabled = false;
   }, false);
   const idNewLocation = document.querySelector('#modalLocations #idNewLocation');
-  idNewLocation.addEventListener('click', async event => {
+  idNewLocation.addEventListener('click', async () => {
     const inputModalLocations = document.querySelector('#modalLocations #nameNewLocation');
     let operationOk = inputModalLocations.value !== '';
     if (!operationOk) {
@@ -1269,7 +1439,7 @@ const handleNewLocationModal = async (event) => {
         }
         const method = 'PUT';
         const objUpdateLocation = await fetchData(url, authorization, method, objData);
-        if (objUpdateLocation.error) throw new error('Error al actualizar la localización');
+        if (objUpdateLocation.error) throw 'Error al actualizar la localización';
       } else {
         const objData = {
           name: document.querySelector('#modalLocations #nameNewLocation').value,
@@ -1279,7 +1449,7 @@ const handleNewLocationModal = async (event) => {
         //
         const method = 'POST';
         const objInsertLocation = await fetchData(url, authorization, method, objData);
-        if (objInsertLocation.error) throw new error('Error al insertar la localización');
+        if (objInsertLocation.error) throw 'Error al insertar la localización';
 
       }
       modalNewLocation.classList.remove('show');
@@ -1288,16 +1458,16 @@ const handleNewLocationModal = async (event) => {
     }
   }, false);
   const idDeleteNewLocation = document.querySelector('#modalLocations #idDeleteNewLocation');
-  idDeleteNewLocation.addEventListener('click', async event => {
+  idDeleteNewLocation.addEventListener('click', async () => {
     const modalDanger = document.getElementById('modalDanger');
     const buttonBack = document.querySelector('#modalDanger #back');
-    buttonBack.addEventListener('click', event => {
+    buttonBack.addEventListener('click', () => {
       const modalDanger = document.getElementById('modalDanger');
       modalDanger.classList.remove('show');
       modalDanger.style.display = 'none';
     }, false);
     const buttonDelete = document.querySelector('#modalDanger #borrar');
-    buttonDelete.addEventListener('click', async event => {
+    buttonDelete.addEventListener('click', async () => {
       // donde se borra
       url = 'http://192.168.0.2:81/locations';
       if (sessionStorage.getItem('updateLocation')) {
@@ -1309,7 +1479,7 @@ const handleNewLocationModal = async (event) => {
         }
         const method = 'DELETE';
         const objUpdateLocation = await fetchData(url, authorization, method, objData);
-        if (objUpdateLocation.error) throw new error('Error al borrar la localización');
+        if (objUpdateLocation.error) throw 'Error al borrar la localización';
         const modalLocations = document.querySelector('#modalLocations');
         modalLocations.classList.remove('show');
         modalLocations.style.display = 'none';
@@ -1343,7 +1513,7 @@ const handleNewLocationModal = async (event) => {
     spinnerTotalLocationsSelected.classList.add('d-inline-block');
     url = `http://192.168.0.2:81/installations?client=${parseInt(clientSelect.options[clientSelect.selectedIndex].value)}`;
     const objInstallationsSelect = await fetchData(url, authorization, method);
-    if (objInstallationsSelect.error) throw new error('Error al buscar las instalaciones');
+    if (objInstallationsSelect.error) throw 'Error al buscar las instalaciones';
     objInstallationsSelect.data.data.map(installation => {
       const option = document.createElement('option');
       option.value = installation.id;
@@ -1353,7 +1523,7 @@ const handleNewLocationModal = async (event) => {
 
     url = `http://192.168.0.2:81/locations?installation=${parseInt(installationSelect.options[installationSelect.selectedIndex].value)}`;
     const objLocationsSelect = await fetchData(url, authorization, method);
-    if (objLocationsSelect.error) throw new error('Error al buscar las localizaciones');
+    if (objLocationsSelect.error) throw 'Error al buscar las localizaciones';
     objLocationsSelect.data.data.map(location => {
       const option = document.createElement('option');
       option.value = location.id;
@@ -1389,7 +1559,7 @@ const handleNewLocationModal = async (event) => {
     spinnerTotalLocationsSelected.classList.add('d-inline-block');
     url = `http://192.168.0.2:81/locations?installation=${parseInt(installationSelect.options[installationSelect.selectedIndex].value)}`;
     const objLocationsSelect = await fetchData(url, authorization, method);
-    if (objLocationsSelect.error) throw new error('Error al buscar las localizaciones');
+    if (objLocationsSelect.error) throw 'Error al buscar las localizaciones';
     objLocationsSelect.data.data.map(location => {
       const option = document.createElement('option');
       option.value = location.id;
@@ -1434,7 +1604,6 @@ const handleNewPositionModal = async (event) => {
   const installationPositionsSelected = document.querySelector('#modalPositions #installationPositionsSelected');
   const spinnerInstallationPositionsSelected = document.querySelector('#modalPositions #spinnerInstallationPositionsSelected');
   const elementSelect = document.querySelector('#modalPositions #elementSelected');
-  const spinnerElementSelect = document.querySelector('#modalPositions #spinnerElementSelected');
   const locationSelect = document.querySelector('#modalPositions #locationSelected');
   const spinnerLocationSelected = document.querySelector('#modalPositions #spinnerLocationSelected');
   const iePosition = document.querySelector('#modalPositions #IEPosition');
@@ -1444,8 +1613,6 @@ const handleNewPositionModal = async (event) => {
   const idDeleteNewPosition = document.querySelector('#modalPositions #idDeleteNewPosition');
   const idNewPosition = document.querySelector('#modalPositions #idNewPosition');
   const resetNewPosition = document.querySelector('#modalPositions #resetNewPosition');
-  const backNewPosition = document.querySelector('#modalPositions #backNewPosition');
-  const spinnerUpdatePosition = document.querySelector('#modalPositions #spinnerUpdatePosition');
   const idPosition = document.querySelector('#modalPositions #idPosition');
   spinnerButton.classList.remove('d-none');
   spinnerButton.classList.add('d-block');
@@ -1475,12 +1642,11 @@ const handleNewPositionModal = async (event) => {
       elementSelect.removeChild(elementSelect.firstChild);
     }
   }
-  // Carga de Modal
   let method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   let url = 'http://192.168.0.2:81/clients';
   const objClientsPositions = await fetchData(url, authorization, method);
-  if (objClientsPositions.error) throw new error('Error al buscar los clientes');
+  if (objClientsPositions.error) throw 'Error al buscar los clientes';
   objClientsPositions.data.data.map(client => {
     const option = document.createElement('option');
     option.value = client.id;
@@ -1489,7 +1655,7 @@ const handleNewPositionModal = async (event) => {
   });
   url = `http://192.168.0.2:81/installations?client=${parseInt(clientPositionsSelected.options[clientPositionsSelected.selectedIndex].value)}`;
   const objInstallationsPositions = await fetchData(url, authorization, method);
-  if (objInstallationsPositions.error) throw new error('Error al buscar las instalaciones');
+  if (objInstallationsPositions.error) throw 'Error al buscar las instalaciones';
   objInstallationsPositions.data.data.map(installation => {
     const option = document.createElement('option');
     option.value = installation.id;
@@ -1498,7 +1664,7 @@ const handleNewPositionModal = async (event) => {
   });
   url = `http://192.168.0.2:81/locations?installation=${parseInt(installationPositionsSelected.options[installationPositionsSelected.selectedIndex].value)}`;
   const objLocationsPositions = await fetchData(url, authorization, method);
-  if (objLocationsPositions.error) throw new error('Error al buscar las localizaciones');
+  if (objLocationsPositions.error) throw 'Error al buscar las localizaciones';
   objLocationsPositions.data.data.map(location => {
     const option = document.createElement('option');
     option.value = location.id;
@@ -1507,7 +1673,7 @@ const handleNewPositionModal = async (event) => {
   });
   url = 'http://192.168.0.2:81/elements';
   const objElementSelected = await fetchData(url, authorization, method);
-  if (objElementSelected.error) throw new error('Error el buscar los elementos');
+  if (objElementSelected.error) throw 'Error el buscar los elementos';
   objElementSelected.data.data.map(element => {
     const option = document.createElement('option');
     option.value = element.id;
@@ -1516,7 +1682,7 @@ const handleNewPositionModal = async (event) => {
   });
   url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
   const objPositionsSelected = await fetchData(url, authorization, method);
-  if (objPositionsSelected.error) throw new error('Error al buscar las posiciones');
+  if (objPositionsSelected.error) throw 'Error al buscar las posiciones';
   objPositionsSelected.data.data.map(position => {
     const option = document.createElement('option');
     option.value = position.id;
@@ -1528,21 +1694,19 @@ const handleNewPositionModal = async (event) => {
   tensionPosition.value = '';
   pointPosition.value = '';
   fasePosition.value = '';
-  // Inicia la carga de eventos
-  clientPositionsSelected.addEventListener('change', async event => {
+  clientPositionsSelected.addEventListener('change', async () => {
     spinnerTotalPositions.classList.remove('d-none');
     spinnerTotalPositions.classList.add('d-inline-block');
+    totalPositions.disabled = true;
     spinnerClientPositionsSelected.classList.remove('d-none');
     spinnerClientPositionsSelected.classList.add('d-inline-block');
+    clientPositionsSelected.disabled = true;
     spinnerInstallationPositionsSelected.classList.remove('d-none');
     spinnerInstallationPositionsSelected.classList.add('d-inline-block');
+    installationPositionsSelected.disabled = true;
     spinnerLocationSelected.classList.remove('d-none');
     spinnerLocationSelected.classList.add('d-inline-block');
-    totalPositions.disabled = true;
-    clientPositionsSelected.disabled = true;
-    installationPositionsSelected.disabled = true;
     locationSelect.disabled = true;
-
 
     if (totalPositions.firstChild) {
       while (totalPositions.firstChild) {
@@ -1561,7 +1725,7 @@ const handleNewPositionModal = async (event) => {
     }
     url = `http://192.168.0.2:81/installations?client=${parseInt(clientPositionsSelected.options[clientPositionsSelected.selectedIndex].value)}`;
     const objInstallationsPositionsSelected = await fetchData(url, authorization, method);
-    if (objInstallationsPositionsSelected.error) throw new error('Error al buscar las instalaciones');
+    if (objInstallationsPositionsSelected.error) throw 'Error al buscar las instalaciones';
     objInstallationsPositionsSelected.data.data.map(installation => {
       const option = document.createElement('option');
       option.value = installation.id;
@@ -1570,7 +1734,7 @@ const handleNewPositionModal = async (event) => {
     });
     url = `http://192.168.0.2:81/locations?installation=${parseInt(installationPositionsSelected.options[installationPositionsSelected.selectedIndex].value)}`;
     const objLocationsPositionsSelected = await fetchData(url, authorization, method);
-    if (objLocationsPositionsSelected.error) throw new error('Error al buscar las localizaciones');
+    if (objLocationsPositionsSelected.error) throw 'Error al buscar las localizaciones';
     objLocationsPositionsSelected.data.data.map(location => {
       const option = document.createElement('option');
       option.value = location.id;
@@ -1579,7 +1743,7 @@ const handleNewPositionModal = async (event) => {
     });
     url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
     const objPositionsPositionsSelected = await fetchData(url, authorization, method);
-    if (objPositionsPositionsSelected.error) throw new error('Error al buscar las posiciones');
+    if (objPositionsPositionsSelected.error) throw 'Error al buscar las posiciones';
     objPositionsPositionsSelected.data.data.map(position => {
       const option = document.createElement('option');
       option.value = position.id;
@@ -1599,7 +1763,7 @@ const handleNewPositionModal = async (event) => {
     spinnerLocationSelected.classList.remove('d-inline-block');
     spinnerLocationSelected.classList.add('d-none');
   }, false);
-  installationPositionsSelected.addEventListener('change', async event => {
+  installationPositionsSelected.addEventListener('change', async () => {
     spinnerTotalPositions.classList.remove('d-none');
     spinnerTotalPositions.classList.add('d-inline-block');
     spinnerClientPositionsSelected.classList.remove('d-none');
@@ -1624,7 +1788,7 @@ const handleNewPositionModal = async (event) => {
     }
     url = `http://192.168.0.2:81/locations?installation=${parseInt(installationPositionsSelected.options[installationPositionsSelected.selectedIndex].value)}`;
     const objLocationsPositionsSelected = await fetchData(url, authorization, method);
-    if (objLocationsPositionsSelected.error) throw new error('Error al buscar las localizaciones');
+    if (objLocationsPositionsSelected.error) throw 'Error al buscar las localizaciones';
     objLocationsPositionsSelected.data.data.map(location => {
       const option = document.createElement('option');
       option.value = location.id;
@@ -1633,7 +1797,7 @@ const handleNewPositionModal = async (event) => {
     });
     url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
     const objPositionsPositionsSelected = await fetchData(url, authorization, method);
-    if (objPositionsPositionsSelected.error) throw new error('Error al buscar las posiciones');
+    if (objPositionsPositionsSelected.error) throw 'Error al buscar las posiciones';
     objPositionsPositionsSelected.data.data.map(position => {
       const option = document.createElement('option');
       option.value = position.id;
@@ -1653,9 +1817,7 @@ const handleNewPositionModal = async (event) => {
     spinnerLocationSelected.classList.remove('d-inline-block');
     spinnerLocationSelected.classList.add('d-none');
   }, false);
-
-
-  locationSelect.addEventListener('change', async event => {
+  locationSelect.addEventListener('change', async () => {
     spinnerTotalPositions.classList.remove('d-none');
     spinnerTotalPositions.classList.add('d-inline-block');
     spinnerClientPositionsSelected.classList.remove('d-none');
@@ -1675,7 +1837,7 @@ const handleNewPositionModal = async (event) => {
     }
     url = `http://192.168.0.2:81/positions?location=${parseInt(locationSelect.options[locationSelect.selectedIndex].value)}`;
     const objPositionsPositionsSelected = await fetchData(url, authorization, method);
-    if (objPositionsPositionsSelected.error) throw new error('Error al buscar las posiciones');
+    if (objPositionsPositionsSelected.error) throw 'Error al buscar las posiciones';
     objPositionsPositionsSelected.data.data.map(position => {
       const option = document.createElement('option');
       option.value = position.id;
@@ -1695,15 +1857,13 @@ const handleNewPositionModal = async (event) => {
     spinnerLocationSelected.classList.remove('d-inline-block');
     spinnerLocationSelected.classList.add('d-none');
   }, false);
-
-
   totalPositions.addEventListener('change', async event => {
     idDeleteNewPosition.disabled = false;
     idNewPosition.textContent = 'Actualizar';
     const idTotalPositionsSelected = parseInt(event.target.options[event.target.selectedIndex].value);
     url = `http://192.168.0.2:81/positions?id=${idTotalPositionsSelected}`;
     const objTotalPositions = await fetchData(url, authorization, method);
-    if (objTotalPositions.error) throw new error('Error al buscar la posición');
+    if (objTotalPositions.error) throw 'Error al buscar la posición';
     idPosition.value = parseInt(objTotalPositions.data.data[0].id);
     nameNewPosition.value = objTotalPositions.data.data[0].name;
     for (let i = 0; i < elementSelect.options.length; i++) {
@@ -1724,65 +1884,159 @@ const handleNewPositionModal = async (event) => {
     fasePosition.value = objTotalPositions.data.data[0].fase;
     sessionStorage.setItem('updatePosition', JSON.stringify(true));
   }, false);
-  resetNewPosition.addEventListener('click', event => {
+  resetNewPosition.addEventListener('click', async () => {
+    spinnerClientPositionsSelected.classList.add('d-inline-block');
+    spinnerClientPositionsSelected.classList.remove('d-none');
+    clientPositionsSelected.disabled=true;
+    spinnerInstallationPositionsSelected.classList.add('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.remove('d-none');
+    installationPositionsSelected.disabled=true;
+    spinnerLocationSelected.classList.add('d-inline-block');
+    spinnerLocationSelected.classList.remove('d-none');
+    locationSelect.disabled=true;
+    spinnerTotalPositions.classList.add('d-inline-block');
+    spinnerTotalPositions.classList.remove('d-none');
+    totalPositions.disabled=true;
     idNewPosition.textContent = 'Aceptar';
     idDeleteNewPosition.disabled = true;
     sessionStorage.removeItem('updatePosition');
     idPosition.value = 0;
+    nameNewPosition.value = '';
+    iePosition.value = '';
+    tensionPosition.value = '';
+    pointPosition.value = '';
+    fasePosition.value = '';
+    // TODO: borrar Selects todos
+    if (clientPositionsSelected.firstChild) {
+      while (clientPositionsSelected.firstChild) {
+        clientPositionsSelected.removeChild(clientPositionsSelected.firstChild);
+      }
+    }
+    if (installationPositionsSelected.firstChild) {
+      while (installationPositionsSelected.firstChild) {
+        installationPositionsSelected.removeChild(installationPositionsSelected.firstChild);
+      }
+    }
+    if (locationSelect.firstChild) {
+      while (locationSelect.firstChild) {
+        locationSelect.removeChild(locationSelect.firstChild);
+      }
+    }
+    if (totalPositions.firstChild) {
+      while (totalPositions.firstChild) {
+        totalPositions.removeChild(totalPositions.firstChild);
+      }
+    }
+    url = 'http://192.168.0.2:81/clients';
+    method = 'GET';
+    const objClientPositionsSelected = await fetchData(url, authorization, method);
+    if (objClientPositionsSelected.error) throw 'Error al consultar los clientes';
+    objClientPositionsSelected.data.data.map(client => {
+      const option = document.createElement('option');
+      option.value = client.id;
+      option.text = client.name;
+      clientPositionsSelected.appendChild(option);
+    });
+    url = 'http://192.168.0.2:81/installations?client=1';
+    const objInstallationPositionsSelected = await fetchData(url, authorization, method);
+    if (objInstallationPositionsSelected.error) throw 'Error al consultar las instalaciones';
+    objInstallationPositionsSelected.data.data.map(installation => {
+      const option = document.createElement('option');
+      option.value = installation.id;
+      option.text = installation.name;
+      installationPositionsSelected.appendChild(option);
+    });
+    url = 'http://192.168.0.2:81/locations?installation=1';
+    const objLocationPositionsSelected = await fetchData(url, authorization, method);
+    if (objLocationPositionsSelected.error) throw 'Error al consultar las localizaciones';
+    objLocationPositionsSelected.data.data.map(location => {
+      const option = document.createElement('option');
+      option.value = location.id;
+      option.text = location.name;
+      locationSelect.appendChild(option);
+    });
+    url = 'http://192.168.0.2:81/positions?location=1';
+    const objTotalPositions = await fetchData(url, authorization, method);
+    if (objTotalPositions.error) throw 'Error al consultar las posiciones';
+    objTotalPositions.data.data.map(position => {
+      const option = document.createElement('option');
+      option.value = position.id;
+      option.text = position.name;
+      totalPositions.appendChild(option);
+    });
+    spinnerClientPositionsSelected.classList.remove('d-inline-block');
+    spinnerClientPositionsSelected.classList.add('d-none');
+    clientPositionsSelected.disabled=false;
+    spinnerInstallationPositionsSelected.classList.remove('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.add('d-none');
+    installationPositionsSelected.disabled=false;
+    spinnerLocationSelected.classList.remove('d-inline-block');
+    spinnerLocationSelected.classList.add('d-none');
+    locationSelect.disabled=false;
+    spinnerTotalPositions.classList.remove('d-inline-block');
+    spinnerTotalPositions.classList.add('d-none');
+    totalPositions.disabled=false;
   }, false);
-  idNewPosition.addEventListener('click', async event => {
+  idNewPosition.addEventListener('click', async () => {
     let update = false;
     if (sessionStorage.getItem('updatePosition')) {
       update = Boolean(JSON.parse(sessionStorage.getItem('updatePosition')));
       sessionStorage.removeItem('updatePosition');
     }
-    url = `http://192.168.0.2:81/positions`;
-    if (update === true) {
-      const id = idPosition.value;
-      idPosition.value = 0;
-      const objData = {
-        id: parseInt(id),
-        name: nameNewPosition.value,
-        element: elementSelect.options[elementSelect.selectedIndex].value,
-        point: pointPosition.value,
-        type: iePosition.value,
-        fase: fasePosition.value,
-        voltage: parseFloat(tensionPosition.value),
-        location: parseInt(locationSelect.options[locationSelect.selectedIndex].value)
-      }
-      // Actualización
-      method = 'PUT';
-      const objUpdatePosition = await fetchData(url, authorization, method, objData);
-      if (objUpdatePosition.error) throw new error('Error al actualizar la posición');
-      sessionStorage.removeItem('updatePosition');
+    if (nameNewPosition.value === '' || iePosition.value === '' || tensionPosition.value === '' || pointPosition.value === '' || fasePosition.value === '') {
+      const modalInfo = document.getElementById('modalInfo');
+      modalInfo.classList.add('show');
+      modalInfo.style.display = 'block';
+      document.querySelector('#modalInfo #idTitleModalInfo').textContent = 'Operación incompleta';
+      document.querySelector('#modalInfo #idMessageModalInfo').textContent = 'Faltan campos por cubrir';
     } else {
-      const objData = {
-        name: nameNewPosition.value,
-        element: elementSelect.options[elementSelect.selectedIndex].value,
-        point: pointPosition.value,
-        type: iePosition.value,
-        fase: fasePosition.value,
-        voltage: parseFloat(tensionPosition.value),
-        location: parseInt(locationSelect.options[locationSelect.selectedIndex].value)
+      url = `http://192.168.0.2:81/positions`;
+      if (update === true) {
+        const id = idPosition.value;
+        idPosition.value = 0;
+        const objData = {
+          id: parseInt(id),
+          name: nameNewPosition.value,
+          element: elementSelect.options[elementSelect.selectedIndex].value,
+          point: pointPosition.value,
+          type: iePosition.value,
+          fase: fasePosition.value,
+          voltage: parseFloat(tensionPosition.value),
+          location: parseInt(locationSelect.options[locationSelect.selectedIndex].value)
+        }
+        // Actualización
+        method = 'PUT';
+        const objUpdatePosition = await fetchData(url, authorization, method, objData);
+        if (objUpdatePosition.error) throw 'Error al actualizar la posición';
+        sessionStorage.removeItem('updatePosition');
+      } else {
+        const objData = {
+          name: nameNewPosition.value,
+          element: elementSelect.options[elementSelect.selectedIndex].value,
+          point: pointPosition.value,
+          type: iePosition.value,
+          fase: fasePosition.value,
+          voltage: parseFloat(tensionPosition.value),
+          location: parseInt(locationSelect.options[locationSelect.selectedIndex].value)
+        }
+        // Inserción
+        method = 'POST';
+        const objInsertPosition = await fetchData(url, authorization, method, objData);
+        if (objInsertPosition.error) throw 'Error al insertar la posición';
       }
-      // Inserción
-      method = 'POST';
-      const objInsertPosition = await fetchData(url, authorization, method, objData);
-      if (objInsertPosition.error) throw new error('Error al insertar la posición');
-
+      modalNewPosition.classList.remove('show');
+      modalNewPosition.style.display = 'none';
+      window.location.href = '../../views/operator.html';
     }
-    modalNewPosition.classList.remove('show');
-    modalNewPosition.style.display = 'none';
-    window.location.href = '../../views/operator.html';
   }, false);
-  idDeleteNewPosition.addEventListener('click', async event => {
+  idDeleteNewPosition.addEventListener('click', async () => {
     url = 'http://192.168.0.2:81/positions';
     method = 'DELETE';
     const objData = {
       id: parseInt(idPosition.value)
     }
     const objIdDeleteNewPosition = await fetchData(url, authorization, method, objData);
-    if (objIdDeleteNewPosition.error) throw new error('Error al borrar la posición');
+    if (objIdDeleteNewPosition.error) throw 'Error al borrar la posición';
     modalNewPosition.classList.remove('show');
     modalNewPosition.style.display = 'none';
     sessionStorage.removeItem('updatePosition');
@@ -1826,7 +2080,7 @@ const handleNewClientModal = async (event) => {
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
   const method = 'GET';
   const objCountries = await fetchData(url, authorization, method);
-  if (objCountries.error) new error('Error al solicitar los clientes');
+  if (objCountries.error) throw 'Error al solicitar los clientes';
   objCountries.data.data.map(country => {
     const option = document.createElement('option');
     option.value = country.id;
@@ -1838,7 +2092,7 @@ const handleNewClientModal = async (event) => {
   });
   url = 'http://192.168.0.2:81/provinces?country=' + countryNewClient.options[countryNewClient.selectedIndex].value;
   const objProvinces = await fetchData(url, authorization, method);
-  if (objProvinces.error) throw new error('Error al solicitar las provincias');
+  if (objProvinces.error) throw 'Error al solicitar las provincias';
   objProvinces.data.data.map(province => {
     const option = document.createElement('option');
     option.value = province.id;
@@ -1850,7 +2104,7 @@ const handleNewClientModal = async (event) => {
   });
   url = 'http://192.168.0.2:81/municipalities?province=' + provinceNewClient.options[provinceNewClient.selectedIndex].value;
   const objMunicipality = await fetchData(url, authorization, method);
-  if (objMunicipality.error) throw new error('Error al solicitar los municipios');
+  if (objMunicipality.error) throw 'Error al solicitar los municipios';
   objMunicipality.data.data.map(province => {
     const option = document.createElement('option');
     option.value = province.id;
@@ -1956,7 +2210,6 @@ const getNewPositions = (table, positions, searchText) => {
     tdTrash.innerHTML = "<button type='button' class='btn bg-color-marron text-white' data='position.id'><i class=\"fa-solid fa-trash\"></i></button>";
     tdTrash.setAttribute('class', 'text-center align-middle');
     row.appendChild(tdTrash);
-    const tdType = document.createElement('td');
     table.appendChild(row);
     const rowsTable = table.getElementsByTagName('tr');
     for (let i = 0; i < rowsTable.length; i++) {
@@ -2033,13 +2286,12 @@ const handleButtonDelete = async event => {
   const buttonDelete = modalDanger.querySelector('#borrar');
   buttonDelete.addEventListener('click', deleteRowPosition, false);
 };
-const handleBackModalDanger = event => {
+const handleBackModalDanger = () => {
   const modalDanger = document.getElementById('modalDanger');
   modalDanger.classList.remove('show');
   modalDanger.style.display = 'none';
 };
-const deleteRowPosition = async event => {
-  const modalDanger = document.getElementById('modalDanger');
+const deleteRowPosition = async () => {
   const idRowSelected = parseInt(JSON.parse(sessionStorage.getItem('idRowDeleted')));
   const objDelete = {
     id: idRowSelected
@@ -2059,7 +2311,6 @@ const clickRow = event => {
     while (tr.nodeName.toLowerCase() !== 'tr') {
       tr = tr.parentNode;
     }
-    const hijo = tr.children;
     const objPosition = {
       id: parseInt(tr.children[0].textContent),
       position: tr.children[1].textContent,

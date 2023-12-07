@@ -28,11 +28,12 @@
         <div class="row d-block d-md-none">
             <div class="col-12 col-xxl-2">
                 <button type="button" name="exit"
-                        class="w-100 btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar sesión
+                        class="w-100 btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar
+                    sesión
                 </button>
             </div>
         </div>
-        <div class="row my-1">
+        <div class="row mb-1 mt-2">
             <div class="col-12 col-md-3 col-xl-2 col-xxl-2 mb-1 mb-md-0">
                 <button id="client" name="client" class="w-100 btn bg-color-black text-white position-relative"
                         data-bs-toggle="modal"
@@ -82,7 +83,8 @@
             </div>
             <div class="d-none d-xxl-block col-xxl-2">
                 <button type="button" name="exit"
-                        class="w-100 btn bg-color-green text-white btn-lg px-6 border-color-black mx-0 exit ">Cerrar sesión
+                        class="w-100 btn bg-color-green text-white btn-lg px-6 border-color-black mx-0 exit ">Cerrar
+                    sesión
                 </button>
             </div>
 
@@ -121,7 +123,8 @@
             </div>
             <div class=" col-0 col-md-4 d-none d-md-flex d-xxl-none justify-content-end align-items-center px-0">
                 <button type="button" name="exit"
-                        class="exit btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar sesión
+                        class="exit btn bg-color-green text-white btn-lg px-5 border-color-black mx-0 exit">Cerrar
+                    sesión
                 </button>
             </div>
         </div>
@@ -174,7 +177,7 @@
                         <img src="../assets/images/peligro.png" alt="Modal de borrar defectos" class="icon">
                     </div>
                     <div class="w-100 d-flex align-items-center">
-                        <h5 class="modal-title mx-auto fw-bold fs-5 pe-3">¿ ESTÁS SEGURO ?</h5>
+                        <h5 class="modal-title mx-auto fw-bold fs-5 pe-3">¿ESTÁS SEGURO?</h5>
                     </div>
                 </div>
             </div>
@@ -202,17 +205,14 @@
                     <h5 class="modal-title py-1 bg-color-blue text-white w-100 text-center rounded fw-normal"
                         id="modalClientesTitle">Clientes</h5>
                 </div>
-                <div id="spinnerUpdateClient"
-                     class="v-100 h-100 d-flex justify-content-center align-items-center bg-color-background d-none p-5">
-                    <div class="spinner-border text-color-green" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                    <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
-                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col p-0 m-0">
-                            <label for="totalClients" class="form-label fw-bold mb-0 $fs-labels">Clientes</label>
+                            <label for="totalClients" class="form-label fw-bold mb-0 $fs-labels">Clientes
+                                <span id="spinnerTotalClientsSelect"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <select id="totalClients" class="form-select form-select-mg mb-2 mt-0" size="3"
                                     aria-describedby="selector de clientes"></select>
                             <input type="hidden" id="idClient" name="idClient" value="0"/>
@@ -220,21 +220,29 @@
                     </div>
                     <div class="row">
                         <div class="col p-0 m-0">
-                            <label for="nameNewClient" class="form-label fw-bold mb-0 $fs-labels">Nombre</label>
+                            <label for="nameNewClient" class="form-label fw-bold mb-0 $fs-labels">Nombre
+                                <span id="spinnerNameNewClient"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <input type="text" id="nameNewClient" class="form-control valid"
                                    aria-describedby="Nombre del cliente"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-3 p-0 mt-2 pe-2">
-                            <label for="zipCodeNewClient" class="form-label fw-bold mb-0 $fs-labels">C.P.</label>
+                            <label for="zipCodeNewClient" class="form-label fw-bold mb-0 $fs-labels">C.P.
+                                <span id="spinnerZipCodeNewClient"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <input type="text" id="zipCodeNewClient" class="form-control valid"
                                    aria-describedby="código postal"/>
                         </div>
                         <div class="col-3 p-0 mt-2 pe-2">
                             <label for="countryNewClient" class="form-label fw-bold mb-0 $fs-labels">País
                                 <span id="spinnerCountrySelect"
-                                      class="spinner-grow spinner-grow-sm d-none"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
                                       role="status" aria-hidden="true"></span>
                             </label>
                             <select id="countryNewClient" class="form-select form-select-mg mb-2 mt-0"
@@ -243,7 +251,7 @@
                         <div class="col-3 p-0 mt-2 pe-2">
                             <label for="provinceNewClient" class="form-label fw-bold mb-0 $fs-labels">Provincia
                                 <span id="spinnerProvinceSelect"
-                                      class="spinner-grow spinner-grow-sm d-none"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
                                       role="status" aria-hidden="true"></span>
                             </label>
                             <select id="provinceNewClient" class="form-select form-select-mg mb-2 mt-0"
@@ -253,7 +261,7 @@
                             <label for="municipalityNewClient"
                                    class="form-label fw-bold mb-0 $fs-labels">Localidad
                                 <span id="spinnerMunicipalitySelect"
-                                      class="spinner-grow spinner-grow-sm d-none"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
                                       role="status" aria-hidden="true"></span>
                             </label>
                             <select id="municipalityNewClient" class="form-select form-select-mg mb-2 mt-0"
@@ -262,19 +270,33 @@
                     </div>
                     <div class="row">
                         <div class="col p-0 m-0">
-                            <label for="addressNewClient" class="form-label fw-bold mb-0 $fs-labels">Dirección</label>
+                            <label for="addressNewClient" class="form-label fw-bold mb-0 $fs-labels">Dirección
+                                <span id="spinnerAddressNewClient"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <input type="text" id="addressNewClient" class="form-control valid"
                                    aria-describedby="dirección del cliente"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2 p-0 mt-2 me-2">
-                            <label for="phoneNewClient" class="form-label fw-bold mb-0 $fs-labels">Teléfono</label>
+                        <div class="col p-0 mt-2">
+                            <label for="phoneNewClient" class="form-label fw-bold mb-0 $fs-labels">Teléfono
+                                <span id="spinnerPhoneNewClient"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <input type="text" id="phoneNewClient" class="form-control valid"
                                    aria-describedby="teléfono del cliente"/>
                         </div>
-                        <div class="col-10 p-0 mt-2">
-                            <label for="emailNewClient" class="form-label fw-bold mb-0 $fs-labels">Email</label>
+                    </div>
+                    <div class="row">
+                        <div class="col p-0 w-100 mt-2">
+                            <label for="emailNewClient" class="form-label fw-bold mb-0 $fs-labels">Email
+                                <span id="spinnerEmailNewClient"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <input type="email" id="emailNewClient" class="form-control valid"
                                    aria-describedby="email del cliente"/>
                         </div>
@@ -318,18 +340,15 @@
                     <h5 class="modal-title py-1 bg-color-blue text-white w-100 text-center rounded fw-normal"
                         id="modalInstallationsTitle">Instalaciones</h5>
                 </div>
-                <div id="spinnerUpdateInstallation"
-                     class="v-100 h-100 d-flex justify-content-center align-items-center bg-color-background d-none p-5">
-                    <div class="spinner-border text-color-green" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                    <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
-                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col p-0 m-0">
                             <label for="totalInstallations"
-                                   class="form-label fw-bold mb-0 $fs-labels">Instalaciones</label>
+                                   class="form-label fw-bold mb-0 $fs-labels">
+                                <span id="spinnerTotalInstallations"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                                Instalaciones</label>
                             <select id="totalInstallations" class="form-select form-select-mg mb-2 mt-0" size="3"
                                     aria-describedby="selector de clientes"></select>
                             <input type="hidden" id="idInstallation" name="idInstallation" value="0"/>
@@ -338,12 +357,20 @@
                     <div class="row">
                         <div class="col p-0 m-0">
                             <label for="nameNewInstallation"
-                                   class="form-label fw-bold mt-2 mb-0 $fs-labels">Nombre</label>
+                                   class="form-label fw-bold mt-2 mb-0 $fs-labels">
+                                <span id="spinnerNameNewInstallation"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                                Nombre</label>
                             <input type="text" id="nameNewInstallation" class="form-control valid"
                                    aria-describedby="Nombre del cliente" placeholder="Instalación..."/>
                         </div>
                         <div class="col p-0 ps-2 mt-2">
-                            <label for="clientSelected" class="form-label fw-bold mb-0 $fs-labels">Cliente</label>
+                            <label for="clientSelected" class="form-label fw-bold mb-0 $fs-labels">Cliente
+                                <span id="spinnerClientSelected"
+                                      class="spinner-grow spinner-grow-sm d-none text-white"
+                                      role="status" aria-hidden="true"></span>
+                            </label>
                             <select id="clientSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de cliente"></select>
                         </div>
@@ -391,7 +418,9 @@
                     <div class="row">
                         <div class="col p-0 m-0">
                             <label for="totalLocations" class="form-label fw-bold mb-0 fs-labels">Localizaciones
-                            <span  id="spinnerTotalLocations" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerTotalLocations"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="totalLocations" class="form-select form-select-mg mb-2 mt-0" size="3"
                                     aria-describedby="selector de clientes"></select>
@@ -409,7 +438,9 @@
                         <div class="col p-0 mt-2">
                             <label for="clientsSelected"
                                    class="form-label fw-bold mb-0 $fs-labels">Clientes
-                                <span id="spinnerClientsSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerClientsSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="clientsSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector del cliente"></select>
@@ -417,7 +448,9 @@
                         <div class="col p-0 ps-2 mt-2">
                             <label for="installationSelected"
                                    class="form-label fw-bold mb-0 $fs-labels">Instalaciones
-                                <span  id="spinnerInstallationsSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerInstallationsSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="installationSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de la Instalación"></select>
@@ -461,18 +494,13 @@
                     <h5 class="modal-title py-1 bg-color-blue text-white w-100 text-center rounded fw-normal"
                         id="modalPositionTitle">Posiciones</h5>
                 </div>
-                <div id="spinnerUpdatePosition"
-                     class="v-100 h-100 d-flex justify-content-center align-items-center bg-color-background d-none p-5">
-                    <div class="spinner-border text-color-green" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                    <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
-                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col p-0 m-0">
                             <label for="totalPositions" class="form-label fw-bold mb-0 fs-labels">Posiciones
-                                <span id="spinnerTotalPositions" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerTotalPositions"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="totalPositions" class="form-select form-select-mg mb-2 mt-0" size="3"
                                     aria-describedby="selector de posiciones"></select>
@@ -489,7 +517,9 @@
                     <div class="row mt-2">
                         <div class="col-6 p-0 m-0 pe-1">
                             <label for="clientPositionsSelected" class="form-label fw-bold mb-0 fs-labels">Cliente
-                                <span id="spinnerClientPositionsSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerClientPositionsSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="clientPositionsSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de la Localización"></select>
@@ -497,7 +527,9 @@
                         </div>
                         <div class="col-6 p-0 m-0 ps-1">
                             <label for="installationPositionsSelected" class="form-label fw-bold mb-0 fs-labels">Instalación
-                                <span id="spinnerInstallationPositionsSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerInstallationPositionsSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="installationPositionsSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de la Localización"></select>
@@ -506,14 +538,18 @@
                     <div class="row">
                         <div class="col-6 p-0 mt-2 pe-1">
                             <label for="locationSelected" class="form-label fw-bold mb-0 fs-labels">Localización
-                                <span id="spinnerLocationSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerLocationSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="locationSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de la Localización"></select>
                         </div>
                         <div class="col-3 p-0 mt-2 px-1">
                             <label for="elementSelected" class="form-label fw-bold mb-0 fs-labels">Elemento
-                                <span id="spinnerElementSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerElementSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="elementSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de elemento"></select>
@@ -591,7 +627,9 @@
                     <div class="row">
                         <div class="col p-0 m-0">
                             <label for="totalUsers" class="form-label fw-bold mb-0 fs-labels">Usuarios
-                                <span id="spinnerTotalUsers" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerTotalUsers"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="totalUsers" class="form-select form-select-mg mb-2 mt-0" size="3"
                                     aria-describedby="selector de usuarios"></select>
@@ -613,7 +651,9 @@
                         </div>
                         <div class="col-6 p-0 m-0 ps-2">
                             <label for="roleUsersSelected" class="form-label fw-bold mb-0 fs-labels">Rol
-                                <span id="spinnerRoleUsersSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerRoleUsersSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="roleUsersSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector del rol"></select>
@@ -622,14 +662,18 @@
                     <div class="row mt-2">
                         <div class="col-6 p-0 m-0 pe-1">
                             <label for="clientsUserSelected" class="form-label fw-bold mb-0 fs-labels">Clientes
-                                <span id="spinnerClientsUserSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerClientsUserSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="clientsUserSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de la Localización"></select>
                         </div>
                         <div class="col-6 p-0 m-0 ps-2">
                             <label for="installationsUserSelected" class="form-label fw-bold mb-0 fs-labels">Instalaciones
-                                <span id="spinnerInstallationsUserSelected" class="spinner-grow spinner-grow-sm text-white d-none d-none" role="status"></span>
+                                <span id="spinnerInstallationsUserSelected"
+                                      class="spinner-grow spinner-grow-sm text-white d-none d-none"
+                                      role="status"></span>
                             </label>
                             <select id="installationsUserSelected" class="form-select form-select-mg mb-2 mt-0"
                                     aria-describedby="selector de elemento"></select>

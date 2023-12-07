@@ -75,6 +75,7 @@ body {
       resize: none;
     }
   }
+
   #modalUsers {
     min-width: 435px;
   }
@@ -88,6 +89,12 @@ body {
   }
   @include mobile {
     // Aquí
+  }
+
+  #modalClients {
+    #phoneNewClient {
+      width: 12rem;
+    }
   }
 }
 

@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
 }, false);
-const handlerDeleteRow = async (event) => {
+const handlerDeleteRow = async () => {
   const modalDanger = document.getElementById('modalDanger');
   modalDanger.classList.remove('show');
   modalDanger.style.display = 'none';
@@ -68,7 +68,6 @@ const handleBackInfo = () => {
 };
 const handleTypeButtonDefect = async () => {
   const type = JSON.parse(sessionStorage.getItem('NEW_DEFECT'));
-  const idDefect = sessionStorage.getItem('idDefect');
   const errMessages = document.getElementsByClassName('err');
   const validInputs = document.getElementsByClassName('valid');
   let valid = true;
@@ -96,7 +95,7 @@ const handleTypeButtonDefect = async () => {
     const inputsNewDefectModal = newDefectModal.getElementsByTagName('input');
     const textAreaNewDefect = newDefectModal.getElementsByTagName('textarea')[0];
     let objData;
-    let method = '';
+    let method;
     if (type) {
       method = 'POST';
       objData = {
@@ -280,7 +279,7 @@ function isDateValid(day, month, year) {
   return date <= now && date && (date.getMonth() + 1) === month && date.getDate() === Number(day);
 }
 
-const goBack = event => {
+const goBack = () => {
   const modalDanger = document.getElementById('modalDanger');
   const modalWarning = document.getElementById('modalWarning');
   modalDanger.classList.remove('show');
@@ -288,7 +287,7 @@ const goBack = event => {
   modalWarning.classList.remove('show');
   modalWarning.style.display = 'none';
 };
-const handleBack = (event) => {
+const handleBack = () => {
   localStorage.removeItem('row');
   sessionStorage.removeItem('positions');
   sessionStorage.removeItem('NEW_DEFECT');
@@ -296,7 +295,7 @@ const handleBack = (event) => {
   sessionStorage.removeItem('position');
   window.location.href = '../../views/operator.html';
 };
-const handleNewDefect = (event) => {
+const handleNewDefect = () => {
   const modalDefects = document.getElementById('modalDefects');
   modalDefects.classList.add('show');
   modalDefects.style.display = 'block';
