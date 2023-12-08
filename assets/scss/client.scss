@@ -10,4 +10,11 @@ body {
       display: block;
     }
   }
+  .modal-message {
+    width: fit-content;
+
+    .icon {
+      width: 2.5rem;
+    }
+  }
 }

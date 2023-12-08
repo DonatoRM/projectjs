@@ -12427,5 +12427,11 @@ textarea.form-control-lg {
 body main #spinnerClient {
   display: block;
 }
+body .modal-message {
+  width: fit-content;
+}
+body .modal-message .icon {
+  width: 2.5rem;
+}
 
 /*# sourceMappingURL=client.css.map */

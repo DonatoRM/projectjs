@@ -15,8 +15,8 @@
     <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
     <script type="module" src="../assets/js/client.js" defer></script>
 </head>
-<body>
-<main class="bg-color-marron">
+<body class="bg-color-marron">
+<main>
     <div id="spinnerClient" class="vw-100 vh-100 d-flex justify-content-center align-items-center bg-color-background">
         <div class="spinner-border text-color-green" role="status">
             <span class="visually-hidden">Cargando...</span>
@@ -66,7 +66,7 @@
     </div>
     <div class="container-fluid container-md bg-color-background">
         <div class="row">
-            <div class="col px-3 m-0 w-100">
+            <div class="col px-3 m-0 pb-2 w-100">
                 <div class="table-responsive">
                     <table class="table table-striped p-0 m-0">
                         <thead class="position-relative">
@@ -88,5 +88,50 @@
         </div>
     </div>
 </main>
+<!-- Modal cerrar sesion -->
+<div class="modal fade" id="modalExit" tabindex="-1" aria-labelledby="modalExitSession" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-color-green text-white">
+                <h1 class="modal-title fs-5" id="titleModal">Cerrar sesión</h1>
+                <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span>¿Desea cerrar la sessión?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-color-green text-white border-1 close" data-bs-dismiss="modal">
+                    Atrás
+                </button>
+                <button type="button" class="btn bg-color-red text-white border-1" id="exitSession">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalWarning" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-message">
+        <div class="modal-content border-3 border-color-green">
+            <div class="modal-header bg-white text-color-marron border-0 py-1 px-4 pt-2">
+                <div class="d-flex w-100">
+                    <div>
+                        <img src="../assets/images/advertencia.png" alt="Modal de advertencia" class="icon">
+                    </div>
+                    <div class="w-100 d-flex align-items-center">
+                        <h5 id="idTitleModalWarning" class="modal-title mx-auto fw-bold fs-5 pe-3"></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body text-center py-1 px-4">
+                <span id="idMessageModalWarning" class="text-color-marron fw-bold"></span>
+            </div>
+            <div class="modal-footer border-0 d-flex justify-content-evenly">
+                <button type="button"
+                        class="btn bg-color-green border-color-black border-1 text-white closeModal px-3 backMessage"
+                        data-bs-dismiss="modal">atrás
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const hasta = document.getElementById('hasta');
   const table = document.getElementById('table');
   const exitButtons = document.getElementsByClassName('exit');
+  const modalWarning = document.querySelector('#modalWarning');
   const url = 'http://192.168.0.2:81/view';
   const method = 'GET';
   const authorization = 'Bearer ' + localStorage.getItem('AUTH_CLIENT');
@@ -29,6 +30,91 @@ document.addEventListener('DOMContentLoaded', async () => {
     option.text = locationOption;
     location.appendChild(option);
   });
+  showTable(view, location);
+  spinnerClient.classList.remove('d-flex');
+  spinnerClient.classList.add('d-none');
+  // Final de Carga Inicial de datos
+  // Eventos
+  location.addEventListener('change', () => {
+    while (table.firstChild) {
+      table.removeChild(table.firstChild);
+    }
+    showTable(view, location);
+  }, false);
+  desde.addEventListener('change', () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const now = `${year}-${month}-${day}`;
+    if (hasta.value === '') hasta.value = now;
+    if (desde.value <= hasta.value) {
+      const newView = view.filter(obj => obj.date >= desde.value && obj.date <= hasta.value);
+      while (table.firstChild) {
+        table.removeChild(table.firstChild);
+      }
+      showTable(newView, location);
+    } else {
+      document.querySelector('#modalWarning #idTitleModalWarning').textContent = 'Error en la Fecha';
+      document.querySelector('#modalWarning #idMessageModalWarning').textContent = 'La fecha tiene que ser inferior o igual a ' + hasta.value;
+      modalWarning.classList.add('show');
+      modalWarning.style.display = 'block';
+      document.addEventListener('click', () => {
+        modalWarning.classList.remove('block');
+        modalWarning.style.display = 'none';
+        desde.value = '';
+      }, false);
+    }
+  }, false);
+
+  hasta.addEventListener('change', () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const now = `${year}-${month}-${day}`;
+    if (desde.value === '') desde.value = '2023-01-01';
+    if (desde.value < hasta.value) {
+      const newView = view.filter(obj => obj.date >= desde.value && obj.date <= hasta.value);
+      while (table.firstChild) {
+        table.removeChild(table.firstChild);
+      }
+      showTable(newView, location);
+    } else {
+      document.querySelector('#modalWarning #idTitleModalWarning').textContent = 'Error en la Fecha';
+      document.querySelector('#modalWarning #idMessageModalWarning').textContent = 'La fecha tiene que ser superior o igual a ' + desde.value;
+      modalWarning.classList.add('show');
+      modalWarning.style.display = 'block';
+      document.addEventListener('click', () => {
+        modalWarning.classList.remove('block');
+        modalWarning.style.display = 'none';
+        hasta.value = '';
+      }, false);
+    }
+  }, false);
+  for (let button of exitButtons) {
+    button.addEventListener('click', () => {
+      const modalExit = document.getElementById('modalExit');
+      const closeModalButtons = document.querySelector('#modalExit .close');
+      modalExit.classList.add('show');
+      modalExit.style.display = 'block';
+      document.querySelector('#modalExit #exitSession').addEventListener('click', () => {
+        sessionStorage.removeItem('view');
+        localStorage.removeItem('AUTH_CLIENT');
+        localStorage.removeItem('role');
+        window.location.href = '../../index.html';
+      }, false);
+      for (let closeButton of closeModalButtons) {
+        closeButton.addEventListener('click', () => {
+          modalExit.classList.remove('show');
+          modalExit.style.display = 'none';
+        }, false);
+      }
+    });
+  }
+
+}, false);
+const showTable = (view, location) => {
   view.filter(row => row.location === location.options[location.selectedIndex].value).sort((data1, data2) => {
     if (data1.position.toLowerCase() < data2.position.toLowerCase()) return -1;
     else if (data1.position.toLowerCase() > data2.position.toLowerCase()) return 1;
@@ -71,11 +157,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     row.appendChild(tdIr);
     table.appendChild(row);
   });
-  spinnerClient.classList.remove('d-flex');
-  spinnerClient.classList.add('d-none');
-  // Final de Carga Inicial de datos
-  // Eventos
-  location.addEventListener('change', () => {
-
-  }, false);
-}, false);
+};
