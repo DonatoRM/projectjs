@@ -68,11 +68,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }, false);
 
   hasta.addEventListener('change', () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const now = `${year}-${month}-${day}`;
     if (desde.value === '') desde.value = '2023-01-01';
     if (desde.value < hasta.value) {
       const newView = view.filter(obj => obj.date >= desde.value && obj.date <= hasta.value);
@@ -95,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   for (let button of exitButtons) {
     button.addEventListener('click', () => {
       const modalExit = document.getElementById('modalExit');
-      const closeModalButtons = document.querySelector('#modalExit .close');
+      const closeModalButtons = document.getElementsByClassName('close');
       modalExit.classList.add('show');
       modalExit.style.display = 'block';
       document.querySelector('#modalExit #exitSession').addEventListener('click', () => {
