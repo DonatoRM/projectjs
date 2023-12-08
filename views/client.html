@@ -7,15 +7,86 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Thermworksheet</title>
     <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href=../assets/css/client.css>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
-    <script src="../assets/js/client.js" defer></script>
+    <link rel="stylesheet" href=../assets/css/client.css>
     <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js" defer></script>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js" defer></script>
     <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script type="module" src="../assets/js/client.js" defer></script>
 </head>
 <body>
-<h1>Clientes</h1>
+<main class="bg-color-marron">
+    <div id="spinnerClient" class="vw-100 vh-100 d-flex justify-content-center align-items-center bg-color-background">
+        <div class="spinner-border text-color-green" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <div class="ms-3 fw-bold fs-3 text-color-marron">Cargando...</div>
+    </div>
+    <div class="container-fluid container-md bg-color-background py-2 px-4">
+        <div class="row bg-color-blue px-1 py-2 rounded-top">
+            <div class="col-12 col-xl-6">
+                <label for="client" class="form-label mb-0 text-white">Cliente</label>
+                <input type="text" id="client" class="form-control mb-2 mt-0"/>
+            </div>
+            <div class="col-12 col-xl-6">
+                <label for="installation" class="form-label mb-0 text-white">Instalaciones</label>
+                <input type="text" id="installation" class="form-control mb-2 mt-0"/>
+            </div>
+        </div>
+        <div class="row bg-color-blue px-1 pb-2 rounded-bottom">
+            <div class="col-12 col-xl-6">
+                <label for="location" class="form-label mb-0 text-white">Localización
+                    <span id="spinnerClientSelect"
+                          class="spinner-grow spinner-grow-sm d-none"
+                          role="status" aria-hidden="true"></span>
+                </label>
+                <select id="location" class="form-select form-select-md mb-2 mt-0">Cliente</select>
+            </div>
+            <div class="col-12 col-xl-2">
+                <label for="desde" class="form-label mb-0 text-white">Desde...</label>
+                <input type="date" id="desde" class="form-control mb-2 mt-0"/>
+            </div>
+            <div class="col-12 col-xl-2">
+                <label for="hasta" class="form-label mb-0 text-white">Hasta...</label>
+                <input type="date" id="hasta" class="form-control mb-2 mt-0"/>
+            </div>
+            <div class="col-12 col-xl-2">
+                <button type="button" name="exit"
+                        class="w-100 d-none d-xxl-block btn bg-color-green text-white btn-lg border-color-black mx-0 mt-3 exit">
+                    Cerrar
+                    sesión
+                </button>
+                <button type="button" name="exit"
+                        class="w-100 d-xxl-none btn bg-color-green text-white border-color-black mx-0 mt-3 exit">Cerrar
+                    sesión
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid container-md bg-color-background">
+        <div class="row">
+            <div class="col px-3 m-0 w-100">
+                <div class="table-responsive">
+                    <table class="table table-striped p-0 m-0">
+                        <thead class="position-relative">
+                        <tr class="text-center table-secondary position-sticky sticky-top">
+                            <th>Fecha</th>
+                            <th>Posición</th>
+                            <th>Punto</th>
+                            <th>Fase</th>
+                            <th>Tp</th>
+                            <th>Tref</th>
+                            <th>Imax</th>
+                            <th>Ir</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

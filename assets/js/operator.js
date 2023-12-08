@@ -635,7 +635,6 @@ const handleModalUser = async event => {
     }
   }, false);
   idDeleteNewUser.addEventListener('click', async () => {
-    // TODO: Borra usuario
     const modalUsers = document.querySelector('#modalUsers');
     const modalDanger = document.querySelector('#modalDanger');
     const buttonBackModalDanger = document.querySelector('#modalDanger #back');
@@ -1147,7 +1146,6 @@ const handleNewInstallationModal = async (event) => {
   const nameNewInstallation = document.querySelector('#modalInstallations #nameNewInstallation');
   const clientSelect = document.querySelector('#modalInstallations #clientSelected');
   const spinnerTotalInstallations = document.querySelector('#modalInstallations #spinnerTotalInstallations');
-  const spinnerNameNewInstallation = document.querySelector('#modalInstallations #spinnerNameNewInstallation');
   const spinnerClientSelected = document.querySelector('#modalInstallations #spinnerClientSelected');
   event.target.disabled = false;
   let objNewInstallation = null;
@@ -1906,7 +1904,6 @@ const handleNewPositionModal = async (event) => {
     tensionPosition.value = '';
     pointPosition.value = '';
     fasePosition.value = '';
-    // TODO: borrar Selects todos
     if (clientPositionsSelected.firstChild) {
       while (clientPositionsSelected.firstChild) {
         clientPositionsSelected.removeChild(clientPositionsSelected.firstChild);
@@ -2335,7 +2332,7 @@ const initialStateComponents = async (selectClients, selectInstallations, select
   url = 'http://192.168.0.2:81/positions?location=' + selectLocationValue;
   await getPositions(url, authorization, method, table);
   const selectTotalClients = document.querySelector('#modalClients #totalClients');
-  arrayClientes.forEach((objectClient, index) => {
+  arrayClientes.forEach((objectClient) => {
     const option = document.createElement('option');
     option.value = objectClient.id;
     option.text = objectClient.name;

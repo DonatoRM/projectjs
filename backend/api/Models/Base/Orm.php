@@ -65,59 +65,70 @@ class Orm extends Connection
             Services::unauthorizedAccess();
         }
         try {
-            $this->checkParamsOfSelect(); //
-            $page = null;
-            $limit = 0;
-            if (isset($_GET['page']) && isset($_GET['limit'])) {
-                $page = intval($_GET['page']);
-                unset($_GET['page']);
-                $limit = intval($_GET['limit']);
-                unset($_GET['limit']);
-            }
-            $query = "SELECT * FROM $this->table ";
-            $queryCount = "SELECT COUNT(*) FROM $this->table ";
-            if (count($_GET) > 3) {
-                $query .= "WHERE ";
-                $queryCount .= "WHERE ";
-            }
-            $noFirst = false;
-            for ($i = 0; $i < count($this->params); $i++) {
-                if ($noFirst && isset($_GET["{$this->params[$i]}"])) $query .= ' AND ';
-                if (isset($_GET["{$this->params[$i]}"])) {
-                    $query .= $this->params[$i] . "=:" . $this->params[$i];
-                    $queryCount .= $this->params[$i] . "=:" . $this->params[$i];
-                    $noFirst = true;
-                }
-            }
-            if ($page !== null && $limit !== null) {
-                $offset = ($page - 1) * $limit;
-                $query .= " LIMIT $offset,$limit";
-            }
-            $stmt = $this->connection->prepare($query);
-            foreach ($this->params as $param) {
-                if (isset($_GET["$param"])) {
-                    $stmt->bindValue(":$param", $_GET["$param"], PDO::PARAM_INT | PDO::PARAM_STR);
-                }
-            }
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            //Se realiza la consulta de datos globales
-            $stmt = $this->connection->prepare($queryCount);
-            foreach ($this->params as $param) {
-                if (isset($_GET["$param"])) {
-                    $stmt->bindValue(":$param", $_GET["$param"], PDO::PARAM_INT | PDO::PARAM_STR);
-                }
-            }
-            $stmt->execute();
-            $res = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
-            $rows = $res['COUNT(*)'];
-            $stmt = null;
-            if ($limit !== 0) $pages = ceil($rows / $limit);
-            else $pages = 1;
-            if ($page === null && $limit === 0) {
+            if ($this->query !== '') {
+                // TODO: Nuevo
+                $stmt = $this->connection->prepare($this->query);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $page = 1;
-                $limit = $rows;
+                $limit = 1;
                 $pages = 1;
+                $rows = 1;
+            } else {
+                $this->checkParamsOfSelect(); //
+                $page = null;
+                $limit = 0;
+                if (isset($_GET['page']) && isset($_GET['limit'])) {
+                    $page = intval($_GET['page']);
+                    unset($_GET['page']);
+                    $limit = intval($_GET['limit']);
+                    unset($_GET['limit']);
+                }
+                $query = "SELECT * FROM $this->table ";
+                $queryCount = "SELECT COUNT(*) FROM $this->table ";
+                if (count($_GET) > 3) {
+                    $query .= "WHERE ";
+                    $queryCount .= "WHERE ";
+                }
+                $noFirst = false;
+                for ($i = 0; $i < count($this->params); $i++) {
+                    if ($noFirst && isset($_GET["{$this->params[$i]}"])) $query .= ' AND ';
+                    if (isset($_GET["{$this->params[$i]}"])) {
+                        $query .= $this->params[$i] . "=:" . $this->params[$i];
+                        $queryCount .= $this->params[$i] . "=:" . $this->params[$i];
+                        $noFirst = true;
+                    }
+                }
+                if ($page !== null && $limit !== null) {
+                    $offset = ($page - 1) * $limit;
+                    $query .= " LIMIT $offset,$limit";
+                }
+                $stmt = $this->connection->prepare($query);
+                foreach ($this->params as $param) {
+                    if (isset($_GET["$param"])) {
+                        $stmt->bindValue(":$param", $_GET["$param"], PDO::PARAM_INT | PDO::PARAM_STR);
+                    }
+                }
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //Se realiza la consulta de datos globales
+                $stmt = $this->connection->prepare($queryCount);
+                foreach ($this->params as $param) {
+                    if (isset($_GET["$param"])) {
+                        $stmt->bindValue(":$param", $_GET["$param"], PDO::PARAM_INT | PDO::PARAM_STR);
+                    }
+                }
+                $stmt->execute();
+                $res = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+                $rows = $res['COUNT(*)'];
+                $stmt = null;
+                if ($limit !== 0) $pages = ceil($rows / $limit);
+                else $pages = 1;
+                if ($page === null && $limit === 0) {
+                    $page = 1;
+                    $limit = $rows;
+                    $pages = 1;
+                }
             }
             return [
                 'data' => $result,
@@ -332,9 +343,9 @@ class Orm extends Connection
                     }
                     $stmt = $this->connection->prepare($query);
 
-                    $stmt->bindValue("$param", $value, PDO::PARAM_STR|PDO::PARAM_INT);
-                    if(isset($value2)) {
-                        $stmt->bindValue("$param2", $value2, PDO::PARAM_STR|PDO::PARAM_INT);
+                    $stmt->bindValue("$param", $value, PDO::PARAM_STR | PDO::PARAM_INT);
+                    if (isset($value2)) {
+                        $stmt->bindValue("$param2", $value2, PDO::PARAM_STR | PDO::PARAM_INT);
                     }
 //                    $stmt->bindValue("$param", $value, PDO::PARAM_STR);
                     $stmt->execute();

@@ -17,7 +17,7 @@ Accept: application/json
 Authorization: Basic boss boss
 
 ###
-GET http://localhost:80/clients?id=2
+GET http://localhost:81/clients?id=2
 Accept: application/json
 Authorization: Basic operator operator
 
@@ -183,3 +183,6 @@ Accept: application/json
 Authorization: Basic boss boss
 
 ###
+GET http://localhost:81/view
+Accept: application/json
+Authorization: Basic client client
