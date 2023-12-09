@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.localStorage.getItem('selectLocation')) {
     selectLocationValue = parseInt(window.localStorage.getItem('selectLocation'));
   }
+  // TODO: Me da la impresión de que faltaría la parte de position
 
   const changeClients = async (event) => {
     const clients = document.getElementById('clients');
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authToken = window.localStorage.getItem('AUTH_CLIENT');
     const authorization = 'Bearer ' + authToken;
     window.localStorage.setItem('selectClient', event.target.value);
-    let url = 'http://192.168.0.2:81/installations?client=' + event.target.value;
+    let url = 'http://192.168.0.2:81/installations?client=' + parseInt(event.target.options[event.target.selectedIndex].value);
     const selectInstallationsValue = await getInstallations(url, authorization, method, selectInstallations, selectLocations, selectInstallationValue);
     window.localStorage.setItem('selectInstallation', selectInstallationsValue);
     url = 'http://192.168.0.2:81/locations?installation=' + selectInstallationsValue;
@@ -1856,6 +1857,18 @@ const handleNewPositionModal = async (event) => {
     spinnerLocationSelected.classList.add('d-none');
   }, false);
   totalPositions.addEventListener('change', async event => {
+    spinnerTotalPositions.classList.remove('d-none');
+    spinnerTotalPositions.classList.add('d-inline-block');
+    spinnerClientPositionsSelected.classList.remove('d-none');
+    spinnerClientPositionsSelected.classList.add('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.remove('d-none');
+    spinnerInstallationPositionsSelected.classList.add('d-inline-block');
+    spinnerLocationSelected.classList.remove('d-none');
+    spinnerLocationSelected.classList.add('d-inline-block');
+    totalPositions.disabled = true;
+    clientPositionsSelected.disabled = true;
+    installationPositionsSelected.disabled = true;
+    locationSelect.disabled = true;
     idDeleteNewPosition.disabled = false;
     idNewPosition.textContent = 'Actualizar';
     const idTotalPositionsSelected = parseInt(event.target.options[event.target.selectedIndex].value);
@@ -1881,6 +1894,18 @@ const handleNewPositionModal = async (event) => {
     pointPosition.value = objTotalPositions.data.data[0].point;
     fasePosition.value = objTotalPositions.data.data[0].fase;
     sessionStorage.setItem('updatePosition', JSON.stringify(true));
+    clientPositionsSelected.disabled = false;
+    installationPositionsSelected.disabled = false;
+    locationSelect.disabled = false;
+    totalPositions.disabled = false;
+    spinnerTotalPositions.classList.remove('d-inline-block');
+    spinnerTotalPositions.classList.add('d-none');
+    spinnerClientPositionsSelected.classList.remove('d-inline-block');
+    spinnerClientPositionsSelected.classList.add('d-none');
+    spinnerInstallationPositionsSelected.classList.remove('d-inline-block');
+    spinnerInstallationPositionsSelected.classList.add('d-none');
+    spinnerLocationSelected.classList.remove('d-inline-block');
+    spinnerLocationSelected.classList.add('d-none');
   }, false);
   resetNewPosition.addEventListener('click', async () => {
     spinnerClientPositionsSelected.classList.add('d-inline-block');
@@ -2320,6 +2345,7 @@ const clickRow = event => {
   }
 };
 const initialStateComponents = async (selectClients, selectInstallations, selectLocations, selectClientValue, selectInstallationValue, selectLocationValue) => {
+  const table=document.getElementById('table');
   const authToken = window.localStorage.getItem('AUTH_CLIENT');
   const authorization = 'Bearer ' + authToken;
   let url = 'http://192.168.0.2:81/clients';

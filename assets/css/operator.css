@@ -12448,7 +12448,7 @@ body main .searchContainer .icon {
   left: 1.5rem;
 }
 body .modal-message {
-  min-width: 450px;
+  min-width: 500px;
   width: fit-content;
 }
 body .modal-message .icon {
@@ -12456,9 +12456,6 @@ body .modal-message .icon {
 }
 body .modal-positions textarea {
   resize: none;
-}
-body #modalUsers {
-  min-width: 435px;
 }
 body #modalClients #phoneNewClient {
   width: 12rem;

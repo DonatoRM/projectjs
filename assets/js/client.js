@@ -39,17 +39,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     while (table.firstChild) {
       table.removeChild(table.firstChild);
     }
+    desde.value = '';
+    hasta.value = '';
     showTable(view, location);
   }, false);
-  desde.addEventListener('change', () => {
+  desde.addEventListener('blur', () => {
     const date = new Date();
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const now = `${year}-${month}-${day}`;
     if (hasta.value === '') hasta.value = now;
-    if (desde.value <= hasta.value) {
-      const newView = view.filter(obj => obj.date >= desde.value && obj.date <= hasta.value);
+    const hastaFecha = new Date(hasta.value);
+    const desdeFecha = new Date(desde.value);
+    if (desdeFecha <= hastaFecha) {
+      const newView = view.filter(obj => new Date(obj.date) >= desdeFecha && new Date(obj.date) <= hastaFecha);
       while (table.firstChild) {
         table.removeChild(table.firstChild);
       }
@@ -67,10 +71,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }, false);
 
-  hasta.addEventListener('change', () => {
+  hasta.addEventListener('blur', () => {
     if (desde.value === '') desde.value = '2023-01-01';
-    if (desde.value < hasta.value) {
-      const newView = view.filter(obj => obj.date >= desde.value && obj.date <= hasta.value);
+    const hastaFecha = new Date(hasta.value);
+    const desdeFecha = new Date(desde.value);
+    if (desdeFecha < hastaFecha) {
+      const newView = view.filter(obj => new Date(obj.date) >= desdeFecha && new Date(obj.date) <= hastaFecha);
       while (table.firstChild) {
         table.removeChild(table.firstChild);
       }
@@ -110,6 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 }, false);
 const showTable = (view, location) => {
+  const table = document.getElementById('table');
   view.filter(row => row.location === location.options[location.selectedIndex].value).sort((data1, data2) => {
     if (data1.position.toLowerCase() < data2.position.toLowerCase()) return -1;
     else if (data1.position.toLowerCase() > data2.position.toLowerCase()) return 1;

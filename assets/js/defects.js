@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   modalInfoButton.addEventListener('click', handleBackInfo, false);
   deleteButtonModal.addEventListener('click', handlerDeleteRow, false);
 
-  const ok=await getDefects(objPosition.id, table);
-  if(ok) {
+  const ok = await getDefects(objPosition.id, table);
+  if (ok) {
     spinnerDefects.classList.add('d-none');
     defects.classList.remove('d-none');
   }
@@ -49,7 +49,7 @@ const handlerDeleteRow = async () => {
   modalDanger.classList.remove('show');
   modalDanger.style.display = 'none';
   const idDefect = parseInt(JSON.parse(sessionStorage.getItem('deleteRow')));
-  const objData={
+  const objData = {
     'id': idDefect
   }
   sessionStorage.removeItem('deleteRow');
@@ -359,7 +359,11 @@ const getDefects = async (id, table) => {
   while (tds.length > 0) {
     tds[0].parentNode.removeChild(tds[0]);
   }
-  data.data.reverse().map(point => {
+  data.data.sort((element1, element2) => {
+    if (element1.date > element2.date) return -1;
+    else if (element1.date < element2.date) return 1;
+    else return 0;
+  }).map(point => {
     const row = document.createElement('tr');
     const tdId = document.createElement('td');
     tdId.textContent = point.id;
@@ -404,17 +408,17 @@ const getDefects = async (id, table) => {
     const tdThermogram = document.createElement('td');
     tdThermogram.textContent = point.thermogram;
     tdThermogram.setAttribute('class', 'text-center d-none d-xl-table-cell');
-    tdThermogram.setAttribute('style','max-width: 150px');
+    tdThermogram.setAttribute('style', 'max-width: 150px');
     row.appendChild(tdThermogram);
     const tdPhoto = document.createElement('td');
     tdPhoto.textContent = point.photo;
     tdPhoto.setAttribute('class', 'text-center d-none d-xl-table-cell');
-    tdPhoto.setAttribute('style','max-width: 150px');
+    tdPhoto.setAttribute('style', 'max-width: 150px');
     row.appendChild(tdPhoto);
     const tdFeedback = document.createElement('td');
     tdFeedback.textContent = point.feedback;
     tdFeedback.setAttribute('class', 'text-center d-none d-xl-table-cell');
-    tdFeedback.setAttribute('style','max-width: 150px');
+    tdFeedback.setAttribute('style', 'max-width: 150px');
     row.appendChild(tdFeedback);
     const tdIcons = document.createElement('td');
     const buttonUpdate = document.createElement('button');
