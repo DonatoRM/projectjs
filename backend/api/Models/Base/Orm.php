@@ -66,7 +66,6 @@ class Orm extends Connection
         }
         try {
             if ($this->query !== '') {
-                // TODO: Nuevo
                 $stmt = $this->connection->prepare($this->query);
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

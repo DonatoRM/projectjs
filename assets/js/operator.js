@@ -39,8 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.localStorage.getItem('selectLocation')) {
     selectLocationValue = parseInt(window.localStorage.getItem('selectLocation'));
   }
-  // TODO: Me da la impresión de que faltaría la parte de position
-
   const changeClients = async (event) => {
     const clients = document.getElementById('clients');
     const installations = document.getElementById('installations');
